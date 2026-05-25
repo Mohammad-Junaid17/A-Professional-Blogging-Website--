@@ -1,0 +1,11 @@
+import { verifyAdmin } from '@/lib/auth-helpers'
+import { supabaseAdmin } from '@/lib/supabase-admin'
+import { NextResponse } from 'next/server'
+
+export async function GET() {
+  const session = await verifyAdmin(true)
+  if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
+  const { data, error } = await supabaseAdmin.from('profiles').select('*, comments:comments(count), questions:qa_entries(count)').order('created_at', { ascending: false })
+  if (error) return NextResponse.json({ error: error.message },{ status: 500 })
+  return NextResponse.json({ data })
+}
