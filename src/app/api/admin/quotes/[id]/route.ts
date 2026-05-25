@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { verifyAdmin } from '@/lib/auth-helpers'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
