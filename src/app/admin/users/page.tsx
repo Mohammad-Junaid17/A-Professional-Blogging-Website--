@@ -68,7 +68,7 @@ export default function AdminUsers() {
                         "bg-muted/10 text-muted"
                       }`}>{u.role}</span>
                     </td>
-                    <td className="px-4 py-3 text-muted hidden md:table-cell">{new Date(u.created_at).toLocaleDateString()}</td>
+                    <td className="px-4 py-3 text-muted hidden md:table-cell">{u.created_at ? new Date(u.created_at).toLocaleDateString() : '—'}</td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
                         {acting === u.id ? (

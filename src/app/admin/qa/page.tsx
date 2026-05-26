@@ -142,7 +142,7 @@ export default function AdminQA() {
                   <p className="text-foreground font-semibold">Q: {qa.question}</p>
                   <div className="flex items-center gap-3 mt-2 text-xs text-muted">
                     {qa.category && <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full">{qa.category}</span>}
-                    <span>{new Date(qa.created_at).toLocaleDateString()}</span>
+                    <span>{qa.created_at ? new Date(qa.created_at).toLocaleDateString() : '—'}</span>
                   </div>
                 </div>
               </div>

@@ -10,7 +10,7 @@ import { AdminEditButton } from "@/components/admin/AdminEditButton";
 export const revalidate = 60; // revalidate every 60 seconds
 
 export default async function BookDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = React.use(params);
+  const { slug } = await params;
   const supabase = await createClient();
   const { data: book } = await supabase
     .from("books")
@@ -73,10 +73,12 @@ export default async function BookDetailPage({ params }: { params: Promise<{ slu
                   <span>{book.category}</span>
                 </div>
               )}
-              <div className="flex items-center gap-1.5">
-                <Calendar size={16} className="text-primary" />
-                <span>{new Date(book.created_at).toLocaleDateString()}</span>
-              </div>
+              {book.created_at && (
+                <div className="flex items-center gap-1.5">
+                  <Calendar size={16} className="text-primary" />
+                  <span>{new Date(book.created_at).toLocaleDateString()}</span>
+                </div>
+              )}
             </div>
 
             <div className="mb-10">

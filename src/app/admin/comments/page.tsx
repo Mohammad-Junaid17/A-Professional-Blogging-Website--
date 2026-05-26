@@ -89,7 +89,7 @@ export default function AdminComments() {
             <div key={comment.id} className="bg-card border border-border rounded-xl p-5">
               <div className="flex items-center gap-2 text-xs text-muted mb-2">
                 <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full capitalize">{comment.content_type}</span>
-                <span>• {new Date(comment.created_at).toLocaleDateString()}</span>
+                <span>• {comment.created_at ? new Date(comment.created_at).toLocaleDateString() : '—'}</span>
               </div>
               <p className="text-foreground text-sm leading-relaxed mb-4">&ldquo;{comment.body}&rdquo;</p>
               <div className="flex flex-col gap-3 mt-3">

@@ -22,7 +22,7 @@ export default function AdminNewsletter() {
   };
 
   const handleExport = () => {
-    const csv = "Email,Subscribed Date\n" + subs.map(s => `${s.email},${new Date(s.created_at).toLocaleDateString()}`).join("\n");
+    const csv = "Email,Subscribed Date\n" + subs.map(s => `${s.email},${s.created_at ? new Date(s.created_at).toLocaleDateString() : '—'}`).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "newsletter_subscribers.csv"; a.click();
@@ -56,7 +56,7 @@ export default function AdminNewsletter() {
               {subs.map((s) => (
                 <tr key={s.id} className="hover:bg-muted/5">
                   <td className="px-4 py-3 text-foreground flex items-center gap-2"><Mail size={14} className="text-muted" /> {s.email}</td>
-                  <td className="px-4 py-3 text-muted">{new Date(s.created_at).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 text-muted">{s.created_at ? new Date(s.created_at).toLocaleDateString() : '—'}</td>
                   <td className="px-4 py-3 text-right">
                     <button onClick={() => handleDelete(s.id)} className="p-2 text-muted hover:text-red-500 hover:bg-red-500/10 rounded-md transition-colors"><Trash2 size={16} /></button>
                   </td>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, Clock, User, Share2, Copy } from "lucide-react";
+import { ChevronRight, Clock, User, Share2, Copy, Calendar } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
@@ -66,10 +66,10 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
             <span>{article.reading_time || 5} min read</span>
           </div>
           {article.created_at && (
-            <>
-              <span>|</span>
+            <div className="flex items-center gap-1.5">
+              <Calendar size={16} className="text-primary" />
               <span>{new Date(article.created_at).toLocaleDateString()}</span>
-            </>
+            </div>
           )}
         </div>
       </header>
