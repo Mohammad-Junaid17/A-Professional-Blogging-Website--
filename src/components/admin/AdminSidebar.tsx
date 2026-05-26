@@ -5,9 +5,10 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, FileText, BookOpen, Users, Quote, HelpCircle,
   BookMarked, ShieldAlert, Video, MessageSquare, Mail, Settings,
-  LogOut, ChevronLeft, Menu, BookOpenCheck, Tags
+  LogOut, ChevronLeft, Menu, BookOpenCheck, Tags, Moon, Sun
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 
 const sidebarLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -29,6 +30,12 @@ const sidebarLinks = [
 export default function AdminSidebar({ role = "admin" }: { role?: string }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (href: string) => {
     if (href === "/admin") return pathname === "/admin";
@@ -103,10 +110,20 @@ export default function AdminSidebar({ role = "admin" }: { role?: string }) {
         </nav>
 
         {/* Footer */}
-        <div className="px-2 py-4 border-t border-white/10">
+        <div className="px-2 py-4 border-t border-white/10 flex flex-col gap-1">
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all w-full text-left"
+            title={collapsed ? "Toggle Theme" : undefined}
+          >
+            {mounted && theme === "dark" ? <Sun size={20} className="flex-shrink-0" /> : <Moon size={20} className="flex-shrink-0" />}
+            {!collapsed && <span>Toggle Theme</span>}
+          </button>
+
           <Link
             href="/"
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
+            title={collapsed ? "Back to Site" : undefined}
           >
             <LogOut size={20} className="flex-shrink-0" />
             {!collapsed && <span>Back to Site</span>}

@@ -1,10 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { FileText, BookOpen, Users, Quote, HelpCircle, MessageSquare, Mail, UserCheck } from "lucide-react";
+import { FileText, BookOpen, Users, Quote, HelpCircle, MessageSquare, Mail, UserCheck, Activity } from "lucide-react";
 import Link from "next/link";
+import { AnalyticsChart } from "@/components/admin/AnalyticsChart";
 
 async function getDashboardStats() {
-  const [articles, books, scholars, quotes, pendingQA, pendingComments, newsletter, users] = await Promise.all([
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const [articles, books, scholars, quotes, pendingQA, pendingComments, newsletter, users, pageViewsResponse] = await Promise.all([
     supabaseAdmin.from("articles").select("id", { count: "exact", head: true }),
     supabaseAdmin.from("books").select("id", { count: "exact", head: true }),
     supabaseAdmin.from("scholars").select("id", { count: "exact", head: true }),
@@ -13,7 +20,32 @@ async function getDashboardStats() {
     supabaseAdmin.from("comments").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabaseAdmin.from("newsletter_subscribers").select("id", { count: "exact", head: true }),
     supabaseAdmin.from("profiles").select("id", { count: "exact", head: true }),
+    supabaseAdmin.from("page_views").select("created_at").gte("created_at", thirtyDaysAgo.toISOString())
   ]);
+
+  const pageViews = pageViewsResponse.data || [];
+  
+  // Calculate views today
+  const viewsToday = pageViews.filter(v => new Date(v.created_at) >= today).length;
+
+  // Group by date for the chart
+  const viewsByDate = pageViews.reduce((acc: Record<string, number>, view) => {
+    const date = new Date(view.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    acc[date] = (acc[date] || 0) + 1;
+    return acc;
+  }, {});
+
+  // Generate last 7 days array to ensure empty days are shown
+  const chartData = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    chartData.push({
+      date: dateStr,
+      views: viewsByDate[dateStr] || 0
+    });
+  }
 
   return {
     articles: articles.count ?? 0,
@@ -24,6 +56,9 @@ async function getDashboardStats() {
     pendingComments: pendingComments.count ?? 0,
     newsletter: newsletter.count ?? 0,
     users: users.count ?? 0,
+    totalViews: pageViews.length,
+    viewsToday,
+    chartData
   };
 }
 
@@ -31,8 +66,10 @@ export default async function AdminDashboard() {
   const stats = await getDashboardStats();
 
   const statItems = [
+    { label: "Views Today", count: stats.viewsToday, icon: Activity, href: "/admin", color: "text-green-500 bg-green-500/10" },
+    { label: "Views (30d)", count: stats.totalViews, icon: Activity, href: "/admin", color: "text-emerald-500 bg-emerald-500/10" },
     { label: "Articles", count: stats.articles, icon: FileText, href: "/admin/articles", color: "text-blue-500 bg-blue-500/10" },
-    { label: "Books", count: stats.books, icon: BookOpen, href: "/admin/books", color: "text-emerald-500 bg-emerald-500/10" },
+    { label: "Books", count: stats.books, icon: BookOpen, href: "/admin/books", color: "text-teal-500 bg-teal-500/10" },
     { label: "Scholars", count: stats.scholars, icon: Users, href: "/admin/scholars", color: "text-purple-500 bg-purple-500/10" },
     { label: "Quotes", count: stats.quotes, icon: Quote, href: "/admin/quotes", color: "text-amber-500 bg-amber-500/10" },
     { label: "Pending Q&A", count: stats.pendingQA, icon: HelpCircle, href: "/admin/qa", color: "text-orange-500 bg-orange-500/10" },
@@ -79,6 +116,17 @@ export default async function AdminDashboard() {
             </Link>
           );
         })}
+      </div>
+
+      {/* Analytics Chart */}
+      <div className="bg-card border border-border rounded-xl p-6 mb-12">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-lg font-bold text-foreground">Traffic Overview (Last 7 Days)</h2>
+          <div className="text-sm text-muted">
+            <span className="font-bold text-primary">{stats.totalViews}</span> views this month
+          </div>
+        </div>
+        <AnalyticsChart data={stats.chartData} />
       </div>
 
       {/* Recent Activity */}
