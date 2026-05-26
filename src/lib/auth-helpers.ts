@@ -2,7 +2,7 @@ import { supabaseAdmin } from './supabase-admin'
 import { createClient } from '@/lib/supabase/server'
 import { cache } from 'react'
 
-export const verifyAdmin = cache(async (requireSuperAdmin: boolean = false) => {
+export const verifyAdmin = cache(async (requireSuperAdmin: boolean = false, requiredSection?: string) => {
   try {
     const supabase = await createClient()
 
@@ -33,8 +33,14 @@ export const verifyAdmin = cache(async (requireSuperAdmin: boolean = false) => {
       return null
     }
 
+    if (profile.role === 'moderator' && requiredSection) {
+      const accessSections: string[] = profile.access_sections || [];
+      if (!accessSections.includes(requiredSection)) {
+        return null; // Moderator does not have access to this specific section
+      }
+    }
+
     // We still return session to maintain type signature, or at least a fake session object if needed.
-    // Wait, the original returned `session`. Let's fetch session to return it.
     const { data: { session } } = await supabase.auth.getSession()
     return session || { user }
   } catch (err) {

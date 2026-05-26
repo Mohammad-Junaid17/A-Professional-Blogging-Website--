@@ -17,7 +17,7 @@ function extractTags(xml: string, tag: string) {
 export async function POST(req: Request) {
   // Allow manual sync via Admin Dashboard
   let isAuthorized = false;
-  const session = await verifyAdmin();
+  const session = await verifyAdmin(true);
   if (session) {
     isAuthorized = true;
   } else {

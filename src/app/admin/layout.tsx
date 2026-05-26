@@ -31,7 +31,7 @@ export default async function AdminLayout({
 
   return (
     <div className="flex min-h-screen bg-background">
-      <AdminSidebar role={profile.role} />
+      <AdminSidebar role={profile.role} accessSections={profile.access_sections} />
       <main className="flex-1 p-6 lg:p-8 overflow-auto">
         {children}
       </main>

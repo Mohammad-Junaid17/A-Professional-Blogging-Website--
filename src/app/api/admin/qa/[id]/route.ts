@@ -8,7 +8,7 @@ import { sendEmail } from '@/lib/mailer'
 export async function PUT(req: Request, props: { params: Promise<{ id: string  }> }) {
   const params = await props.params;
   const { id } = params;
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(false, 'qa')
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { action, answer, scholar, status: revertStatus } = await req.json()
 
@@ -90,7 +90,7 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string  }
 export async function DELETE(req: Request, props: { params: Promise<{ id: string  }> }) {
   const params = await props.params;
   const { id } = params;
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(false, 'qa')
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { error } = await supabaseAdmin.from('qa_entries').delete().eq('id', params.id)
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

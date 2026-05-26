@@ -8,10 +8,13 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string  }
   const { id } = params;
   const session = await verifyAdmin(true)
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
-  const { action } = await req.json()
-  const updates: Record<string, string | boolean> = {}
+  const { action, access_sections } = await req.json()
+  const updates: Record<string, any> = {}
   if (action === 'make_admin') updates.role = 'admin'
-  if (action === 'make_moderator') updates.role = 'moderator'
+  if (action === 'make_moderator') {
+    updates.role = 'moderator'
+    if (access_sections) updates.access_sections = access_sections
+  }
   if (action === 'make_user') updates.role = 'user'
   if (action === 'disable') updates.disabled = true
   if (action === 'enable') updates.disabled = false

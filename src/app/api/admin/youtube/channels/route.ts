@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(true)
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
   const { data, error } = await supabaseAdmin.from('youtube_channels').select('*')
   if (error) return NextResponse.json({ error: error.message },{ status: 500 })
@@ -12,7 +12,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(true)
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
   const body = await req.json()
   
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(true)
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
   const url = new URL(req.url);
   const id = url.searchParams.get('id');

@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server'
 export async function PUT(req: Request, props: { params: Promise<{ id: string  }> }) {
   const params = await props.params;
   const { id } = params;
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(false, 'comments')
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { action, admin_reply } = await req.json()
   
@@ -23,7 +23,7 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string  }
 export async function DELETE(req: Request, props: { params: Promise<{ id: string  }> }) {
   const params = await props.params;
   const { id } = params;
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(false, 'comments')
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { error } = await supabaseAdmin.from('comments').delete().eq('id', params.id)
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

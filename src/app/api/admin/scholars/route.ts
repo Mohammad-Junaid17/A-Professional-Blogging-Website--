@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(false, 'scholars')
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
   const { data, error } = await supabaseAdmin.from('scholars').select('*').order('created_at', { ascending: false })
   if (error) return NextResponse.json({ error: error.message },{ status: 500 })
@@ -12,7 +12,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(false, 'scholars')
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
   const body = await req.json()
   const { data, error } = await supabaseAdmin.from('scholars').insert(body).select().single()

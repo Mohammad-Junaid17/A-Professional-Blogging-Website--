@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 
 export async function GET() {
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(false, 'books')
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
   const { data, error } = await supabaseAdmin.from('books').select('*').order('created_at', { ascending: false })
   if (error) return NextResponse.json({ error: error.message },{ status: 500 })
@@ -13,7 +13,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const session = await verifyAdmin()
+  const session = await verifyAdmin(false, 'books')
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
   const body = await req.json()
   const { data, error } = await supabaseAdmin.from('books').insert(body).select().single()

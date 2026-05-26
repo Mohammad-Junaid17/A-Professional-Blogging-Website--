@@ -27,7 +27,7 @@ const sidebarLinks = [
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
-export default function AdminSidebar({ role = "admin" }: { role?: string }) {
+export default function AdminSidebar({ role = "admin", accessSections = [] }: { role?: string, accessSections?: string[] }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -84,8 +84,19 @@ export default function AdminSidebar({ role = "admin" }: { role?: string }) {
         {/* Nav */}
         <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
           {sidebarLinks.filter(link => {
-            if (role !== "admin" && (link.href === "/admin/users" || link.href === "/admin/settings")) return false;
-            return true;
+            if (role === "admin") return true;
+            if (link.href === "/admin") return true; // Always show Dashboard to moderators
+            
+            // For moderators, hide sensitive sections entirely
+            if (link.href === "/admin/users" || link.href === "/admin/settings") return false;
+            
+            // Check if link matches an allowed access section
+            const sectionId = link.href.split("/")[2]; // e.g. "/admin/articles" -> "articles"
+            if (sectionId && accessSections.length > 0) {
+              return accessSections.includes(sectionId);
+            }
+            
+            return false;
           }).map((link) => {
             const Icon = link.icon;
             const active = isActive(link.href);
