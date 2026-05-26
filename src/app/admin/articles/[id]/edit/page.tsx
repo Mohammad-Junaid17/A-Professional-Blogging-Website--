@@ -24,6 +24,7 @@ export default function EditArticle({ params }: { params: Promise<{ id: string }
   const [readingTime, setReadingTime] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
+  const [status, setStatus] = useState("published");
   const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function EditArticle({ params }: { params: Promise<{ id: string }
       if (data) {
         setTitle(data.title || ""); setSlug(data.slug || ""); setAuthor(data.author || "");
         setCategory(data.category || ""); setSubCategory(data.sub_category || ""); setReadingTime(data.reading_time?.toString() || "");
-        setExcerpt(data.excerpt || ""); setContent(data.content || "");
+        setExcerpt(data.excerpt || ""); setContent(data.content || ""); setStatus(data.status || "published");
       }
       setFetching(false);
     }).catch(() => setFetching(false));
@@ -59,7 +60,7 @@ export default function EditArticle({ params }: { params: Promise<{ id: string }
         body: JSON.stringify({
           title, slug, author, category, sub_category: subCategory,
           reading_time: readingTime ? parseInt(readingTime) : null,
-          excerpt, content,
+          excerpt, content, status
         }),
       });
       if (!res.ok) {
@@ -108,6 +109,13 @@ export default function EditArticle({ params }: { params: Promise<{ id: string }
                 <option key={c.id} value={c.name}>{c.name}</option>
               ))}
             </select></div>
+        </div>
+        <div>
+          <label className="block text-sm font-semibold text-foreground mb-1.5">Status</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+            <option value="published">Published</option>
+            <option value="pending">Pending (Hidden)</option>
+          </select>
         </div>
         <div><label className="block text-sm font-semibold text-foreground mb-1.5">Excerpt</label><textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={2} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
         <div data-color-mode="light"><label className="block text-sm font-semibold text-foreground mb-1.5">Content *</label><MDEditor value={content} onChange={(val) => setContent(val || "")} height={400} /></div>

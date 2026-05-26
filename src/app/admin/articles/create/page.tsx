@@ -23,6 +23,7 @@ export default function CreateArticle() {
   const [readingTime, setReadingTime] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
+  const [status, setStatus] = useState("published");
 
   useEffect(() => {
     fetch("/api/admin/categories").then(r => r.json()).then(d => {
@@ -52,7 +53,7 @@ export default function CreateArticle() {
         body: JSON.stringify({
           title, slug: slug || generateSlug(title), author, category, sub_category: subCategory,
           reading_time: readingTime ? parseInt(readingTime) : null,
-          excerpt, content,
+          excerpt, content, status
         }),
       });
 
@@ -135,6 +136,14 @@ export default function CreateArticle() {
             className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
         </div>
 
+        <div>
+          <label className="block text-sm font-semibold text-foreground mb-1.5">Status</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+            <option value="published">Published</option>
+            <option value="pending">Pending (Hidden)</option>
+          </select>
+        </div>
+
         <div data-color-mode="light">
           <label className="block text-sm font-semibold text-foreground mb-1.5">Content (Markdown) <span className="text-red-500">*</span></label>
           <MDEditor value={content} onChange={(val) => setContent(val || "")} height={400} />
@@ -144,7 +153,7 @@ export default function CreateArticle() {
           <button type="submit" disabled={loading}
             className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">
             {loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
-            {loading ? "Saving..." : "Publish Article"}
+            {loading ? "Saving..." : "Save Article"}
           </button>
         </div>
       </form>

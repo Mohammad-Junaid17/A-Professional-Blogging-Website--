@@ -75,8 +75,12 @@ export function ScholarCard({ scholar }: { scholar: any }) {
       <Link href={`/scholars/${scholar.slug}`} className="block h-full">
         <div className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow h-full">
         <div className="flex justify-between items-start mb-4">
-          <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-card">
-            <User size={24} />
+          <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-card overflow-hidden border-2 border-primary/20">
+            {scholar.image_url ? (
+              <img src={scholar.image_url} alt={scholar.name_english} className="w-full h-full object-cover" />
+            ) : (
+              <User size={24} />
+            )}
           </div>
           <span className="text-sm text-muted">d. {scholar.death_year_ah} AH</span>
         </div>

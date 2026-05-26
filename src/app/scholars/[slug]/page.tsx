@@ -17,6 +17,7 @@ export default async function ScholarPage(props: { params: Promise<{ slug: strin
     .from("scholars")
     .select("*")
     .eq("slug", params.slug)
+    .eq("status", "published")
     .single();
 
   if (!scholar) {
@@ -43,8 +44,12 @@ export default async function ScholarPage(props: { params: Promise<{ slug: strin
 
       <header className="bg-card border border-border rounded-xl p-8 mb-12 text-center md:text-left flex flex-col md:flex-row gap-8 items-center md:items-start relative">
         <AdminEditButton id={scholar.id} type="scholars" />
-        <div className="w-32 h-32 bg-primary rounded-full flex items-center justify-center text-card shrink-0">
-          <Users size={64} />
+        <div className="w-32 h-32 bg-primary rounded-full flex items-center justify-center text-card shrink-0 overflow-hidden border-4 border-primary/20 shadow-md">
+          {scholar.image_url ? (
+            <img src={scholar.image_url} alt={scholar.name_english} className="w-full h-full object-cover" />
+          ) : (
+            <Users size={64} />
+          )}
         </div>
         
         <div className="flex-1">

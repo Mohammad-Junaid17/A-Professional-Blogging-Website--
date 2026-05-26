@@ -33,7 +33,12 @@ export default async function AdminLectures() {
               <td className="px-4 py-3 text-foreground font-medium">{l.title}</td>
               <td className="px-4 py-3 text-muted hidden md:table-cell">{l.speaker || "—"}</td>
               <td className="px-4 py-3 text-muted hidden lg:table-cell">{l.duration || "—"}</td>
-              <td className="px-4 py-3 text-muted hidden sm:table-cell">{l.category || "—"}</td>
+              <td className="px-4 py-3 text-muted hidden sm:table-cell">
+                <div className="flex gap-1.5 flex-wrap items-center">
+                  <span>{l.category || "—"}</span>
+                  {l.status === "pending" && <span className="bg-orange-500/10 text-orange-600 text-xs px-2 py-0.5 rounded-full font-medium">Pending</span>}
+                </div>
+              </td>
               <td className="px-4 py-3"><div className="flex items-center justify-end gap-1">
                 <Link href={`/admin/lectures/${l.id}/edit`} className="p-2 text-muted hover:text-blue-500 hover:bg-blue-500/10 rounded-md transition-colors"><Pencil size={16} /></Link>
                 <DeleteButton id={l.id} table="lectures" />

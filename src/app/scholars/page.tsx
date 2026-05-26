@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Users, Search, ChevronRight } from "lucide-react";
 import { ScholarCard } from "@/components/ui/Cards";
 import { createClient } from "@/lib/supabase/server";
+import { AdminAddButton } from "@/components/admin/AdminAddButton";
 
 export default async function ScholarsPage(props: { searchParams: Promise<{ madhab?: string; q?: string }> }) {
   const searchParams = await props.searchParams;
@@ -9,7 +10,7 @@ export default async function ScholarsPage(props: { searchParams: Promise<{ madh
   const currentMadhab = searchParams.madhab || "All";
   const searchQuery = searchParams.q || "";
 
-  let query = supabase.from("scholars").select("*").order("name_english", { ascending: true });
+  let query = supabase.from("scholars").select("*").eq("status", "published").order("name_english", { ascending: true });
 
   if (currentMadhab !== "All") {
     query = query.ilike("madhab", `%${currentMadhab}%`);
@@ -35,6 +36,7 @@ export default async function ScholarsPage(props: { searchParams: Promise<{ madh
             <Users size={20} />
           </div>
           <h1 className="text-3xl font-bold font-serif text-foreground">Scholar Biographies</h1>
+          <AdminAddButton type="scholars" label="Add Scholar" />
         </div>
 
         <form method="GET" action="/scholars" className="flex flex-col sm:flex-row gap-3">

@@ -16,6 +16,7 @@ export default async function BookDetailPage({ params }: { params: Promise<{ slu
     .from("books")
     .select("*")
     .eq("slug", slug)
+    .eq("status", "published")
     .single();
 
   if (!book) {

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FileText, Search, ChevronRight } from "lucide-react";
 import { ArticleCard } from "@/components/ui/Cards";
 import { createClient } from "@/lib/supabase/server";
+import { AdminAddButton } from "@/components/admin/AdminAddButton";
 
 // Categories are fetched dynamically
 
@@ -13,7 +14,7 @@ export default async function ArticlesPage(props: {
   const currentCategory = searchParams.category || "All Articles";
   const searchQuery = searchParams.q || "";
 
-  let query = supabase.from("articles").select("*").order("created_at", { ascending: false });
+  let query = supabase.from("articles").select("*").eq("status", "published").order("created_at", { ascending: false });
 
   if (currentCategory !== "All Articles") {
     query = query.eq("category", currentCategory);
@@ -68,11 +69,12 @@ export default async function ArticlesPage(props: {
           <span className="text-foreground font-medium">Articles</span>
         </div>
 
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-8 w-full">
           <div className="w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center text-primary">
             <FileText size={20} />
           </div>
           <h1 className="text-3xl font-bold font-serif text-foreground">Articles</h1>
+          <AdminAddButton type="articles" label="Add Article" />
         </div>
 
         {/* Search Bar - Client Side Form is better but doing it simple via form GET for now */}

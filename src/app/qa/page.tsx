@@ -3,6 +3,7 @@ import { HelpCircle, ChevronRight, Search } from "lucide-react";
 import { QACard } from "@/components/ui/QACard";
 import { createClient } from "@/lib/supabase/server";
 import SubmitQuestionButton from "@/components/SubmitQuestionButton";
+import { AdminAddButton } from "@/components/admin/AdminAddButton";
 
 // Categories are fetched dynamically
 
@@ -76,7 +77,10 @@ export default async function QAPage(props: {
             </div>
             <h1 className="text-3xl font-bold font-serif text-foreground">Questions & Answers</h1>
           </div>
-          <SubmitQuestionButton />
+          <div className="flex items-center gap-2 ml-auto">
+            <AdminAddButton type="qa" label="Add Q&A" />
+            <SubmitQuestionButton />
+          </div>
         </div>
 
         <form method="GET" action="/qa" className="relative mb-8">

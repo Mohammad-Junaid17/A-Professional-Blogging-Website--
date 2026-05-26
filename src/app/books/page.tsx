@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BookOpen, Search, ChevronRight } from "lucide-react";
 import { BookCard } from "@/components/ui/Cards";
 import { createClient } from "@/lib/supabase/server";
+import { AdminAddButton } from "@/components/admin/AdminAddButton";
 
 // Categories are fetched dynamically
 
@@ -11,7 +12,7 @@ export default async function BooksPage(props: { searchParams: Promise<{ categor
   const currentCategory = searchParams.category || "All Books";
   const searchQuery = searchParams.q || "";
 
-  let query = supabase.from("books").select("*").order("created_at", { ascending: false });
+  let query = supabase.from("books").select("*").eq("status", "published").order("created_at", { ascending: false });
 
   if (currentCategory !== "All Books") {
     // Assuming book categories might be multi or single, standard ilike or eq. Using ilike for flexibility.
@@ -67,11 +68,12 @@ export default async function BooksPage(props: { searchParams: Promise<{ categor
           <span className="text-foreground font-medium">Books & Library</span>
         </div>
 
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-8 w-full">
           <div className="w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center text-primary">
             <BookOpen size={20} />
           </div>
           <h1 className="text-3xl font-bold font-serif text-foreground">Books & Library</h1>
+          <AdminAddButton type="books" label="Add Book" />
         </div>
 
         <form method="GET" action="/books" className="relative mb-8">

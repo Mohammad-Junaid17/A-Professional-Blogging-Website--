@@ -17,6 +17,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
     .from("articles")
     .select("*")
     .eq("slug", params.slug)
+    .eq("status", "published")
     .single();
 
   if (!article) {

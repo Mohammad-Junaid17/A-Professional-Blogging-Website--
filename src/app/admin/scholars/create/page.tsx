@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 export default function CreateScholar() {
   const supabase = createClient(); const router = useRouter();
   const [loading, setLoading] = useState(false); const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ name_english: "", name_arabic: "", slug: "", birth_year: "", death_year_ah: "", madhab: "", origin: "", bio: "" });
+  const [form, setForm] = useState({ name_english: "", name_arabic: "", slug: "", birth_year: "", death_year_ah: "", madhab: "", origin: "", bio: "", status: "published", image_url: "" });
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
   const genSlug = (t: string) => t.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").slice(0, 80);
 
@@ -33,10 +34,24 @@ export default function CreateScholar() {
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Slug</label><input type="text" value={form.slug} onChange={(e) => set("slug", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Madhab</label><select value={form.madhab} onChange={(e) => set("madhab", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"><option value="">Select</option><option>Hanafi</option><option>Shafi&apos;i</option><option>Maliki</option><option>Hanbali</option><option>Other</option></select></div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Birth Year</label><input type="text" value={form.birth_year} onChange={(e) => set("birth_year", e.target.value)} placeholder="e.g. 80 AH" className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Death Year</label><input type="text" value={form.death_year_ah} onChange={(e) => set("death_year_ah", e.target.value)} placeholder="e.g. 150" className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Origin</label><input type="text" value={form.origin} onChange={(e) => set("origin", e.target.value)} placeholder="e.g. Kufa, Iraq" className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
+          <div>
+            <label className="block text-sm font-semibold text-foreground mb-1.5">Status</label>
+            <select value={form.status} onChange={(e) => set("status", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+              <option value="published">Published</option>
+              <option value="pending">Pending (Hidden)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-semibold text-foreground mb-1.5">Scholar Logo / Calligraphy</label>
+          <ImageUpload
+            value={form.image_url}
+            onChange={(url) => set("image_url", url)}
+          />
         </div>
         <div data-color-mode="light"><label className="block text-sm font-semibold text-foreground mb-1.5">Biography (Markdown)</label><MDEditor value={form.bio} onChange={(val) => set("bio", val || "")} height={350} /></div>
         <div className="flex justify-end pt-4 border-t border-border"><button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Save Scholar"}</button></div>

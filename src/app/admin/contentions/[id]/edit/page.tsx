@@ -12,12 +12,12 @@ export default function EditContention({ params }: { params: Promise<{ id: strin
   const { id } = React.use(params);
   const supabase = createClient(); const router = useRouter();
   const [loading, setLoading] = useState(false); const [fetching, setFetching] = useState(true); const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ claim: "", rebuttal: "", scholarly_response: "", scholar: "", source: "" });
+  const [form, setForm] = useState({ claim: "", rebuttal: "", scholarly_response: "", scholar: "", source: "", status: "published" });
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
   useEffect(() => {
     supabase.from("contentions").select("*").eq("id", id).single().then(({ data }) => {
-      if (data) setForm({ claim: data.claim || "", rebuttal: data.rebuttal || "", scholarly_response: data.scholarly_response || "", scholar: data.scholar || "", source: data.source || "" });
+      if (data) setForm({ claim: data.claim || "", rebuttal: data.rebuttal || "", scholarly_response: data.scholarly_response || "", scholar: data.scholar || "", source: data.source || "", status: data.status || "published" });
       setFetching(false);
     });
   }, [id]);
@@ -38,9 +38,16 @@ export default function EditContention({ params }: { params: Promise<{ id: strin
         <div><label className="block text-sm font-semibold text-foreground mb-1.5">Claim *</label><textarea value={form.claim} onChange={(e) => set("claim", e.target.value)} rows={3} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" required /></div>
         <div data-color-mode="light"><label className="block text-sm font-semibold text-foreground mb-1.5">Rebuttal *</label><MDEditor value={form.rebuttal} onChange={(val) => set("rebuttal", val || "")} height={250} /></div>
         <div data-color-mode="light"><label className="block text-sm font-semibold text-foreground mb-1.5">Scholarly Response</label><MDEditor value={form.scholarly_response} onChange={(val) => set("scholarly_response", val || "")} height={200} /></div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Scholar</label><input type="text" value={form.scholar} onChange={(e) => set("scholar", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Source</label><input type="text" value={form.source} onChange={(e) => set("source", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
+          <div>
+            <label className="block text-sm font-semibold text-foreground mb-1.5">Status</label>
+            <select value={form.status} onChange={(e) => set("status", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+              <option value="published">Published</option>
+              <option value="pending">Pending (Hidden)</option>
+            </select>
+          </div>
         </div>
         <div className="flex justify-end pt-4 border-t border-border"><button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Update"}</button></div>
       </form>

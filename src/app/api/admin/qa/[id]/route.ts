@@ -54,6 +54,20 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string  }
     return NextResponse.json({ data })
   }
 
+  if (action === 'update') {
+    const { question, category, answer, status } = await req.json()
+    const { data, error } = await supabaseAdmin.from('qa_entries').update({
+      question,
+      category,
+      admin_answer: answer,
+      answer,
+      answered_by: scholar,
+      status
+    }).eq('id', params.id).select().single()
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ data })
+  }
+
   if (action === 'reject') {
     const { data, error } = await supabaseAdmin.from('qa_entries').update({ status: 'rejected' }).eq('id', params.id).select().single()
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })

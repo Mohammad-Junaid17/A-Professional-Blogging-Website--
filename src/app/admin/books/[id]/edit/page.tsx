@@ -12,7 +12,7 @@ export default function EditBook({ params }: { params: Promise<{ id: string }> }
   const { id } = React.use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(false); const [fetching, setFetching] = useState(true); const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ title: "", slug: "", author: "", description: "", language: "", category: "", sub_category: "", pdf_url: "", cover_url: "" });
+  const [form, setForm] = useState({ title: "", slug: "", author: "", description: "", language: "", category: "", sub_category: "", pdf_url: "", cover_url: "", status: "published" });
   const [categories, setCategories] = useState<any[]>([]);
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
@@ -21,7 +21,7 @@ export default function EditBook({ params }: { params: Promise<{ id: string }> }
       if (d.data) setCategories(d.data.filter((c:any) => !c.content_type || c.content_type === "books"));
     });
     fetch(`/api/admin/books/${id}`).then(r => r.json()).then(({ data }) => {
-      if (data) setForm({ title: data.title || "", slug: data.slug || "", author: data.author || "", description: data.description || "", language: data.language || "", category: data.category || "", sub_category: data.sub_category || "", pdf_url: data.pdf_url || "", cover_url: data.cover_url || "" });
+      if (data) setForm({ title: data.title || "", slug: data.slug || "", author: data.author || "", description: data.description || "", language: data.language || "", category: data.category || "", sub_category: data.sub_category || "", pdf_url: data.pdf_url || "", cover_url: data.cover_url || "", status: data.status || "published" });
       setFetching(false);
     }).catch(() => setFetching(false));
   }, [id]);
@@ -82,7 +82,16 @@ export default function EditBook({ params }: { params: Promise<{ id: string }> }
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">PDF URL</label><input type="url" value={form.pdf_url} onChange={(e) => set("pdf_url", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
           <ImageUpload value={form.cover_url} onChange={(url) => set("cover_url", url)} label="Cover Image URL" />
         </div>
-        <div><label className="block text-sm font-semibold text-foreground mb-1.5">Description</label><textarea value={form.description} onChange={(e) => set("description", e.target.value)} rows={4} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div><label className="block text-sm font-semibold text-foreground mb-1.5">Description</label><textarea value={form.description} onChange={(e) => set("description", e.target.value)} rows={4} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
+          <div>
+            <label className="block text-sm font-semibold text-foreground mb-1.5">Status</label>
+            <select value={form.status} onChange={(e) => set("status", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+              <option value="published">Published</option>
+              <option value="pending">Pending (Hidden)</option>
+            </select>
+          </div>
+        </div>
         <div className="flex justify-end pt-4 border-t border-border"><button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Update Book"}</button></div>
       </form>
     </div>

@@ -4,12 +4,13 @@ import { createClient } from "@/lib/supabase/server";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import { AdminAddButton } from "@/components/admin/AdminAddButton";
 
 export const revalidate = 60;
 
 export default async function ContentionsPage() {
   const supabase = await createClient();
-  const { data: contentions } = await supabase.from("contentions").select("*").order("created_at", { ascending: false });
+  const { data: contentions } = await supabase.from("contentions").select("*").eq("status", "published").order("created_at", { ascending: false });
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -19,7 +20,7 @@ export default async function ContentionsPage() {
         <span className="text-foreground font-medium">Contentions</span>
       </div>
 
-      <div className="flex items-center gap-3 mb-10">
+      <div className="flex items-center gap-3 mb-10 w-full">
         <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center text-red-600 dark:text-red-400">
           <ShieldAlert size={24} />
         </div>
@@ -27,6 +28,7 @@ export default async function ContentionsPage() {
           <h1 className="text-3xl font-bold font-serif text-foreground">Contentions & Rebuttals</h1>
           <p className="text-muted mt-1">Common misconceptions and scholarly responses.</p>
         </div>
+        <AdminAddButton type="contentions" label="Add Contention" />
       </div>
 
       <div className="space-y-10">

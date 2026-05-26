@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Quote as QuoteIcon, ChevronRight } from "lucide-react";
 import { QuoteCard } from "@/components/ui/Cards";
 import { createClient } from "@/lib/supabase/server";
+import { AdminAddButton } from "@/components/admin/AdminAddButton";
 
 const SOURCES = [
   { label: "All", value: "" },
@@ -15,7 +16,7 @@ export default async function QuotesPage(props: { searchParams: Promise<{ source
   const supabase = await createClient();
   const currentSource = searchParams.source || "";
 
-  let query = supabase.from("quotes").select("*").order("created_at", { ascending: false });
+  let query = supabase.from("quotes").select("*").eq("status", "published").order("created_at", { ascending: false });
 
   if (currentSource) {
     query = query.eq("source_type", currentSource);
@@ -37,6 +38,7 @@ export default async function QuotesPage(props: { searchParams: Promise<{ source
             <QuoteIcon size={24} />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold font-serif text-foreground">Inspirational Quotes</h1>
+          <AdminAddButton type="quotes" label="Add Quote" />
         </div>
 
         <div className="flex flex-wrap justify-center md:justify-end gap-2">

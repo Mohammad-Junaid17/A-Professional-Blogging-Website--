@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Video, ChevronRight, Clock, User, Search } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { AdminAddButton } from "@/components/admin/AdminAddButton";
 
 export const revalidate = 60;
 
@@ -9,7 +10,7 @@ export default async function LecturesPage(props: { searchParams: Promise<{ q?: 
   const supabase = await createClient();
   const searchQuery = searchParams.q || "";
 
-  let query = supabase.from("lectures").select("*").order("created_at", { ascending: false });
+  let query = supabase.from("lectures").select("*").eq("status", "published").order("created_at", { ascending: false });
 
   if (searchQuery) {
     query = query.ilike("title", `%${searchQuery}%`);
@@ -25,7 +26,7 @@ export default async function LecturesPage(props: { searchParams: Promise<{ q?: 
         <span className="text-foreground font-medium">Lectures</span>
       </div>
 
-      <div className="flex items-center gap-3 mb-10">
+      <div className="flex items-center gap-3 mb-10 w-full">
         <div className="w-12 h-12 bg-primary-light rounded-xl flex items-center justify-center text-primary">
           <Video size={24} />
         </div>
@@ -33,6 +34,7 @@ export default async function LecturesPage(props: { searchParams: Promise<{ q?: 
           <h1 className="text-3xl font-bold font-serif text-foreground">Lectures & Series</h1>
           <p className="text-muted mt-1">Audio and video recordings of lessons and sermons.</p>
         </div>
+        <AdminAddButton type="lectures" label="Add Lecture" />
       </div>
 
       <form method="GET" action="/lectures" className="relative mb-10 max-w-2xl">

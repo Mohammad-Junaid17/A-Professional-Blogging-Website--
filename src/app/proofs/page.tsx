@@ -3,6 +3,7 @@ import { BookMarked, ChevronRight, BookOpen, Search } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import { AdminAddButton } from "@/components/admin/AdminAddButton";
 
 const SOURCES = [
   { label: "All", value: "" },
@@ -17,7 +18,7 @@ export default async function ProofsPage(props: { searchParams: Promise<{ filter
   const currentFilter = searchParams.filter || "";
   const searchQuery = searchParams.q || "";
 
-  let query = supabase.from("proofs").select("*").order("created_at", { ascending: false });
+  let query = supabase.from("proofs").select("*").eq("status", "published").order("created_at", { ascending: false });
 
   if (currentFilter) {
     query = query.eq("proof_type", currentFilter);
@@ -37,7 +38,7 @@ export default async function ProofsPage(props: { searchParams: Promise<{ filter
         <span className="text-foreground font-medium">Proofs & Evidences</span>
       </div>
 
-      <div className="flex items-center gap-3 mb-8">
+      <div className="flex items-center gap-3 mb-8 w-full">
         <div className="w-12 h-12 bg-primary-light rounded-xl flex items-center justify-center text-primary">
           <BookMarked size={24} />
         </div>
@@ -45,6 +46,7 @@ export default async function ProofsPage(props: { searchParams: Promise<{ filter
           <h1 className="text-3xl font-bold font-serif text-foreground">Proofs & Evidences</h1>
           <p className="text-muted mt-1">Foundational texts and established scholarly consensus.</p>
         </div>
+        <AdminAddButton type="proofs" label="Add Proof" />
       </div>
 
       <div className="flex flex-wrap gap-2 mb-10 border-b border-border pb-6">

@@ -10,12 +10,12 @@ export default function EditQuote({ params }: { params: Promise<{ id: string }> 
   const { id } = React.use(params);
   const supabase = createClient(); const router = useRouter();
   const [loading, setLoading] = useState(false); const [fetching, setFetching] = useState(true); const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ arabic_text: "", english_text: "", attribution: "", source: "", source_type: "scholar" });
+  const [form, setForm] = useState({ arabic_text: "", english_text: "", attribution: "", source: "", source_type: "scholar", status: "published" });
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
   useEffect(() => {
     supabase.from("quotes").select("*").eq("id", id).single().then(({ data }) => {
-      if (data) setForm({ arabic_text: data.arabic_text || "", english_text: data.english_text || "", attribution: data.attribution || "", source: data.source || "", source_type: data.source_type || "scholar" });
+      if (data) setForm({ arabic_text: data.arabic_text || "", english_text: data.english_text || "", attribution: data.attribution || "", source: data.source || "", source_type: data.source_type || "scholar", status: data.status || "published" });
       setFetching(false);
     });
   }, [id]);
@@ -39,6 +39,7 @@ export default function EditQuote({ params }: { params: Promise<{ id: string }> 
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Attribution</label><input type="text" value={form.attribution} onChange={(e) => set("attribution", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Source</label><input type="text" value={form.source} onChange={(e) => set("source", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Source Type</label><select value={form.source_type} onChange={(e) => set("source_type", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"><option value="scholar">Scholar</option><option value="quran">Quran</option><option value="hadith">Hadith</option></select></div>
+          <div><label className="block text-sm font-semibold text-foreground mb-1.5">Status</label><select value={form.status} onChange={(e) => set("status", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"><option value="published">Published</option><option value="pending">Pending (Hidden)</option></select></div>
         </div>
         <div className="flex justify-end pt-4 border-t border-border"><button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Update Quote"}</button></div>
       </form>

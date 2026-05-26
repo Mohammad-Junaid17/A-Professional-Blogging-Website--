@@ -38,7 +38,10 @@ export default async function AdminArticles() {
                 <tr key={article.id} className="hover:bg-muted/5">
                   <td className="px-4 py-3 text-foreground font-medium max-w-[250px] truncate">{article.title}</td>
                   <td className="px-4 py-3 text-muted hidden md:table-cell">
-                    <span className="bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">{article.category || "—"}</span>
+                    <div className="flex gap-1.5 flex-wrap">
+                      <span className="bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">{article.category || "—"}</span>
+                      {article.status === "pending" && <span className="bg-orange-500/10 text-orange-600 text-xs px-2 py-0.5 rounded-full font-medium">Pending</span>}
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-muted hidden lg:table-cell">{article.author || "—"}</td>
                   <td className="px-4 py-3 text-muted hidden sm:table-cell">{article.created_at ? new Date(article.created_at).toLocaleDateString() : "—"}</td>

@@ -4,18 +4,20 @@ import { Pencil } from "lucide-react";
 
 interface AdminEditButtonProps {
   id: string;
-  type: "books" | "articles" | "scholars" | "quotes" | "lectures" | "contentions" | "proofs";
+  type: "books" | "articles" | "scholars" | "quotes" | "lectures" | "contentions" | "proofs" | "qa";
 }
 
 export async function AdminEditButton({ id, type }: AdminEditButtonProps) {
   const session = await verifyAdmin();
   if (!session) return null;
 
+  const href = `/admin/${type}/${id}/edit`;
+
   return (
     <Link 
-      href={`/admin/${type}/${id}/edit`} 
+      href={href} 
       className="absolute top-3 right-3 p-2 bg-background/80 backdrop-blur-sm border border-border text-muted hover:text-primary hover:border-primary rounded-md transition-colors z-10 shadow-sm"
-      title={`Edit this ${type.slice(0, -1)}`}
+      title={`Edit this ${type === 'qa' ? 'Q&A' : type.slice(0, -1)}`}
     >
       <Pencil size={16} />
     </Link>

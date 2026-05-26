@@ -25,7 +25,12 @@ export default async function AdminQuotes() {
           {quotes && quotes.map((q: any) => (
             <tr key={q.id} className="hover:bg-muted/5">
               <td className="px-4 py-3 text-foreground font-medium">{q.attribution || "—"}</td>
-              <td className="px-4 py-3 hidden md:table-cell"><span className={`text-xs px-2 py-0.5 rounded-full ${q.source_type === "quran" ? "bg-emerald-500/10 text-emerald-600" : q.source_type === "hadith" ? "bg-amber-500/10 text-amber-600" : "bg-blue-500/10 text-blue-600"}`}>{q.source_type}</span></td>
+              <td className="px-4 py-3 hidden md:table-cell">
+                <div className="flex gap-1.5 flex-wrap items-center">
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${q.source_type === "quran" ? "bg-emerald-500/10 text-emerald-600" : q.source_type === "hadith" ? "bg-amber-500/10 text-amber-600" : "bg-blue-500/10 text-blue-600"}`}>{q.source_type}</span>
+                  {q.status === "pending" && <span className="bg-orange-500/10 text-orange-600 text-xs px-2 py-0.5 rounded-full font-medium">Pending</span>}
+                </div>
+              </td>
               <td className="px-4 py-3 text-muted hidden lg:table-cell max-w-[300px] truncate">{q.english_text}</td>
               <td className="px-4 py-3"><div className="flex items-center justify-end gap-1">
                 <Link href={`/admin/quotes/${q.id}/edit`} className="p-2 text-muted hover:text-blue-500 hover:bg-blue-500/10 rounded-md transition-colors"><Pencil size={16} /></Link>

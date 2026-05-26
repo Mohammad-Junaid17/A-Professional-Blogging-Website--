@@ -18,8 +18,13 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string  }
   const { id } = params;
   const session = await verifyAdmin()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  const body = await req.json()
-  const { data, error } = await supabaseAdmin.from('articles').update(body).eq('id', params.id).select().single()
+  const { title, slug, author, category, sub_category, reading_time, excerpt, content, status } = await req.json();
+
+  const updates: any = {
+    title, slug, author, category, sub_category, reading_time, excerpt, content, status, updated_at: new Date().toISOString()
+  };
+
+  const { data, error } = await supabaseAdmin.from('articles').update(updates).eq('id', params.id).select().single()
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ data })
 }

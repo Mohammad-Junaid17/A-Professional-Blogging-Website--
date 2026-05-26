@@ -10,7 +10,7 @@ export default function EditLecture({ params }: { params: Promise<{ id: string }
   const { id } = React.use(params);
   const supabase = createClient(); const router = useRouter();
   const [loading, setLoading] = useState(false); const [fetching, setFetching] = useState(true); const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ title: "", slug: "", speaker: "", embed_url: "", duration: "", category: "", sub_category: "", description: "" });
+  const [form, setForm] = useState({ title: "", slug: "", speaker: "", embed_url: "", duration: "", category: "", sub_category: "", description: "", status: "published" });
   const [categories, setCategories] = useState<any[]>([]);
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
@@ -19,7 +19,7 @@ export default function EditLecture({ params }: { params: Promise<{ id: string }
       if (d.data) setCategories(d.data.filter((c:any) => !c.content_type || c.content_type === "lectures"));
     });
     supabase.from("lectures").select("*").eq("id", id).single().then(({ data }) => {
-      if (data) setForm({ title: data.title || "", slug: data.slug || "", speaker: data.speaker || "", embed_url: data.embed_url || "", duration: data.duration || "", category: data.category || "", sub_category: data.sub_category || "", description: data.description || "" });
+      if (data) setForm({ title: data.title || "", slug: data.slug || "", speaker: data.speaker || "", embed_url: data.embed_url || "", duration: data.duration || "", category: data.category || "", sub_category: data.sub_category || "", description: data.description || "", status: data.status || "published" });
       setFetching(false);
     });
   }, [id]);
@@ -69,7 +69,16 @@ export default function EditLecture({ params }: { params: Promise<{ id: string }
               ))}
             </select></div>
         </div>
-        <div><label className="block text-sm font-semibold text-foreground mb-1.5">Embed URL</label><input type="url" value={form.embed_url} onChange={(e) => set("embed_url", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div><label className="block text-sm font-semibold text-foreground mb-1.5">Embed URL</label><input type="url" value={form.embed_url} onChange={(e) => set("embed_url", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
+          <div>
+            <label className="block text-sm font-semibold text-foreground mb-1.5">Status</label>
+            <select value={form.status} onChange={(e) => set("status", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+              <option value="published">Published</option>
+              <option value="pending">Pending (Hidden)</option>
+            </select>
+          </div>
+        </div>
         <div><label className="block text-sm font-semibold text-foreground mb-1.5">Description</label><textarea value={form.description} onChange={(e) => set("description", e.target.value)} rows={4} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
         <div className="flex justify-end pt-4 border-t border-border"><button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Update Lecture"}</button></div>
       </form>

@@ -14,8 +14,10 @@ export async function GET() {
 export async function POST(req: Request) {
   const session = await verifyAdmin()
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
-  const body = await req.json()
-  const { data, error } = await supabaseAdmin.from('articles').insert(body).select().single()
+  const { title, slug, author, category, sub_category, reading_time, excerpt, content, status } = await req.json();
+  const { data, error } = await supabaseAdmin.from('articles').insert([{
+    title, slug, author, category, sub_category, reading_time, excerpt, content, status
+  }]).select().single()
   if (error) return NextResponse.json({ error: error.message },{ status: 500 })
   return NextResponse.json({ data },{ status: 201 })
 }

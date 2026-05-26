@@ -35,7 +35,12 @@ export default async function AdminBooks() {
                   <td className="px-4 py-3 text-foreground font-medium">{book.title}</td>
                   <td className="px-4 py-3 text-muted hidden md:table-cell">{book.author || "—"}</td>
                   <td className="px-4 py-3 text-muted hidden lg:table-cell">{book.language || "—"}</td>
-                  <td className="px-4 py-3 text-muted hidden sm:table-cell">{book.category || "—"}</td>
+                  <td className="px-4 py-3 text-muted hidden sm:table-cell">
+                    <div className="flex gap-1.5 flex-wrap">
+                      <span className="bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">{book.category || "—"}</span>
+                      {book.status === "pending" && <span className="bg-orange-500/10 text-orange-600 text-xs px-2 py-0.5 rounded-full font-medium">Pending</span>}
+                    </div>
+                  </td>
                   <td className="px-4 py-3"><div className="flex items-center justify-end gap-1">
                     <Link href={`/admin/books/${book.id}/edit`} className="p-2 text-muted hover:text-blue-500 hover:bg-blue-500/10 rounded-md transition-colors"><Pencil size={16} /></Link>
                     <DeleteButton id={book.id} table="books" />

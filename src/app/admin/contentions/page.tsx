@@ -24,7 +24,12 @@ export default async function AdminContentions() {
           {contentions && contentions.map((c: any) => (
             <tr key={c.id} className="hover:bg-muted/5">
               <td className="px-4 py-3 text-foreground font-medium max-w-[400px] truncate">{c.claim}</td>
-              <td className="px-4 py-3 text-muted hidden md:table-cell">{c.scholar || "—"}</td>
+              <td className="px-4 py-3 text-muted hidden md:table-cell">
+                <div className="flex gap-1.5 flex-wrap items-center">
+                  <span>{c.scholar || "—"}</span>
+                  {c.status === "pending" && <span className="bg-orange-500/10 text-orange-600 text-xs px-2 py-0.5 rounded-full font-medium">Pending</span>}
+                </div>
+              </td>
               <td className="px-4 py-3"><div className="flex items-center justify-end gap-1">
                 <Link href={`/admin/contentions/${c.id}/edit`} className="p-2 text-muted hover:text-blue-500 hover:bg-blue-500/10 rounded-md transition-colors"><Pencil size={16} /></Link>
                 <DeleteButton id={c.id} table="contentions" />

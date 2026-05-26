@@ -10,7 +10,7 @@ export default function EditProof({ params }: { params: Promise<{ id: string }> 
   const { id } = React.use(params);
   const supabase = createClient(); const router = useRouter();
   const [loading, setLoading] = useState(false); const [fetching, setFetching] = useState(true); const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ proof_type: "quran", arabic_text: "", transliteration: "", translation: "", source_reference: "", category: "", sub_category: "" });
+  const [form, setForm] = useState({ proof_type: "quran", arabic_text: "", transliteration: "", translation: "", source_reference: "", category: "", sub_category: "", status: "published" });
   const [categories, setCategories] = useState<any[]>([]);
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
@@ -19,7 +19,7 @@ export default function EditProof({ params }: { params: Promise<{ id: string }> 
       if (d.data) setCategories(d.data.filter((c:any) => !c.content_type || c.content_type === "proofs"));
     });
     supabase.from("proofs").select("*").eq("id", id).single().then(({ data }) => {
-      if (data) setForm({ proof_type: data.proof_type || "quran", arabic_text: data.arabic_text || "", transliteration: data.transliteration || "", translation: data.translation || "", source_reference: data.source_reference || "", category: data.category || "", sub_category: data.sub_category || "" });
+      if (data) setForm({ proof_type: data.proof_type || "quran", arabic_text: data.arabic_text || "", transliteration: data.transliteration || "", translation: data.translation || "", source_reference: data.source_reference || "", category: data.category || "", sub_category: data.sub_category || "", status: data.status || "published" });
       setFetching(false);
     });
   }, [id]);
@@ -45,9 +45,16 @@ export default function EditProof({ params }: { params: Promise<{ id: string }> 
       <div className="flex items-center gap-4 mb-8"><Link href="/admin/proofs" className="p-2 hover:bg-muted/10 rounded-lg"><ArrowLeft size={20} className="text-muted" /></Link><h1 className="text-3xl font-bold font-serif text-foreground">Edit Proof</h1></div>
       {error && <div className="bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 p-3 rounded-lg text-sm mb-6">{error}</div>}
       <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Type *</label><select value={form.proof_type} onChange={(e) => set("proof_type", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"><option value="quran">Quran</option><option value="hadith">Hadith</option><option value="ijma">Ijmāʿ</option></select></div>
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Source Ref</label><input type="text" value={form.source_reference} onChange={(e) => set("source_reference", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
+          <div>
+            <label className="block text-sm font-semibold text-foreground mb-1.5">Status</label>
+            <select value={form.status} onChange={(e) => set("status", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+              <option value="published">Published</option>
+              <option value="pending">Pending (Hidden)</option>
+            </select>
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Category</label>

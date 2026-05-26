@@ -25,7 +25,12 @@ export default async function AdminProofs() {
           {proofs && proofs.map((p: any) => (
             <tr key={p.id} className="hover:bg-muted/5">
               <td className="px-4 py-3"><span className={`text-xs px-2 py-1 rounded-full font-semibold uppercase ${p.proof_type === "quran" ? "bg-emerald-500/10 text-emerald-600" : p.proof_type === "hadith" ? "bg-amber-500/10 text-amber-600" : "bg-blue-500/10 text-blue-600"}`}>{p.proof_type}</span></td>
-              <td className="px-4 py-3 text-muted hidden md:table-cell">{p.source_reference || "—"}</td>
+              <td className="px-4 py-3 text-muted hidden md:table-cell">
+                <div className="flex gap-1.5 flex-wrap items-center">
+                  <span>{p.source_reference || "—"}</span>
+                  {p.status === "pending" && <span className="bg-orange-500/10 text-orange-600 text-xs px-2 py-0.5 rounded-full font-medium">Pending</span>}
+                </div>
+              </td>
               <td className="px-4 py-3 text-muted hidden lg:table-cell max-w-[300px] truncate">{p.translation}</td>
               <td className="px-4 py-3"><div className="flex items-center justify-end gap-1">
                 <Link href={`/admin/proofs/${p.id}/edit`} className="p-2 text-muted hover:text-blue-500 hover:bg-blue-500/10 rounded-md transition-colors"><Pencil size={16} /></Link>
