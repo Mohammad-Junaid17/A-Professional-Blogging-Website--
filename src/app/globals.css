@@ -31,6 +31,10 @@
 }
 
 @layer base {
+  html {
+    font-size: 90%;
+  }
+  
   body {
     @apply bg-background text-foreground font-sans;
   }
