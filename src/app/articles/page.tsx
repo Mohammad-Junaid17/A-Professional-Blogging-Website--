@@ -7,19 +7,28 @@ import { AdminAddButton } from "@/components/admin/AdminAddButton";
 // Categories are fetched dynamically
 
 export default async function ArticlesPage(props: {
-  searchParams: Promise<{ category?: string; q?: string }>;
+  searchParams: Promise<{ category?: string; sub?: string; q?: string }>;
 }) {
   const searchParams = await props.searchParams;
   const supabase = await createClient();
   const currentCategory = searchParams.category || "All Articles";
+  const currentSub = searchParams.sub || "";
   const searchQuery = searchParams.q || "";
 
-  let query = supabase.from("articles").select("*").eq("status", "published").order("created_at", { ascending: false });
+  let query = supabase
+    .from("articles")
+    .select("*")
+    .eq("status", "published")
+    .order("created_at", { ascending: false });
 
   if (currentCategory !== "All Articles") {
     query = query.eq("category", currentCategory);
   }
-  
+
+  if (currentSub) {
+    query = query.eq("sub_category", currentSub);
+  }
+
   if (searchQuery) {
     query = query.ilike("title", `%${searchQuery}%`);
   }
@@ -31,25 +40,41 @@ export default async function ArticlesPage(props: {
     .select("name")
     .or("content_type.eq.articles,content_type.is.null")
     .order("name", { ascending: true });
-  
-  const fetchedCategories = categoryData?.map(c => c.name) || [];
+
+  const fetchedCategories = categoryData?.map((c) => c.name) || [];
   const CATEGORIES = ["All Articles", ...fetchedCategories];
+
+  // Sub-categories for Aqā'id
+  const AQAID_SUBCATS = [
+    "Mawlid",
+    "Knowledge of the Unseen",
+    "Messenger of Allah",
+    "Tawassul",
+    "Deobandism",
+    "Wahaabism",
+    "Kissing of the Thumbs",
+    "Miscellaneous",
+    "Shi'a",
+  ];
+  const isAqaid = currentCategory === "Aqā'id";
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
       {/* Sidebar - 25% */}
       <aside className="w-full md:w-1/4 shrink-0">
-        <h2 className="text-xs font-bold tracking-widest text-muted mb-4 uppercase">Categories</h2>
+        <h2 className="text-xs font-bold tracking-widest text-muted mb-4 uppercase">
+          Categories
+        </h2>
         <ul className="space-y-1">
           {CATEGORIES.map((cat) => {
-            const isActive = currentCategory === cat;
+            const isActive = currentCategory === cat && !currentSub;
             return (
               <li key={cat}>
                 <Link
-                  href={`/articles?category=${cat === "All Articles" ? "" : cat}`}
+                  href={`/articles?category=${cat === "All Articles" ? "" : encodeURIComponent(cat)}`}
                   className={`block px-4 py-2 rounded-md text-sm transition-colors ${
-                    isActive 
-                      ? "bg-primary text-card font-semibold" 
+                    isActive
+                      ? "bg-primary text-card font-semibold"
                       : "text-muted hover:text-foreground hover:bg-muted/10"
                   }`}
                 >
@@ -59,28 +84,129 @@ export default async function ArticlesPage(props: {
             );
           })}
         </ul>
+
+        {/* Sub-topic chips — only for Aqā'id */}
+        {isAqaid && (
+          <div className="mt-6">
+            <h3 className="text-xs font-bold tracking-widest text-muted mb-3 uppercase">
+              Sub-Topics
+            </h3>
+            <div className="flex flex-col gap-1">
+              <Link
+                href={`/articles?category=${encodeURIComponent(currentCategory)}`}
+                className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
+                  !currentSub
+                    ? "bg-primary/15 text-primary font-semibold"
+                    : "text-muted hover:text-foreground hover:bg-muted/10"
+                }`}
+              >
+                All Aqā&apos;id
+              </Link>
+              {AQAID_SUBCATS.map((sub) => (
+                <Link
+                  key={sub}
+                  href={`/articles?category=${encodeURIComponent(currentCategory)}&sub=${encodeURIComponent(sub)}`}
+                  className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
+                    currentSub === sub
+                      ? "bg-primary text-card font-semibold"
+                      : "text-muted hover:text-foreground hover:bg-muted/10"
+                  }`}
+                >
+                  {sub}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </aside>
 
       {/* Main Content - 75% */}
       <main className="w-full md:w-3/4">
         <div className="flex items-center text-sm text-muted mb-6">
-          <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+          <Link href="/" className="hover:text-primary transition-colors">
+            Home
+          </Link>
           <ChevronRight size={14} className="mx-1" />
-          <span className="text-foreground font-medium">Articles</span>
+          {isAqaid ? (
+            <>
+              <Link
+                href={`/articles?category=${encodeURIComponent(currentCategory)}`}
+                className="hover:text-primary transition-colors"
+              >
+                Articles
+              </Link>
+              <ChevronRight size={14} className="mx-1" />
+              <span className="text-foreground font-medium">Aqā&apos;id</span>
+              {currentSub && (
+                <>
+                  <ChevronRight size={14} className="mx-1" />
+                  <span className="text-foreground font-medium">{currentSub}</span>
+                </>
+              )}
+            </>
+          ) : (
+            <span className="text-foreground font-medium">Articles</span>
+          )}
         </div>
 
-        <div className="flex items-center gap-3 mb-8 w-full">
+        <div className="flex items-center gap-3 mb-4 w-full">
           <div className="w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center text-primary">
             <FileText size={20} />
           </div>
-          <h1 className="text-3xl font-bold font-serif text-foreground">Articles</h1>
+          <div>
+            <h1 className="text-3xl font-bold font-serif text-foreground">
+              {currentSub || (currentCategory === "All Articles" ? "Articles" : currentCategory)}
+            </h1>
+            {isAqaid && currentSub && (
+              <p className="text-sm text-muted mt-0.5">
+                Aqā&apos;id &rsaquo; {currentSub}
+              </p>
+            )}
+          </div>
           <AdminAddButton type="articles" label="Add Article" />
         </div>
 
-        {/* Search Bar - Client Side Form is better but doing it simple via form GET for now */}
+        {/* Sub-topic pill row (shown in main area when Aqā'id is active) */}
+        {isAqaid && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            <Link
+              href={`/articles?category=${encodeURIComponent(currentCategory)}`}
+              className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
+                !currentSub
+                  ? "bg-primary text-card"
+                  : "bg-muted/10 text-muted hover:bg-primary/10 hover:text-primary"
+              }`}
+            >
+              All
+            </Link>
+            {AQAID_SUBCATS.map((sub) => (
+              <Link
+                key={sub}
+                href={`/articles?category=${encodeURIComponent(currentCategory)}&sub=${encodeURIComponent(sub)}`}
+                className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
+                  currentSub === sub
+                    ? "bg-primary text-card"
+                    : "bg-muted/10 text-muted hover:bg-primary/10 hover:text-primary"
+                }`}
+              >
+                {sub}
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* Search Bar */}
         <form method="GET" action="/articles" className="relative mb-8">
-          <input type="hidden" name="category" value={currentCategory === "All Articles" ? "" : currentCategory} />
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={20} />
+          <input
+            type="hidden"
+            name="category"
+            value={currentCategory === "All Articles" ? "" : currentCategory}
+          />
+          {currentSub && <input type="hidden" name="sub" value={currentSub} />}
+          <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-muted"
+            size={20}
+          />
           <input
             type="text"
             name="q"
@@ -93,9 +219,7 @@ export default async function ArticlesPage(props: {
         {/* Article List */}
         <div className="space-y-4">
           {articles && articles.length > 0 ? (
-            articles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))
+            articles.map((article) => <ArticleCard key={article.id} article={article} />)
           ) : (
             <div className="py-12 text-center text-muted">
               No articles found matching your criteria.

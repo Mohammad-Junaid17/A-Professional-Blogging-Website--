@@ -6,9 +6,9 @@ import toast from "react-hot-toast";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { CategorySelector } from "@/components/admin/CategorySelector";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
-const CATEGORIES = ["Fiqh", "Aqeedah", "Marriage & Family", "Finance", "Contemporary Issues", "Worship"];
 
 export default function EditQA({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
@@ -33,7 +33,7 @@ export default function EditQA({ params }: { params: Promise<{ id: string }> }) 
         setStatus(data.status || "answered");
       }
       setFetching(false);
-    }).catch(() => setFetching(false));
+    });
   }, [id, supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -99,17 +99,12 @@ export default function EditQA({ params }: { params: Promise<{ id: string }> }) 
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-semibold text-foreground mb-1.5">Category *</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+            <div className="w-full">
+              <CategorySelector 
+                contentType="qa"
+                category={category}
+                setCategory={setCategory}
+              />
             </div>
             <div>
               <label className="block text-sm font-semibold text-foreground mb-1.5">Status</label>

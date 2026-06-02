@@ -7,6 +7,7 @@ import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
+import { CategorySelector } from "@/components/admin/CategorySelector";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -25,12 +26,7 @@ export default function EditArticle({ params }: { params: Promise<{ id: string }
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
   const [status, setStatus] = useState("published");
-  const [categories, setCategories] = useState<any[]>([]);
-
   useEffect(() => {
-    fetch("/api/admin/categories").then(r => r.json()).then(d => {
-      if (d.data) setCategories(d.data.filter((c:any) => !c.content_type || c.content_type === "articles"));
-    });
     fetch(`/api/admin/articles/${id}`).then(res => res.json()).then(({ data }) => {
       if (data) {
         setTitle(data.title || ""); setSlug(data.slug || ""); setAuthor(data.author || "");
@@ -41,13 +37,7 @@ export default function EditArticle({ params }: { params: Promise<{ id: string }
     }).catch(() => setFetching(false));
   }, [id]);
 
-  const parents = categories.filter(c => !c.parent_id);
-  const getSubCategories = () => {
-    const parent = categories.find(c => c.name === category);
-    if (!parent) return [];
-    return categories.filter(c => c.parent_id === parent.id);
-  };
-  const subCategories = getSubCategories();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,22 +84,13 @@ export default function EditArticle({ params }: { params: Promise<{ id: string }
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Author</label><input type="text" value={author} onChange={(e) => setAuthor(e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Reading Time</label><input type="number" value={readingTime} onChange={(e) => setReadingTime(e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div><label className="block text-sm font-semibold text-foreground mb-1.5">Category</label>
-            <select value={category} onChange={(e) => { setCategory(e.target.value); setSubCategory(""); }} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
-              <option value="">Select Category</option>
-              {parents.map(c => (
-                <option key={c.id} value={c.name}>{c.name}</option>
-              ))}
-            </select></div>
-          <div><label className="block text-sm font-semibold text-foreground mb-1.5">Sub-category</label>
-            <select value={subCategory} onChange={(e) => setSubCategory(e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" disabled={!category || subCategories.length === 0}>
-              <option value="">Select Sub-category</option>
-              {subCategories.map(c => (
-                <option key={c.id} value={c.name}>{c.name}</option>
-              ))}
-            </select></div>
-        </div>
+        <CategorySelector 
+          contentType="articles" 
+          category={category} 
+          setCategory={setCategory} 
+          subCategory={subCategory} 
+          setSubCategory={setSubCategory} 
+        />
         <div>
           <label className="block text-sm font-semibold text-foreground mb-1.5">Status</label>
           <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">

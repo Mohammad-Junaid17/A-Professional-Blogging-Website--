@@ -34,51 +34,36 @@ export default async function ContentionsPage() {
       <div className="space-y-10">
         {contentions && contentions.length > 0 ? (
           contentions.map((contention) => (
-            <div key={contention.id} className="bg-card border border-border rounded-xl shadow-sm overflow-hidden flex flex-col relative group">
+            <div key={contention.id} className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow flex flex-col relative group">
               <AdminEditButton id={contention.id} type="contentions" />
               
-              {/* Claim */}
-              <div className="bg-red-50 dark:bg-red-950/20 p-6 border-b border-red-100 dark:border-red-900/30">
-                <span className="text-xs font-bold tracking-widest uppercase text-red-600 dark:text-red-400 mb-2 block">
-                  The Claim / Contention
-                </span>
-                <h3 className="text-lg md:text-xl font-bold text-foreground leading-relaxed">
-                  &quot;{contention.claim}&quot;
-                </h3>
-              </div>
+              <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">
+                Contention
+              </span>
+              <h3 className="font-bold text-[1.1rem] text-foreground mb-4 line-clamp-2">
+                &quot;{contention.claim}&quot;
+              </h3>
 
-              {/* Evidence Against */}
-              <div className="bg-primary-light/30 p-6 border-b border-border">
-                <span className="text-xs font-bold tracking-widest uppercase text-primary mb-2 block">
-                  Evidence Against
-                </span>
-                <div className="prose prose-sm dark:prose-invert max-w-none text-foreground">
-                  <MarkdownRenderer content={contention.rebuttal} />
-                </div>
-              </div>
-
-              {/* Scholarly Response */}
-              {contention.scholarly_response && (
-                <div className="p-6">
-                  <span className="text-xs font-bold tracking-widest uppercase text-muted mb-3 block">
-                    Scholarly Detailed Response
-                  </span>
-                  <div className="prose prose-sm dark:prose-invert max-w-none text-muted leading-relaxed mb-6">
+              <div className="prose prose-sm dark:prose-invert max-w-none text-muted mb-4 flex-1">
+                <p className="font-semibold text-foreground mb-1">Rebuttal:</p>
+                <MarkdownRenderer content={contention.rebuttal} />
+                
+                {contention.scholarly_response && (
+                  <div className="mt-4">
+                    <p className="font-semibold text-foreground mb-1">Scholarly Response:</p>
                     <MarkdownRenderer content={contention.scholarly_response} />
                   </div>
-                  
-                  {(contention.scholar || contention.source) && (
-                    <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-foreground pt-4 border-t border-border/50">
-                      {contention.scholar && <span>— {contention.scholar}</span>}
-                      {contention.source && (
-                        <span className="flex items-center gap-1 text-muted">
-                          <BookOpen size={14} /> {contention.source}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
+                )}
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-muted font-medium pt-3 border-t border-border/50">
+                <span className="text-primary truncate max-w-[60%]">
+                  {contention.scholar || "Admin"}
+                </span>
+                <span className="truncate max-w-[40%] text-right">
+                  {contention.source && <span className="flex items-center gap-1"><BookOpen size={14} /> {contention.source}</span>}
+                </span>
+              </div>
             </div>
           ))
         ) : (

@@ -15,15 +15,12 @@ const mainLinks = [
   { href: "/articles", label: "Articles", icon: FileText },
   { href: "/books", label: "Books", icon: BookOpen },
   { href: "/scholars", label: "Scholars", icon: Users },
-  { href: "/quotes", label: "Quotes", icon: Quote },
   { href: "/qa", label: "Q&A", icon: HelpCircle },
 ];
 
 const moreLinks = [
   { href: "/lectures", label: "Lectures", icon: Video },
-  { href: "/proofs", label: "Proofs & Evidences", icon: BookMarked },
   { href: "/contentions", label: "Contentions", icon: ShieldAlert },
-  { href: "/references", label: "References", icon: MessageSquare },
   { href: "/search", label: "Search", icon: Search },
 ];
 

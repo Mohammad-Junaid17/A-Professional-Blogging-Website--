@@ -7,32 +7,21 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 
 import { ImageUpload } from "@/components/admin/ImageUpload";
+import { CategorySelector } from "@/components/admin/CategorySelector";
 
 export default function EditBook({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(false); const [fetching, setFetching] = useState(true); const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ title: "", slug: "", author: "", description: "", language: "", category: "", sub_category: "", pdf_url: "", cover_url: "", status: "published" });
-  const [categories, setCategories] = useState<any[]>([]);
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
   useEffect(() => {
-    fetch("/api/admin/categories").then(r => r.json()).then(d => {
-      if (d.data) setCategories(d.data.filter((c:any) => !c.content_type || c.content_type === "books"));
-    });
     fetch(`/api/admin/books/${id}`).then(r => r.json()).then(({ data }) => {
       if (data) setForm({ title: data.title || "", slug: data.slug || "", author: data.author || "", description: data.description || "", language: data.language || "", category: data.category || "", sub_category: data.sub_category || "", pdf_url: data.pdf_url || "", cover_url: data.cover_url || "", status: data.status || "published" });
       setFetching(false);
     }).catch(() => setFetching(false));
   }, [id]);
-
-  const parents = categories.filter(c => !c.parent_id);
-  const getSubCategories = () => {
-    const parent = categories.find(c => c.name === form.category);
-    if (!parent) return [];
-    return categories.filter(c => c.parent_id === parent.id);
-  };
-  const subCategories = getSubCategories();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setLoading(true); setError(null);
@@ -58,26 +47,13 @@ export default function EditBook({ params }: { params: Promise<{ id: string }> }
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Author</label><input type="text" value={form.author} onChange={(e) => set("author", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">Language</label><select value={form.language} onChange={(e) => set("language", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"><option value="">Select</option><option>Arabic</option><option>English</option><option>Arabic &amp; English</option><option>Urdu</option><option>Other</option></select></div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-semibold text-foreground mb-1.5">Category</label>
-            <select value={form.category} onChange={(e) => { set("category", e.target.value); set("sub_category", ""); }} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
-              <option value="">Select Category</option>
-              {parents.map(c => (
-                <option key={c.id} value={c.name}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-foreground mb-1.5">Sub-category</label>
-            <select value={form.sub_category} onChange={(e) => set("sub_category", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" disabled={!form.category || subCategories.length === 0}>
-              <option value="">Select Sub-category</option>
-              {subCategories.map(c => (
-                <option key={c.id} value={c.name}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <CategorySelector 
+          contentType="books" 
+          category={form.category} 
+          setCategory={(val) => set("category", val)} 
+          subCategory={form.sub_category} 
+          setSubCategory={(val) => set("sub_category", val)} 
+        />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div><label className="block text-sm font-semibold text-foreground mb-1.5">PDF URL</label><input type="url" value={form.pdf_url} onChange={(e) => set("pdf_url", e.target.value)} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
           <ImageUpload value={form.cover_url} onChange={(url) => set("cover_url", url)} label="Cover Image URL" />

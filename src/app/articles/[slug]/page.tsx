@@ -1,18 +1,31 @@
 import Link from "next/link";
-import { ChevronRight, Clock, User, Share2, Copy, Calendar } from "lucide-react";
+import { ChevronRight, Clock, User, Calendar } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { notFound } from "next/navigation";
-
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import { ShareButtons } from "@/components/ShareButtons";
 
 export const revalidate = 60;
 
-export default async function ArticlePage(props: { params: Promise<{ slug: string  }> }) {
+// Ordered sub-topics for Aqā'id section
+const AQAID_SUBTOPICS = [
+  "Mawlid",
+  "Knowledge of the Unseen",
+  "Messenger of Allah",
+  "Tawassul",
+  "Deobandism",
+  "Wahaabism",
+  "Kissing of the Thumbs",
+  "Miscellaneous",
+  "Shi'a",
+];
+
+export default async function ArticlePage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const supabase = await createClient();
-  
+
   const { data: article } = await supabase
     .from("articles")
     .select("*")
@@ -24,36 +37,98 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
     notFound();
   }
 
-  // Fetch related articles
-  const { data: relatedArticles } = await supabase
-    .from("articles")
-    .select("id, title, slug")
-    .eq("category", article.category)
-    .neq("id", article.id)
-    .limit(3);
+  const isAqaid = article.category === "Aqā'id";
+  let relatedArticles: { id: string; title: string; slug: string; sub_category: string | null }[] = [];
+  
+  if (isAqaid) {
+    try {
+      // Import local mapping created by our scraper
+      const relatedMap = (await import("@/data/aqaid_related.json").then((m) => m.default || m)) as Record<string, string[]>;
+      const mappedSlugs: string[] = relatedMap[params.slug] || [];
+      
+      if (mappedSlugs.length > 0) {
+        const { data } = await supabase
+          .from("articles")
+          .select("id, title, slug, sub_category")
+          .in("slug", mappedSlugs)
+          .eq("status", "published");
+          
+        if (data) {
+          // Sort to match the exact order defined in the mapped array
+          relatedArticles = data.sort(
+            (a, b) => mappedSlugs.indexOf(a.slug) - mappedSlugs.indexOf(b.slug)
+          );
+        }
+      }
+    } catch (err) {
+      console.error("Could not load aqaid_related.json map", err);
+    }
+  }
+
+  // Fallback: If no related articles found in map, or if not Aqā'id, just fetch by category
+  if (relatedArticles.length === 0) {
+    const { data: byCat } = await supabase
+      .from("articles")
+      .select("id, title, slug, sub_category")
+      .eq("category", article.category)
+      .eq("status", "published")
+      .neq("id", article.id)
+      .limit(6);
+    relatedArticles = byCat || [];
+  }
 
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl relative">
       <AdminEditButton id={article.id} type="articles" />
+
       {/* Breadcrumb */}
       <div className="flex items-center text-sm text-muted mb-8">
         <Link href="/" className="hover:text-primary transition-colors">Home</Link>
         <ChevronRight size={14} className="mx-1" />
         <Link href="/articles" className="hover:text-primary transition-colors">Articles</Link>
+        {isAqaid && (
+          <>
+            <ChevronRight size={14} className="mx-1" />
+            <Link
+              href={`/articles?category=${encodeURIComponent(article.category)}`}
+              className="hover:text-primary transition-colors"
+            >
+              Aqā&apos;id
+            </Link>
+          </>
+        )}
+        {article.sub_category && (
+          <>
+            <ChevronRight size={14} className="mx-1" />
+            <Link
+              href={`/articles?category=${encodeURIComponent(article.category)}&sub=${encodeURIComponent(article.sub_category)}`}
+              className="hover:text-primary transition-colors"
+            >
+              {article.sub_category}
+            </Link>
+          </>
+        )}
         <ChevronRight size={14} className="mx-1" />
         <span className="text-foreground font-medium truncate">{article.title}</span>
       </div>
 
+      {/* Article Header */}
       <header className="mb-10 text-center">
-        {article.category && (
-          <span className="inline-block bg-primary-light text-primary text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-6">
-            {article.category}
-          </span>
-        )}
+        <div className="flex items-center justify-center gap-2 mb-6">
+          {article.category && (
+            <span className="inline-block bg-primary-light text-primary text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full">
+              {article.category}
+            </span>
+          )}
+          {article.sub_category && (
+            <span className="inline-block bg-muted/10 text-muted text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full">
+              {article.sub_category}
+            </span>
+          )}
+        </div>
         <h1 className="text-3xl md:text-5xl font-bold font-serif text-foreground leading-tight mb-6">
           {article.title}
         </h1>
-        
         <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted">
           {article.author && (
             <div className="flex items-center gap-1">
@@ -80,32 +155,46 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
         <MarkdownRenderer content={article.content || article.excerpt || ""} />
       </div>
 
-      {/* Footer / Share / Related */}
+      {/* Footer */}
       <footer className="border-t border-border pt-8 mt-12">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-12">
+        {/* Share Bar */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
           <h3 className="font-bold text-lg">Share this article</h3>
-          <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 bg-muted/10 text-foreground rounded-md hover:bg-muted/20 transition-colors text-sm font-medium">
-              <Share2 size={16} /> Share
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-card border border-border text-foreground rounded-md hover:bg-muted/10 transition-colors text-sm font-medium">
-              <Copy size={16} /> Copy Link
-            </button>
-          </div>
+          <ShareButtons title={article.title} />
         </div>
 
-        {relatedArticles && relatedArticles.length > 0 && (
+        {/* ── Related Articles (Common UI for both Aqaid mapped items and fallback) ── */}
+        {relatedArticles.length > 0 && (
           <div>
-            <h3 className="font-bold text-2xl font-serif mb-6 border-b border-border pb-2">Related Articles</h3>
+            <div className="flex items-baseline gap-3 mb-6 border-b border-border pb-3">
+              <h3 className="font-bold text-2xl font-serif">Related Articles</h3>
+              {article.sub_category && !isAqaid && (
+                <span className="text-xs font-bold tracking-widest uppercase text-primary bg-primary-light px-2 py-0.5 rounded-full">
+                  {article.sub_category}
+                </span>
+              )}
+            </div>
             <ul className="space-y-3">
               {relatedArticles.map((related) => (
-                <li key={related.id}>
-                  <Link href={`/articles/${related.slug}`} className="text-primary hover:underline text-lg">
+                <li key={related.id} className="flex items-start gap-3 group">
+                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0 group-hover:scale-150 transition-transform" />
+                  <Link
+                    href={`/articles/${related.slug}`}
+                    className="text-foreground hover:text-primary transition-colors text-base font-medium leading-snug"
+                  >
                     {related.title}
                   </Link>
                 </li>
               ))}
             </ul>
+            <div className="mt-6">
+              <Link
+                href={`/articles?category=${encodeURIComponent(article.category)}`}
+                className="inline-flex items-center gap-1 text-sm text-primary hover:underline font-medium"
+              >
+                View all {article.category} articles →
+              </Link>
+            </div>
           </div>
         )}
       </footer>

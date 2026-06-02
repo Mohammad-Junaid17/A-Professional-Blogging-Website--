@@ -6,10 +6,9 @@ import { Loader2, ArrowLeft, Send } from "lucide-react";
 import toast from "react-hot-toast";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { CategorySelector } from "@/components/admin/CategorySelector";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
-
-const CATEGORIES = ["Fiqh", "Aqeedah", "Marriage & Family", "Finance", "Contemporary Issues", "Worship"];
 
 export default function CreateQA() {
   const router = useRouter();
@@ -74,18 +73,11 @@ export default function CreateQA() {
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-foreground mb-1.5">Category *</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-          </div>
+          <CategorySelector 
+            contentType="qa"
+            category={category}
+            setCategory={setCategory}
+          />
 
           <div>
             <label className="block text-sm font-semibold text-foreground mb-1.5">Answer *</label>

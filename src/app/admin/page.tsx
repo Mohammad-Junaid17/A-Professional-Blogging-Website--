@@ -11,11 +11,10 @@ async function getDashboardStats() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const [articles, books, scholars, quotes, pendingQA, pendingComments, newsletter, users, pageViewsResponse] = await Promise.all([
+  const [articles, books, scholars, pendingQA, pendingComments, newsletter, users, pageViewsResponse] = await Promise.all([
     supabaseAdmin.from("articles").select("id", { count: "exact", head: true }),
     supabaseAdmin.from("books").select("id", { count: "exact", head: true }),
     supabaseAdmin.from("scholars").select("id", { count: "exact", head: true }),
-    supabaseAdmin.from("quotes").select("id", { count: "exact", head: true }),
     supabaseAdmin.from("qa_entries").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabaseAdmin.from("comments").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabaseAdmin.from("newsletter_subscribers").select("id", { count: "exact", head: true }),
@@ -51,7 +50,6 @@ async function getDashboardStats() {
     articles: articles.count ?? 0,
     books: books.count ?? 0,
     scholars: scholars.count ?? 0,
-    quotes: quotes.count ?? 0,
     pendingQA: pendingQA.count ?? 0,
     pendingComments: pendingComments.count ?? 0,
     newsletter: newsletter.count ?? 0,
@@ -71,7 +69,6 @@ export default async function AdminDashboard() {
     { label: "Articles", count: stats.articles, icon: FileText, href: "/admin/articles", color: "text-blue-500 bg-blue-500/10" },
     { label: "Books", count: stats.books, icon: BookOpen, href: "/admin/books", color: "text-teal-500 bg-teal-500/10" },
     { label: "Scholars", count: stats.scholars, icon: Users, href: "/admin/scholars", color: "text-purple-500 bg-purple-500/10" },
-    { label: "Quotes", count: stats.quotes, icon: Quote, href: "/admin/quotes", color: "text-amber-500 bg-amber-500/10" },
     { label: "Pending Q&A", count: stats.pendingQA, icon: HelpCircle, href: "/admin/qa", color: "text-orange-500 bg-orange-500/10" },
     { label: "Pending Comments", count: stats.pendingComments, icon: MessageSquare, href: "/admin/comments", color: "text-rose-500 bg-rose-500/10" },
     { label: "Newsletter", count: stats.newsletter, icon: Mail, href: "/admin/newsletter", color: "text-cyan-500 bg-cyan-500/10" },

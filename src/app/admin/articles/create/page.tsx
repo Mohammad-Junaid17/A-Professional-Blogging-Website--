@@ -6,6 +6,7 @@ import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
+import { CategorySelector } from "@/components/admin/CategorySelector";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -18,27 +19,10 @@ export default function CreateArticle() {
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
-  const [categories, setCategories] = useState<any[]>([]);
-  const genSlug = (t: string) => t.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").slice(0, 80);
   const [readingTime, setReadingTime] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
   const [status, setStatus] = useState("published");
-
-  useEffect(() => {
-    fetch("/api/admin/categories").then(r => r.json()).then(d => {
-      if (d.data) setCategories(d.data.filter((c:any) => !c.content_type || c.content_type === "articles"));
-    });
-  }, []);
-
-  const parents = categories.filter(c => !c.parent_id);
-  const getSubCategories = () => {
-    const parent = categories.find(c => c.name === category);
-    if (!parent) return [];
-    return categories.filter(c => c.parent_id === parent.id);
-  };
-  const subCategories = getSubCategories();
-
   const generateSlug = (t: string) => t.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").slice(0, 80);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -107,28 +91,13 @@ export default function CreateArticle() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-semibold text-foreground mb-1.5">Category</label>
-            <select value={category} onChange={(e) => { setCategory(e.target.value); setSubCategory(""); }}
-              className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
-              <option value="">Select category</option>
-              {parents.map(c => (
-                <option key={c.id} value={c.name}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-foreground mb-1.5">Sub-category</label>
-            <select value={subCategory} onChange={(e) => setSubCategory(e.target.value)}
-              className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" disabled={!category || subCategories.length === 0}>
-              <option value="">Select sub-category</option>
-              {subCategories.map(c => (
-                <option key={c.id} value={c.name}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <CategorySelector 
+          contentType="articles" 
+          category={category} 
+          setCategory={setCategory} 
+          subCategory={subCategory} 
+          setSubCategory={setSubCategory} 
+        />
 
         <div>
           <label className="block text-sm font-semibold text-foreground mb-1.5">Excerpt</label>

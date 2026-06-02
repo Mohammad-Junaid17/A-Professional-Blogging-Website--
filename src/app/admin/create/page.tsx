@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Save, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 
-type ContentType = "articles" | "books" | "scholars" | "quotes" | "qa_entries";
+type ContentType = "articles" | "books" | "scholars" | "qa_entries";
 
 export default function CreateEntryPage() {
   const supabase = createClient();
@@ -63,7 +63,6 @@ export default function CreateEntryPage() {
             <option value="articles">Article</option>
             <option value="books">Book</option>
             <option value="scholars">Scholar</option>
-            <option value="quotes">Quote</option>
             <option value="qa_entries">Q&A Entry</option>
           </select>
         </div>
@@ -124,25 +123,6 @@ export default function CreateEntryPage() {
                 <Input label="Origin" name="origin" placeholder="e.g. Kufa, Iraq" />
               </div>
               <Textarea label="Biography (Markdown)" name="bio" rows={8} />
-            </>
-          )}
-
-          {contentType === "quotes" && (
-            <>
-              <Textarea label="English Text" name="english_text" rows={3} required />
-              <Textarea label="Arabic Text" name="arabic_text" rows={3} dir="rtl" className="font-arabic text-xl" />
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Input label="Attribution" name="attribution" placeholder="e.g. Prophet Muhammad (ﷺ)" />
-                <Input label="Source" name="source" placeholder="e.g. Sahih al-Bukhari 1" />
-                <div className="space-y-2">
-                  <label className="block text-sm font-bold text-foreground">Source Type</label>
-                  <select name="source_type" className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
-                    <option value="scholar">Scholar</option>
-                    <option value="quran">Quran</option>
-                    <option value="hadith">Hadith</option>
-                  </select>
-                </div>
-              </div>
             </>
           )}
 

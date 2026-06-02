@@ -4,7 +4,7 @@ import { Pencil } from "lucide-react";
 
 interface AdminEditButtonProps {
   id: string;
-  type: "books" | "articles" | "scholars" | "quotes" | "lectures" | "contentions" | "proofs" | "qa";
+  type: "books" | "articles" | "scholars" | "lectures" | "contentions" | "qa";
 }
 
 export async function AdminEditButton({ id, type }: AdminEditButtonProps) {

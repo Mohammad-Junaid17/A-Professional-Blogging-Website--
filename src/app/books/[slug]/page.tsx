@@ -24,92 +24,93 @@ export default async function BookDetailPage({ params }: { params: Promise<{ slu
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-5xl">
-      <div className="mb-8">
-        <Link href="/books" className="text-primary hover:underline flex items-center gap-2 text-sm font-semibold">
-          &larr; Back to Library
-        </Link>
+    <div className="container mx-auto px-4 py-8 max-w-4xl relative">
+      <AdminEditButton id={book.id} type="books" />
+      
+      {/* Breadcrumb */}
+      <div className="flex items-center text-sm text-muted mb-8">
+        <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+        <span className="mx-1">&rsaquo;</span>
+        <Link href="/books" className="hover:text-primary transition-colors">Books</Link>
+        <span className="mx-1">&rsaquo;</span>
+        <span className="text-foreground font-medium truncate">Book Details</span>
       </div>
 
-      <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm relative">
-        <AdminEditButton id={book.id} type="books" />
-        <div className="flex flex-col md:flex-row">
-          {/* Cover Section */}
-          <div className="md:w-1/3 bg-primary-light flex items-center justify-center min-h-[300px] md:min-h-full border-r border-border relative overflow-hidden">
-            {book.cover_url ? (
-              <div 
-                className="absolute inset-0 w-full h-full bg-cover bg-center"
-                style={{ backgroundImage: `url(${book.cover_url})` }}
-              />
-            ) : (
-              <div className="text-center p-12">
-                <Book size={80} className="text-primary mx-auto mb-6" />
-                <div className="bg-primary text-card px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest inline-block">
-                  {book.category || "Book"}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Details Section */}
-          <div className="md:w-2/3 p-8 md:p-12">
-            <h1 className="text-3xl md:text-4xl font-bold font-serif text-foreground mb-4">
-              {book.title}
-            </h1>
-            
-            <div className="flex flex-wrap gap-4 text-sm text-muted mb-8 pb-8 border-b border-border">
-              <div className="flex items-center gap-1.5">
-                <User size={16} className="text-primary" />
-                <span className="font-medium text-foreground">{book.author}</span>
-              </div>
-              {book.language && (
-                <div className="flex items-center gap-1.5">
-                  <Globe size={16} className="text-primary" />
-                  <span>{book.language}</span>
-                </div>
-              )}
-              {book.category && (
-                <div className="flex items-center gap-1.5">
-                  <Tag size={16} className="text-primary" />
-                  <span>{book.category}</span>
-                </div>
-              )}
-              {book.created_at && (
-                <div className="flex items-center gap-1.5">
-                  <Calendar size={16} className="text-primary" />
-                  <span>{new Date(book.created_at).toLocaleDateString()}</span>
-                </div>
-              )}
+      {/* Header Metadata */}
+      <header className="mb-10 text-center">
+        <div className="flex items-center justify-center gap-2 mb-6">
+          {book.category && (
+            <span className="inline-block bg-primary-light text-primary text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full">
+              {book.category}
+            </span>
+          )}
+          {book.language && (
+            <span className="inline-block bg-muted/10 text-muted text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full">
+              {book.language}
+            </span>
+          )}
+        </div>
+        
+        <h1 className="text-3xl md:text-4xl font-bold font-serif text-foreground leading-tight mb-6">
+          {book.title}
+        </h1>
+        
+        <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted border-b border-border pb-6">
+          {book.author && (
+            <div className="flex items-center gap-1.5">
+              <User size={16} />
+              <span className="font-medium text-foreground">Author: {book.author}</span>
             </div>
-
-            <div className="mb-10">
-              <h2 className="text-xl font-bold text-foreground mb-4">Description</h2>
-              <MarkdownRenderer content={book.description || "No description provided."} />
+          )}
+          {book.author && <span>|</span>}
+          {book.created_at && (
+            <div className="flex items-center gap-1.5">
+              <Calendar size={16} className="text-primary" />
+              <span>{new Date(book.created_at).toLocaleDateString()}</span>
             </div>
+          )}
+        </div>
+      </header>
 
-            {book.pdf_url && (
-              <div className="flex flex-wrap gap-4 mt-auto">
-                <a 
-                  href={book.pdf_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-primary text-card px-6 py-3 rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-sm"
-                >
-                  <Download size={20} /> Download PDF
-                </a>
-                <a 
-                  href={book.pdf_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-bold hover:bg-muted/5 transition-colors shadow-sm"
-                >
-                  <ExternalLink size={20} /> Read Online
-                </a>
-              </div>
-            )}
+      {/* Main Content matching Articles theme */}
+      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-gray-700 dark:text-gray-300 flex flex-col md:flex-row gap-8">
+        {book.cover_url && (
+          <div className="md:w-1/3 shrink-0">
+            <img src={book.cover_url} alt={book.title} className="w-full h-auto rounded-lg shadow-md border border-border" />
           </div>
+        )}
+        <div className="md:w-2/3">
+          <h2 className="font-bold text-3xl font-serif text-foreground mb-4">Description</h2>
+          <MarkdownRenderer content={book.description || "No description provided."} />
         </div>
       </div>
+
+      {/* Footer / Downloads */}
+      <footer className="border-t border-border pt-8 mt-12 mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <h3 className="font-bold text-lg">Downloads</h3>
+          {book.pdf_url && (
+            <div className="flex flex-wrap gap-4">
+              <a 
+                href={book.pdf_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-primary text-card px-6 py-2 rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-sm text-sm"
+              >
+                <Download size={16} /> Download PDF
+              </a>
+              <a 
+                href={book.pdf_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-card border border-border text-foreground px-6 py-2 rounded-xl font-bold hover:bg-muted/5 transition-colors shadow-sm text-sm"
+              >
+                <ExternalLink size={16} /> Read Online
+              </a>
+            </div>
+          )}
+        </div>
+      </footer>
 
       <CommentSection contentType="books" contentId={book.id} />
     </div>

@@ -11,37 +11,19 @@ export function QACard({ qa }: { qa: any }) {
     <div className="relative h-full group">
       <AdminEditButton id={qa.id} type="qa" />
       <Link href={`/qa/${qa.id}`} className="block h-full">
-        <div className="bg-card border border-border p-6 rounded-xl hover:border-primary/50 hover:shadow-md transition-all flex flex-col h-full">
-          <div className="flex gap-4 mb-4">
-            <div className="flex-shrink-0 pt-1">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-card font-bold">
-                Q
-              </div>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-xl text-foreground font-serif group-hover:text-primary transition-colors line-clamp-2">
-                {qa.question}
-              </h3>
-            </div>
-          </div>
-          
-          <div className="flex flex-wrap items-center gap-2 text-xs mb-4">
-            {qa.answered_by && (
-              <span className="bg-primary-light text-primary font-semibold px-2 py-1 rounded-full">
-                {qa.answered_by}
-              </span>
-            )}
-            <span className="text-muted font-medium">
-              {qa.category} {qa.sub_category && `• ${qa.sub_category}`}
-            </span>
-          </div>
-
-          <p className="text-muted text-sm leading-relaxed line-clamp-3 mb-4 flex-1">
+        <div className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow h-full flex flex-col">
+          <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">
+            Q&A {qa.category && `• ${qa.category}`} {qa.sub_category && `• ${qa.sub_category}`}
+          </span>
+          <h3 className="font-bold text-[1.1rem] text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+            {qa.question}
+          </h3>
+          <p className="text-muted text-sm line-clamp-3 mb-4 flex-1">
             {previewText}
           </p>
-
-          <div className="mt-auto pt-4 border-t border-border/50">
-            <span className="text-sm font-medium text-primary flex items-center gap-1 group-hover:underline">
+          <div className="flex items-center justify-between text-xs text-muted font-medium pt-3 border-t border-border/50">
+            <span className="text-primary truncate max-w-[60%]">{qa.answered_by || "Admin"}</span>
+            <span className="flex items-center gap-1 group-hover:text-primary transition-colors">
               Read Full Answer <ArrowRight size={14} />
             </span>
           </div>

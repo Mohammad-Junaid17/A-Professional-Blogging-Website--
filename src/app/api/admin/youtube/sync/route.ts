@@ -52,7 +52,7 @@ export async function POST(req: Request) {
       const entries = xml.split('<entry>');
       entries.shift(); // Remove the header part before the first entry
       
-      const maxToSync = 5;
+      const maxToSync = 3;
       const entriesToProcess = entries.slice(0, maxToSync);
       
       for (const entry of entriesToProcess) {

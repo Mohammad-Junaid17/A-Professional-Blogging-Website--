@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, Users, FileText, Quote as QuoteIcon } from "lucide-react";
+import { ArrowRight, BookOpen, Users, FileText } from "lucide-react";
 import { ArticleCard, BookCard, ScholarCard } from "@/components/ui/Cards";
 import { createClient } from "@/lib/supabase/server";
 
@@ -12,7 +12,6 @@ export default async function Home() {
   const { data: articles } = await supabase.from('articles').select('*').order('created_at', { ascending: false }).limit(3);
   const { data: books } = await supabase.from('books').select('*').order('created_at', { ascending: false }).limit(3);
   const { data: scholars } = await supabase.from('scholars').select('*').order('created_at', { ascending: false }).limit(3);
-  const { data: quotes } = await supabase.from('quotes').select('*').limit(1);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -81,7 +80,7 @@ export default async function Home() {
       {/* SECTION 2 - Browse by Category */}
       <section className="py-16 bg-card border-y border-border">
         <div className="container px-4 mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <CategoryCard 
               href="/articles" 
               icon={<FileText size={32} className="text-primary mb-4 group-hover:scale-110 transition-transform" />} 
@@ -99,12 +98,6 @@ export default async function Home() {
               icon={<Users size={32} className="text-primary mb-4 group-hover:scale-110 transition-transform" />} 
               title="Biographies" 
               description="Learn about the lives and works of traditional scholars." 
-            />
-            <CategoryCard 
-              href="/quotes" 
-              icon={<QuoteIcon size={32} className="text-primary mb-4 group-hover:scale-110 transition-transform" />} 
-              title="Quotes" 
-              description="Inspirational wisdom from the Quran, Sunnah, and scholars." 
             />
           </div>
         </div>
