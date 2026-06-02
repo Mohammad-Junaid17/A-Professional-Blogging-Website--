@@ -76,7 +76,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
       </header>
 
       {/* Main Content */}
-      <div className="prose prose-lg dark:prose-invert max-w-none mb-16">
+      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-gray-700 dark:text-gray-300">
         <MarkdownRenderer content={article.content || article.excerpt || ""} />
       </div>
 

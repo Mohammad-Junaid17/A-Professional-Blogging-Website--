@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Naskh_Arabic } from "next/font/google";
+import { Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
@@ -8,10 +8,10 @@ import { Toaster } from 'react-hot-toast';
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const arabicFont = Noto_Naskh_Arabic({
-  weight: ["400", "700"],
-  subsets: ["arabic"],
-  variable: "--font-amiri",
+const cormorantFont = Cormorant_Garamond({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-amiri", // Keeping variable name same to map to tailwind's font-serif easily
 });
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${inter.variable} ${arabicFont.variable} font-sans antialiased bg-background text-foreground min-h-screen flex flex-col`}>
+      <body suppressHydrationWarning className={`${inter.variable} ${cormorantFont.variable} font-sans antialiased bg-background text-foreground min-h-screen flex flex-col`}>
         <AnalyticsTracker />
         <Toaster
           position="top-right"

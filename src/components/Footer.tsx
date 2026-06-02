@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { BookOpen, Mail, Send, Globe } from "lucide-react";
 
 const TwitterIcon = ({ size = 20 }: { size?: number }) => (
@@ -17,23 +20,26 @@ const InstagramIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) return null;
+
   return (
-    <footer className="bg-card border-t border-border pt-16 pb-6">
+    <footer className="bg-[#31373D] text-gray-300 pt-16 pb-6">
       <div className="container mx-auto px-4">
         
         {/* Social Banner */}
         <div className="flex flex-col items-center justify-center space-y-5 mb-16 pb-12 border-b border-border">
-          <span className="text-sm text-foreground font-bold uppercase tracking-[0.2em]">Follow Our Updates</span>
+          <span className="text-sm text-white font-bold uppercase tracking-[0.2em]">Follow Our Updates</span>
           <div className="flex flex-col items-center gap-4">
             <div className="flex items-center gap-6">
-              <a href="https://x.com/sugemadinah" target="_blank" rel="noopener noreferrer" className="p-4 bg-background border border-border rounded-full hover:bg-primary/10 hover:border-primary/30 hover:-translate-y-1 hover:shadow-lg transition-all group" aria-label="Twitter">
-                <TwitterIcon size={24} className="text-muted group-hover:text-primary transition-colors" />
+              <a href="https://x.com/sugemadinah" target="_blank" rel="noopener noreferrer" className="p-4 bg-[#252A2E] border border-[#404850] rounded-full hover:bg-primary/20 hover:border-primary/50 hover:-translate-y-1 hover:shadow-lg transition-all group" aria-label="Twitter">
+                <TwitterIcon size={24} className="text-gray-400 group-hover:text-primary transition-colors" />
               </a>
-              <a href="https://www.instagram.com/q.sunnahh_/" target="_blank" rel="noopener noreferrer" className="p-4 bg-background border border-border rounded-full hover:bg-primary/10 hover:border-primary/30 hover:-translate-y-1 hover:shadow-lg transition-all group" aria-label="Instagram">
-                <InstagramIcon size={24} className="text-muted group-hover:text-primary transition-colors" />
+              <a href="https://www.instagram.com/q.sunnahh_/" target="_blank" rel="noopener noreferrer" className="p-4 bg-[#252A2E] border border-[#404850] rounded-full hover:bg-primary/20 hover:border-primary/50 hover:-translate-y-1 hover:shadow-lg transition-all group" aria-label="Instagram">
+                <InstagramIcon size={24} className="text-gray-400 group-hover:text-primary transition-colors" />
               </a>
             </div>
-            <span className="text-sm text-muted italic mt-2">Curated by @q.sunnahh_</span>
+            <span className="text-sm text-gray-500 italic mt-2">Curated by @q.sunnahh_</span>
           </div>
         </div>
 
@@ -43,21 +49,21 @@ export default function Footer() {
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 group">
               <div className="w-10 h-10 rounded flex items-center justify-center overflow-hidden">
-                <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+                <img src="/logo.png" alt="Logo" className="w-full h-full object-contain brightness-0 invert" />
               </div>
-              <span className="font-bold text-primary text-xl">
+              <span className="font-bold text-white text-xl">
                 Islamic Scholarly Resource
               </span>
             </Link>
-            <p className="text-muted text-sm leading-relaxed">
+            <p className="text-gray-400 text-sm leading-relaxed">
               A comprehensive knowledge hub for Islamic sciences, jurisprudence, theology, and general Islamic learning.
             </p>
           </div>
 
           {/* Column 2 */}
           <div>
-            <h3 className="font-bold mb-4 text-foreground">Browse</h3>
-            <ul className="space-y-2 text-sm text-muted">
+            <h3 className="font-bold mb-4 text-white">Browse</h3>
+            <ul className="space-y-2 text-sm text-gray-400">
               <li><Link href="/articles" className="hover:text-primary transition-colors">Articles</Link></li>
               <li><Link href="/books" className="hover:text-primary transition-colors">Books & Library</Link></li>
               <li><Link href="/scholars" className="hover:text-primary transition-colors">Scholar Biographies</Link></li>
@@ -68,8 +74,8 @@ export default function Footer() {
 
           {/* Column 3 */}
           <div>
-            <h3 className="font-bold mb-4 text-foreground">Resources</h3>
-            <ul className="space-y-2 text-sm text-muted">
+            <h3 className="font-bold mb-4 text-white">Resources</h3>
+            <ul className="space-y-2 text-sm text-gray-400">
               <li><Link href="/quotes" className="hover:text-primary transition-colors">Quotes</Link></li>
               <li><Link href="/proofs" className="hover:text-primary transition-colors">Proofs & Evidences</Link></li>
               <li><Link href="/contentions" className="hover:text-primary transition-colors">Contentions</Link></li>
@@ -79,20 +85,20 @@ export default function Footer() {
 
           {/* Column 4 */}
           <div>
-            <h3 className="font-bold mb-4 text-foreground">Newsletter</h3>
-            <p className="text-sm text-muted mb-4">
+            <h3 className="font-bold mb-4 text-white">Newsletter</h3>
+            <p className="text-sm text-gray-400 mb-4">
               Subscribe for updates on new articles, books, and scholarly content.
             </p>
             <form className="flex" action="/#">
               <input 
                 type="email" 
                 placeholder="Email address" 
-                className="flex-1 px-3 py-2 bg-background border border-border rounded-l-md text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                className="flex-1 px-3 py-2 bg-[#252A2E] border border-[#404850] rounded-l-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-primary"
                 required
               />
               <button 
                 type="submit"
-                className="bg-primary text-card px-4 py-2 rounded-r-md hover:bg-primary/90 transition-colors flex items-center justify-center"
+                className="bg-primary text-white px-4 py-2 rounded-r-md hover:bg-primary/90 transition-colors flex items-center justify-center"
                 aria-label="Subscribe"
               >
                 <Send size={16} />
@@ -102,11 +108,11 @@ export default function Footer() {
           
         </div>
 
-        <div className="border-t border-border pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted">
+        <div className="border-t border-[#404850] pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-gray-500">
             © 2026 Islamic Scholarly Resource. All rights reserved.
           </p>
-          <div className="flex items-center space-x-4 text-muted">
+          <div className="flex items-center space-x-4 text-gray-500">
             <a href="https://x.com/sugemadinah" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:text-primary transition-colors"><TwitterIcon size={20} /></a>
             <a href="https://www.instagram.com/q.sunnahh_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-primary transition-colors"><InstagramIcon size={20} /></a>
             <a href="#" className="hover:text-primary transition-colors" aria-label="Website"><Globe size={20} /></a>

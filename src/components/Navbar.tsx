@@ -134,12 +134,12 @@ export default function Navbar() {
   if (pathname.startsWith("/admin")) return null;
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+    <nav className="sticky top-0 z-50 w-full bg-[#31373D] border-b border-[#404850]">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <img src="/logo.png" alt="Logo" className="h-10 w-auto object-contain" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-          <span className="font-bold text-primary text-xl hidden sm:block group-hover:opacity-90 transition-opacity">
+          <img src="/logo.png" alt="Logo" className="h-10 w-auto object-contain brightness-0 invert" onError={(e) => { e.currentTarget.style.display = 'none' }} />
+          <span className="font-bold text-white text-xl hidden sm:block group-hover:opacity-90 transition-opacity">
             Islamic Scholarly Resource
           </span>
         </Link>
@@ -154,7 +154,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-colors
-                  ${isActive ? "bg-nav-active text-primary" : "text-muted hover:text-foreground hover:bg-muted/10"}
+                  ${isActive ? "bg-primary/20 text-[#9CC76D]" : "text-gray-300 hover:text-white hover:bg-white/10"}
                 `}
               >
                 <Icon size={16} />
@@ -167,10 +167,10 @@ export default function Navbar() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsMoreOpen(!isMoreOpen)}
-              className="flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium text-muted hover:text-foreground hover:bg-muted/10 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
             >
               <Menu size={16} />
-              More ≡
+              More
             </button>
 
             {isMoreOpen && (
@@ -200,19 +200,11 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <Link
             href="/search"
-            className="p-2 rounded-md text-muted hover:text-foreground hover:bg-muted/10 transition-colors"
+            className="p-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
             aria-label="Search"
           >
             <Search size={20} />
           </Link>
-
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-md text-muted hover:text-foreground hover:bg-muted/10 transition-colors"
-            aria-label="Toggle dark mode"
-          >
-            {mounted && theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
 
           {/* Auth Section */}
           {!loading && (
@@ -221,12 +213,12 @@ export default function Navbar() {
                 <div className="relative" ref={userMenuRef}>
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-muted/10 transition-colors"
+                    className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
                   >
                     <div className="w-8 h-8 rounded-full bg-primary text-card flex items-center justify-center text-sm font-bold">
                       {getInitials(user.full_name, user.email)}
                     </div>
-                    <ChevronDown size={14} className="text-muted hidden sm:block" />
+                    <ChevronDown size={14} className="text-gray-300 hidden sm:block" />
                   </button>
 
                   {isUserMenuOpen && (
@@ -278,7 +270,7 @@ export default function Navbar() {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden p-2 text-muted"
+            className="md:hidden p-2 text-gray-300 hover:text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <Menu size={24} />
@@ -288,7 +280,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-background px-4 py-4 space-y-2">
+        <div className="md:hidden border-t border-[#404850] bg-[#31373D] px-4 py-4 space-y-2">
           {[...mainLinks, ...moreLinks].map((link) => {
             const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
             const Icon = link.icon;
@@ -298,7 +290,7 @@ export default function Navbar() {
                 href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-md text-base font-medium transition-colors
-                  ${isActive ? "bg-nav-active text-primary" : "text-muted hover:text-foreground hover:bg-muted/10"}
+                  ${isActive ? "bg-primary/20 text-[#9CC76D]" : "text-gray-300 hover:text-white hover:bg-white/10"}
                 `}
               >
                 <Icon size={20} />
@@ -306,7 +298,7 @@ export default function Navbar() {
               </Link>
             );
           })}
-          <div className="pt-4 border-t border-border">
+          <div className="pt-4 border-t border-[#404850]">
             {user ? (
               <button
                 onClick={() => { handleSignOut(); setIsMobileMenuOpen(false); }}

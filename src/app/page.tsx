@@ -34,20 +34,17 @@ export default async function Home() {
               </span>
             </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 font-serif">
-            Islamic Scholarly Resource
-          </h1>
-          <p className="text-lg md:text-xl text-muted mb-8 leading-relaxed max-w-3xl mx-auto">
-            A comprehensive knowledge hub for Islamic sciences, jurisprudence, theology, and general Islamic learning.
-            <br className="hidden md:block mt-2" />
-            <span className="inline-block mt-2 font-medium">
-              Propagating Maslak-e-Aʿlā Ḥaḍrat <span className="font-amiri text-[1.1em] text-accent" dir="rtl">رضي الله عنه</span>
-            </span>
-          </p>
-          <div className="mb-10 p-6 bg-card border border-border rounded-xl shadow-sm inline-block max-w-2xl">
-            <p className="font-amiri text-2xl text-primary mb-2" dir="rtl">رَبِّ زِدْنِي عِلْمًا</p>
-            <p className="italic text-muted font-medium">&quot;And say: My Lord, increase me in knowledge.&quot;</p>
-            <p className="text-xs text-muted/80 mt-2">— Quran 20:114</p>
+          <div className="text-left md:text-center text-lg md:text-xl text-gray-700 dark:text-gray-300 font-serif leading-relaxed max-w-4xl mx-auto mb-10 space-y-6">
+            <p>Asalāmu Álaykum wa raHmatullah</p>
+            <p>
+              Welcome to Islamic Scholarly Resource! The aim and mission of this website is to propagate the correct Áqaýed (beliefs) and
+              Manhaj (teachings) of the Ahl as-Sunnah wa al-Jamaáh as written in the works of the great Imām of the Ahl as-Sunnah,
+              and revivalist of the 14th century, <strong className="text-foreground">Ala Hazrat</strong> <span className="text-[#9CC76D]">Imam Ahmed Rida al-Qadri</span> rahīmahullāh wa rađiyAllāhu ánh.
+            </p>
+            <p>
+              The site mainly concentrates in bringing the teachings of the maslak (path) of Imam Ahmed RiDa al-Qadri
+              rahimahullah to the English speaking masses, and In-shaáAllah with your help, we will fulfil this aim.
+            </p>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/articles" className="w-full sm:w-auto px-8 py-3 bg-primary text-card font-semibold rounded-lg hover:bg-primary/90 transition-colors">

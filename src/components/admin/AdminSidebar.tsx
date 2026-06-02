@@ -47,7 +47,7 @@ export default function AdminSidebar({ role = "admin", accessSections = [] }: { 
       {/* Mobile toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-primary text-white rounded-lg shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-[#31373D] text-white rounded-lg shadow-lg"
       >
         <Menu size={20} />
       </button>
@@ -61,24 +61,34 @@ export default function AdminSidebar({ role = "admin", accessSections = [] }: { 
       )}
 
       <aside
-        className={`fixed lg:sticky top-0 left-0 z-40 h-screen bg-primary text-white flex flex-col transition-all duration-300
+        className={`fixed lg:sticky top-0 left-0 z-40 h-screen bg-[#31373D] text-white flex flex-col transition-all duration-300
           ${collapsed ? "-translate-x-full lg:translate-x-0 lg:w-20" : "translate-x-0 w-64"}
         `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-5 border-b border-white/10">
+        <div className={`flex ${collapsed ? 'flex-col items-center justify-center gap-4 py-4 px-2' : 'items-center justify-between px-4 py-5'} border-b border-white/10`}>
           <Link href="/admin" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded flex items-center justify-center overflow-hidden">
-              <img src="/logo.png" alt="Admin Logo" className="w-full h-full object-contain" />
+            <div className="w-8 h-8 rounded flex items-center justify-center overflow-hidden flex-shrink-0">
+              <img src="/logo.png" alt="Admin Logo" className="w-full h-full object-contain brightness-0 invert" />
             </div>
             {!collapsed && <span className="font-bold text-lg">Admin</span>}
           </Link>
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="hidden lg:block p-1 rounded hover:bg-white/10 transition-colors"
-          >
-            <ChevronLeft size={18} className={`transition-transform ${collapsed ? "rotate-180" : ""}`} />
-          </button>
+          <div className={`flex ${collapsed ? 'flex-col' : 'items-center'} gap-2`}>
+            <Link
+              href="/"
+              className="p-1.5 rounded text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+              title="Back to Site"
+            >
+              <LogOut size={18} />
+            </Link>
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="hidden lg:block p-1.5 rounded text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+              title="Toggle Sidebar"
+            >
+              <ChevronLeft size={18} className={`transition-transform ${collapsed ? "rotate-180" : ""}`} />
+            </button>
+          </div>
         </div>
 
         {/* Nav */}
@@ -120,26 +130,7 @@ export default function AdminSidebar({ role = "admin", accessSections = [] }: { 
           })}
         </nav>
 
-        {/* Footer */}
-        <div className="px-2 py-4 border-t border-white/10 flex flex-col gap-1">
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all w-full text-left"
-            title={collapsed ? "Toggle Theme" : undefined}
-          >
-            {mounted && theme === "dark" ? <Sun size={20} className="flex-shrink-0" /> : <Moon size={20} className="flex-shrink-0" />}
-            {!collapsed && <span>Toggle Theme</span>}
-          </button>
 
-          <Link
-            href="/"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
-            title={collapsed ? "Back to Site" : undefined}
-          >
-            <LogOut size={20} className="flex-shrink-0" />
-            {!collapsed && <span>Back to Site</span>}
-          </Link>
-        </div>
       </aside>
     </>
   );

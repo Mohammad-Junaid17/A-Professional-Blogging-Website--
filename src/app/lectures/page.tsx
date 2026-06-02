@@ -56,11 +56,31 @@ export default async function LecturesPage(props: { searchParams: Promise<{ q?: 
               {/* Video Thumbnail Placeholder / Embed */}
               <div className="aspect-video bg-muted/20 relative flex items-center justify-center">
                 {lecture.embed_url ? (
-                  <iframe 
-                    src={lecture.embed_url} 
-                    className="w-full h-full border-0"
-                    allowFullScreen 
-                  />
+                  lecture.embed_url.includes("youtube.com/embed/") ? (
+                    <a 
+                      href={lecture.embed_url.replace("/embed/", "/watch?v=")} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="w-full h-full relative group block"
+                    >
+                      <img 
+                        src={`https://img.youtube.com/vi/${lecture.embed_url.split("/embed/")[1]?.split("?")[0]}/hqdefault.jpg`} 
+                        alt={lecture.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white">
+                          <svg className="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                        </div>
+                      </div>
+                    </a>
+                  ) : (
+                    <iframe 
+                      src={lecture.embed_url} 
+                      className="w-full h-full border-0"
+                      allowFullScreen 
+                    />
+                  )
                 ) : (
                   <Video size={48} className="text-muted/50" />
                 )}

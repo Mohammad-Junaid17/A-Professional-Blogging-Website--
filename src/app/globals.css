@@ -4,29 +4,29 @@
 
 @layer base {
   :root {
-    --background: #FDFBF7;
-    --foreground: #2A1F1D;
+    --background: #F8FAF8;
+    --foreground: #1E2923;
     --card: #FFFFFF;
-    --card-border: #E8E0D5;
-    --muted: #7A6F6C;
-    --primary: #752026; /* Deep Maroon */
-    --primary-light: #F0DFE1; /* Light Maroon background */
-    --accent: #B88645; /* Rich Gold/Bronze */
-    --nav-active: #F2EBE1; /* Warm Beige */
-    --border: #E6DED2;
+    --card-border: #E8F0E8;
+    --muted: #6B7C73;
+    --primary: #1B5E20; /* Deep Green */
+    --primary-light: #E8F5E9; /* Light Green background */
+    --accent: #9CC76D; /* SunniWay Light Green */
+    --nav-active: #E8F5E9; /* Light Green */
+    --border: #C8E6C9;
   }
 
   .dark {
-    --background: #140D0E;
-    --foreground: #EFECE6;
-    --card: #241A1C;
-    --card-border: #3A2A2D;
-    --muted: #9E9491;
-    --primary: #BA3E47; /* Lighter Maroon for dark mode */
-    --primary-light: #301F22;
-    --accent: #D4A363; /* Lighter Gold */
-    --nav-active: #2B1D1F;
-    --border: #3A2A2D;
+    --background: #0D140E;
+    --foreground: #E8F0E8;
+    --card: #152217;
+    --card-border: #233626;
+    --muted: #829A88;
+    --primary: #4CAF50; /* Lighter Green for dark mode */
+    --primary-light: #1A301C;
+    --accent: #B0D782; /* Lighter SunniWay Green */
+    --nav-active: #1A301C;
+    --border: #233626;
   }
 }
 

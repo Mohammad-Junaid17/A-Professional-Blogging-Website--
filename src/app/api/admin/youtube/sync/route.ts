@@ -52,7 +52,10 @@ export async function POST(req: Request) {
       const entries = xml.split('<entry>');
       entries.shift(); // Remove the header part before the first entry
       
-      for (const entry of entries) {
+      const maxToSync = 5;
+      const entriesToProcess = entries.slice(0, maxToSync);
+      
+      for (const entry of entriesToProcess) {
         const videoIdMatch = entry.match(/<yt:videoId>(.*?)<\/yt:videoId>/);
         const titleMatch = entry.match(/<title>(.*?)<\/title>/);
         const authorMatch = entry.match(/<name>(.*?)<\/name>/);
