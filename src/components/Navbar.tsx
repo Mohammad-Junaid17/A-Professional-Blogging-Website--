@@ -260,7 +260,7 @@ export default function Navbar() {
               ) : (
                 <Link
                   href="/auth/signin"
-                  className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
+                  className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-white/10 hover:bg-white/20 transition-colors"
                 >
                   Sign In <ArrowRight size={16} />
                 </Link>
