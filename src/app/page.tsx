@@ -10,8 +10,8 @@ export default async function Home() {
   
   // Fetch initial data
   const { data: articles } = await supabase.from('articles').select('*').order('created_at', { ascending: false }).limit(3);
-  const { data: books } = await supabase.from('books').select('*').limit(3);
-  const { data: scholars } = await supabase.from('scholars').select('*').limit(3);
+  const { data: books } = await supabase.from('books').select('*').order('created_at', { ascending: false }).limit(3);
+  const { data: scholars } = await supabase.from('scholars').select('*').order('created_at', { ascending: false }).limit(3);
   const { data: quotes } = await supabase.from('quotes').select('*').limit(1);
 
   return (
@@ -172,28 +172,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* SECTION 5 - Quote of the Moment */}
-      {quotes && quotes.length > 0 && (
-        <section className="py-24 bg-card border-y border-border flex items-center justify-center">
-          <div className="container px-4 mx-auto max-w-4xl text-center">
-            <h2 className="text-xl font-bold tracking-widest uppercase text-muted mb-8">Quote of the Moment</h2>
-            <div className="mb-6">
-              <QuoteIcon size={48} className="mx-auto text-accent mb-6" />
-              <p className="font-amiri text-3xl md:text-4xl text-primary leading-loose mb-6" dir="rtl">
-                {quotes[0].arabic_text}
-              </p>
-              <p className="text-lg md:text-xl text-muted italic mb-8 max-w-2xl mx-auto">
-                &quot;{quotes[0].english_text}&quot;
-              </p>
-              <p className="font-bold text-foreground text-lg">— {quotes[0].attribution}</p>
-              {quotes[0].source && <p className="text-sm text-muted mt-2">{quotes[0].source}</p>}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* SECTION 6 - Newsletter */}
-      <section className="py-20 bg-nav-active border-b border-border">
+      <section className="py-20 bg-background border-b border-border">
         <div className="container px-4 mx-auto max-w-xl text-center">
           <h2 className="text-3xl font-bold text-foreground mb-4">Stay Updated</h2>
           <p className="text-muted mb-8">
