@@ -22,7 +22,7 @@ export default async function QAPage(props: {
   }
 
   if (searchQuery) {
-    query = query.ilike("question", `%${searchQuery}%`);
+    query = query.or(`question.ilike.%${searchQuery}%,answer.ilike.%${searchQuery}%`);
   }
 
   const { data: qaEntries } = await query;
