@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState, useEffect, useCallback } from "react";
-import { Loader2, Check, X, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Loader2, Check, X, Clock, CheckCircle, XCircle, Search } from "lucide-react";
 import toast from "react-hot-toast";
 import dynamic from "next/dynamic";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
@@ -14,7 +14,8 @@ type Tab = "pending" | "answered" | "rejected";
 
 export default function AdminQA() {
   const [tab, setTab] = useState<Tab>("pending");
-  const [items, setItems] = useState<any[]>([]);
+  const [allData, setAllData] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [answeredBy, setAnsweredBy] = useState<Record<string, string>>({});
@@ -26,16 +27,25 @@ export default function AdminQA() {
       const res = await fetch("/api/admin/qa");
       if (!res.ok) throw new Error("Failed to fetch");
       const { data } = await res.json();
-      // Filter by tab status
-      const filtered = (data || []).filter((item: any) => item.status === tab);
-      setItems(filtered);
+      setAllData(data || []);
     } catch {
-      setItems([]);
+      setAllData([]);
     }
     setLoading(false);
-  }, [tab]);
+  }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  const items = allData.filter((item) => {
+    if (item.status !== tab) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      return (item.question || "").toLowerCase().includes(q) || 
+             (item.admin_answer || "").toLowerCase().includes(q) ||
+             (item.answered_by || "").toLowerCase().includes(q);
+    }
+    return true;
+  });
 
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -110,23 +120,44 @@ export default function AdminQA() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold font-serif text-foreground">Q&A Management</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+        <h1 className="text-3xl font-bold font-serif text-foreground">
+          Q&A Management 
+          <span className="text-lg text-muted font-sans font-normal ml-3">
+            ({allData.length} total)
+          </span>
+        </h1>
         <Link 
           href="/admin/qa/create" 
-          className="px-4 py-2 bg-primary text-card rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors"
+          className="px-4 py-2 bg-primary text-card rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors shrink-0 text-center"
         >
           + Create Q&A
         </Link>
       </div>
 
-      <div className="flex gap-2 mb-6">
-        {tabs.map(({ key, label, icon: Icon }) => (
-          <button key={key} onClick={() => { setTab(key); setEditingId(null); }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === key ? "bg-primary text-card" : "bg-card border border-border text-muted hover:text-foreground"}`}>
-            <Icon size={16} /> {label}
-          </button>
-        ))}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+          {tabs.map(({ key, label, icon: Icon }) => {
+            const count = allData.filter(i => i.status === key).length;
+            return (
+              <button key={key} onClick={() => { setTab(key); setEditingId(null); }}
+                className={`flex whitespace-nowrap items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === key ? "bg-primary text-card" : "bg-card border border-border text-muted hover:text-foreground"}`}>
+                <Icon size={16} /> {label} ({count})
+              </button>
+            );
+          })}
+        </div>
+        
+        <div className="relative w-full md:w-72 shrink-0">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
+          <input
+            type="text"
+            placeholder="Search questions or answers..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 bg-card border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
       </div>
 
       {loading ? (

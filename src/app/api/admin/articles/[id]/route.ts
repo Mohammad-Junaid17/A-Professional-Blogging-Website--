@@ -21,7 +21,7 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string  }
   const { title, slug, author, category, sub_category, reading_time, excerpt, content, status } = await req.json();
 
   const updates: any = {
-    title, slug, author, category, sub_category, reading_time, excerpt, content, status, updated_at: new Date().toISOString()
+    title, slug, author, category, sub_category, reading_time, excerpt, content, status
   };
 
   const { data, error } = await supabaseAdmin.from('articles').update(updates).eq('id', params.id).select().single()
