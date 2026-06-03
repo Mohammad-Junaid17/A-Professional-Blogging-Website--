@@ -99,7 +99,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
 
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl relative">
-      <AdminEditButton id={article.id} type="articles" />
+      <AdminEditButton id={article.id} type="articles" returnUrl={`/articles?category=${encodeURIComponent(article.category)}`} />
 
       {/* Breadcrumb */}
       <div className="flex items-center text-sm text-muted mb-8">

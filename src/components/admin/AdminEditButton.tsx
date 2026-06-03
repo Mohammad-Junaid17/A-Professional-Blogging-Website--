@@ -5,13 +5,16 @@ import { Pencil } from "lucide-react";
 interface AdminEditButtonProps {
   id: string;
   type: "books" | "articles" | "scholars" | "lectures" | "contentions" | "qa";
+  returnUrl?: string;
 }
 
-export async function AdminEditButton({ id, type }: AdminEditButtonProps) {
+export async function AdminEditButton({ id, type, returnUrl }: AdminEditButtonProps) {
   const session = await verifyAdmin();
   if (!session) return null;
 
-  const href = `/admin/${type}/${id}/edit`;
+  const href = returnUrl
+    ? `/admin/${type}/${id}/edit?returnUrl=${encodeURIComponent(returnUrl)}`
+    : `/admin/${type}/${id}/edit`;
 
   return (
     <Link 

@@ -25,7 +25,7 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl relative">
-      <AdminEditButton id={qa.id} type="qa" />
+      <AdminEditButton id={qa.id} type="qa" returnUrl={`/qa/${qa.id}`} />
       
       {/* Breadcrumb */}
       <div className="flex items-center text-sm text-muted mb-8">

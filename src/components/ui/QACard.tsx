@@ -9,7 +9,7 @@ export function QACard({ qa }: { qa: any }) {
 
   return (
     <div className="relative h-full group">
-      <AdminEditButton id={qa.id} type="qa" />
+      <AdminEditButton id={qa.id} type="qa" returnUrl="/qa" />
       <Link href={`/qa/${qa.id}`} className="block h-full">
         <div className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow h-full flex flex-col">
           <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">

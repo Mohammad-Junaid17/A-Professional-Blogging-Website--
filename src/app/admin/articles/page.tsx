@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import Link from "next/link";
-import { PlusCircle, Eye, Pencil } from "lucide-react";
+import { PlusCircle, Eye, Pencil, Replace } from "lucide-react";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 
 export const dynamic = "force-dynamic";
@@ -16,9 +16,14 @@ export default async function AdminArticles() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold font-serif text-foreground">Articles</h1>
-        <Link href="/admin/articles/create" className="flex items-center gap-2 bg-primary text-card px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors">
-          <PlusCircle size={18} /> New Article
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/admin/articles/find-replace" className="flex items-center gap-2 border border-border text-foreground px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-muted/10 transition-colors">
+            <Replace size={16} /> Find &amp; Replace
+          </Link>
+          <Link href="/admin/articles/create" className="flex items-center gap-2 bg-primary text-card px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors">
+            <PlusCircle size={18} /> New Article
+          </Link>
+        </div>
       </div>
 
       <div className="bg-card border border-border rounded-xl overflow-hidden">

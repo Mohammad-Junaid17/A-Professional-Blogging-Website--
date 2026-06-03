@@ -8,9 +8,11 @@ import toast from "react-hot-toast";
 
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { CategorySelector } from "@/components/admin/CategorySelector";
+import { DeleteButton } from "@/components/admin/DeleteButton";
 
-export default function EditBook({ params }: { params: Promise<{ id: string }> }) {
+export default function EditBook({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ returnUrl?: string }> }) {
   const { id } = React.use(params);
+  const { returnUrl } = React.use(searchParams);
   const router = useRouter();
   const [loading, setLoading] = useState(false); const [fetching, setFetching] = useState(true); const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ title: "", slug: "", author: "", description: "", language: "", category: "", sub_category: "", pdf_url: "", cover_url: "", status: "published" });
@@ -28,7 +30,7 @@ export default function EditBook({ params }: { params: Promise<{ id: string }> }
     try {
       const res = await fetch(`/api/admin/books/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
       if (!res.ok) { const data = await res.json(); throw new Error(data.error || "Failed"); }
-      toast.success("Book updated!"); router.push("/admin/books"); router.refresh();
+      toast.success("Book updated!"); router.push(returnUrl || "/admin/books"); router.refresh();
     } catch (err: any) { setError(err.message); setLoading(false); }
   };
 
@@ -36,7 +38,7 @@ export default function EditBook({ params }: { params: Promise<{ id: string }> }
 
   return (
     <div className="max-w-3xl">
-      <div className="flex items-center gap-4 mb-8"><Link href="/admin/books" className="p-2 hover:bg-muted/10 rounded-lg"><ArrowLeft size={20} className="text-muted" /></Link><h1 className="text-3xl font-bold font-serif text-foreground">Edit Book</h1></div>
+      <div className="flex items-center gap-4 mb-8"><Link href={returnUrl || "/admin/books"} className="p-2 hover:bg-muted/10 rounded-lg"><ArrowLeft size={20} className="text-muted" /></Link><h1 className="text-3xl font-bold font-serif text-foreground">Edit Book</h1></div>
       {error && <div className="bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 p-3 rounded-lg text-sm mb-6">{error}</div>}
       <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -68,7 +70,10 @@ export default function EditBook({ params }: { params: Promise<{ id: string }> }
             </select>
           </div>
         </div>
-        <div className="flex justify-end pt-4 border-t border-border"><button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Update Book"}</button></div>
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <DeleteButton id={id} table="books" redirectTo={returnUrl || "/admin/books"} />
+          <button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Update Book"}</button>
+        </div>
       </form>
     </div>
   );

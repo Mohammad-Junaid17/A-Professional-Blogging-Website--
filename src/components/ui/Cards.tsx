@@ -6,7 +6,7 @@ import { AdminEditButton } from "@/components/admin/AdminEditButton";
 export function ArticleCard({ article }: { article: any }) {
   return (
     <div className="relative h-full group">
-      <AdminEditButton id={article.id} type="articles" />
+      <AdminEditButton id={article.id} type="articles" returnUrl={article.category ? `/articles?category=${encodeURIComponent(article.category)}` : `/articles`} />
       <Link href={`/articles/${article.slug}`} className="block h-full">
         <div className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow h-full flex flex-col">
         <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">Article</span>
@@ -56,12 +56,14 @@ export function BookCard({ book }: { book: any }) {
 export function ScholarCard({ scholar }: { scholar: any }) {
   return (
     <div className="relative h-full group">
-      <AdminEditButton id={scholar.id} type="scholars" />
+      <AdminEditButton id={scholar.id} type="scholars" returnUrl="/scholars" />
       <Link href={`/scholars/${scholar.slug}`} className="block h-full">
         <div className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow h-full flex flex-col">
-          <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">
-            Scholar {scholar.madhab && `• ${scholar.madhab}`}
-          </span>
+          {scholar.madhab && (
+            <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">
+              {scholar.madhab}
+            </span>
+          )}
           <h3 className="font-bold text-[1.1rem] text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
             {scholar.name_english}
           </h3>

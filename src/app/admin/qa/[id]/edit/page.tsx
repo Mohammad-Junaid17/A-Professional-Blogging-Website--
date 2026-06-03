@@ -7,11 +7,13 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { CategorySelector } from "@/components/admin/CategorySelector";
+import { DeleteButton } from "@/components/admin/DeleteButton";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
-export default function EditQA({ params }: { params: Promise<{ id: string }> }) {
+export default function EditQA({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ returnUrl?: string }> }) {
   const { id } = React.use(params);
+  const { returnUrl } = React.use(searchParams);
   const router = useRouter();
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
@@ -61,7 +63,7 @@ export default function EditQA({ params }: { params: Promise<{ id: string }> }) 
       }
 
       toast.success("Q&A updated successfully!");
-      router.push("/admin/qa");
+      router.push(returnUrl || "/admin/qa");
       router.refresh();
     } catch (err: any) {
       toast.error(err.message || "Failed to update Q&A");
@@ -76,7 +78,7 @@ export default function EditQA({ params }: { params: Promise<{ id: string }> }) 
     <div className="max-w-3xl">
       <div className="flex items-center gap-4 mb-8">
         <Link 
-          href="/admin/qa" 
+          href={returnUrl || "/admin/qa"} 
           className="p-2 rounded-lg bg-card border border-border text-muted hover:text-foreground transition-colors"
         >
           <ArrowLeft size={20} />
@@ -142,7 +144,8 @@ export default function EditQA({ params }: { params: Promise<{ id: string }> }) 
             />
           </div>
 
-          <div className="pt-4 flex justify-end border-t border-border mt-6">
+          <div className="flex items-center justify-between pt-4 border-t border-border mt-6">
+            <DeleteButton id={id} table="qa_entries" redirectTo={returnUrl || "/admin/qa"} />
             <button
               type="submit"
               disabled={loading || !question.trim()}

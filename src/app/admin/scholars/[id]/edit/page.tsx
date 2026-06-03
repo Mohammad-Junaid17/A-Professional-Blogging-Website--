@@ -7,10 +7,12 @@ import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { ImageUpload } from "@/components/admin/ImageUpload";
+import { DeleteButton } from "@/components/admin/DeleteButton";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
-export default function EditScholar({ params }: { params: Promise<{ id: string }> }) {
+export default function EditScholar({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ returnUrl?: string }> }) {
   const { id } = React.use(params);
+  const { returnUrl } = React.use(searchParams);
   const supabase = createClient(); const router = useRouter();
   const [loading, setLoading] = useState(false); const [fetching, setFetching] = useState(true); const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name_english: "", name_arabic: "", slug: "", birth_year: "", death_year_ah: "", madhab: "", origin: "", bio: "", status: "published", image_url: "" });
@@ -26,14 +28,25 @@ export default function EditScholar({ params }: { params: Promise<{ id: string }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setLoading(true); setError(null);
     const { error } = await supabase.from("scholars").update(form).eq("id", id);
-    if (error) { setError(error.message); setLoading(false); } else { router.push("/admin/scholars"); router.refresh(); }
+    if (error) { 
+      setError(error.message); 
+      setLoading(false); 
+    } else { 
+      router.push(returnUrl || "/admin/scholars"); 
+      router.refresh(); 
+    }
   };
 
   if (fetching) return <div className="flex justify-center py-20"><Loader2 size={32} className="animate-spin text-primary" /></div>;
 
   return (
     <div className="max-w-4xl">
-      <div className="flex items-center gap-4 mb-8"><Link href="/admin/scholars" className="p-2 hover:bg-muted/10 rounded-lg"><ArrowLeft size={20} className="text-muted" /></Link><h1 className="text-3xl font-bold font-serif text-foreground">Edit Scholar</h1></div>
+      <div className="flex items-center gap-4 mb-8">
+        <Link href={returnUrl || "/admin/scholars"} className="p-2 hover:bg-muted/10 rounded-lg">
+          <ArrowLeft size={20} className="text-muted" />
+        </Link>
+        <h1 className="text-3xl font-bold font-serif text-foreground">Edit Scholar</h1>
+      </div>
       {error && <div className="bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 p-3 rounded-lg text-sm mb-6">{error}</div>}
       <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -64,7 +77,10 @@ export default function EditScholar({ params }: { params: Promise<{ id: string }
           />
         </div>
         <div data-color-mode="light"><label className="block text-sm font-semibold text-foreground mb-1.5">Biography</label><MDEditor value={form.bio} onChange={(val) => set("bio", val || "")} height={350} /></div>
-        <div className="flex justify-end pt-4 border-t border-border"><button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Update Scholar"}</button></div>
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <DeleteButton id={id} table="scholars" redirectTo={returnUrl || "/admin/scholars"} />
+          <button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Update Scholar"}</button>
+        </div>
       </form>
     </div>
   );

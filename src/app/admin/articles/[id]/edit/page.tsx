@@ -8,11 +8,13 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
 import { CategorySelector } from "@/components/admin/CategorySelector";
+import { DeleteButton } from "@/components/admin/DeleteButton";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
-export default function EditArticle({ params }: { params: Promise<{ id: string }> }) {
+export default function EditArticle({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ returnUrl?: string }> }) {
   const { id } = React.use(params);
+  const { returnUrl } = React.use(searchParams);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -58,7 +60,8 @@ export default function EditArticle({ params }: { params: Promise<{ id: string }
         throw new Error(data.error || "Failed to update");
       }
       toast.success("Article updated!");
-      router.push("/admin/articles");
+      const destination = returnUrl || (category ? `/articles?category=${encodeURIComponent(category)}` : "/admin/articles");
+      router.push(destination);
       router.refresh();
     } catch (err: any) {
       setError(err.message);
@@ -100,7 +103,8 @@ export default function EditArticle({ params }: { params: Promise<{ id: string }
         </div>
         <div><label className="block text-sm font-semibold text-foreground mb-1.5">Excerpt</label><textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={2} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
         <div data-color-mode="light"><label className="block text-sm font-semibold text-foreground mb-1.5">Content *</label><MDEditor value={content} onChange={(val) => setContent(val || "")} height={400} /></div>
-        <div className="flex justify-end pt-4 border-t border-border">
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <DeleteButton id={id} table="articles" redirectTo="/admin/articles" />
           <button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">
             {loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Update Article"}
           </button>
