@@ -40,41 +40,61 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
   const isAqaid = article.category === "Aqā'id";
   let relatedArticles: { id: string; title: string; slug: string; sub_category: string | null }[] = [];
   
-  if (isAqaid) {
-    try {
-      // Import local mapping created by our scraper
-      const relatedMap = (await import("@/data/aqaid_related.json").then((m) => m.default || m)) as Record<string, string[]>;
-      const mappedSlugs: string[] = relatedMap[params.slug] || [];
-      
-      if (mappedSlugs.length > 0) {
-        const { data } = await supabase
-          .from("articles")
-          .select("id, title, slug, sub_category")
-          .in("slug", mappedSlugs)
-          .eq("status", "published");
-          
-        if (data) {
-          // Sort to match the exact order defined in the mapped array
-          relatedArticles = data.sort(
-            (a, b) => mappedSlugs.indexOf(a.slug) - mappedSlugs.indexOf(b.slug)
-          );
-        }
+  try {
+    // Import universal local mapping created by our scraper
+    const relatedMap = (await import("@/data/all_related.json").then((m) => m.default || m)) as Record<string, string[]>;
+    const mappedSlugs: string[] = relatedMap[params.slug] || [];
+    
+    if (mappedSlugs.length > 0) {
+      const { data } = await supabase
+        .from("articles")
+        .select("id, title, slug, sub_category")
+        .in("slug", mappedSlugs)
+        .eq("status", "published");
+        
+      if (data) {
+        // Sort to match the exact order defined in the mapped array
+        relatedArticles = data.sort(
+          (a, b) => mappedSlugs.indexOf(a.slug) - mappedSlugs.indexOf(b.slug)
+        );
       }
-    } catch (err) {
-      console.error("Could not load aqaid_related.json map", err);
     }
+  } catch (err) {
+    console.error("Could not load all_related.json map", err);
   }
 
-  // Fallback: If no related articles found in map, or if not Aqā'id, just fetch by category
+  // Fallback: If no related articles found in map, or if not Aqā'id
   if (relatedArticles.length === 0) {
-    const { data: byCat } = await supabase
+    let query = supabase
       .from("articles")
       .select("id, title, slug, sub_category")
-      .eq("category", article.category)
       .eq("status", "published")
       .neq("id", article.id)
       .limit(6);
-    relatedArticles = byCat || [];
+
+    if (article.sub_category) {
+      query = query.eq("sub_category", article.sub_category);
+    } else {
+      query = query.eq("category", article.category);
+    }
+
+    const { data: byCat } = await query;
+    
+    // If not enough related by sub_category, fetch more from parent category
+    if (byCat && byCat.length < 6 && article.sub_category) {
+      const { data: moreCat } = await supabase
+        .from("articles")
+        .select("id, title, slug, sub_category")
+        .eq("category", article.category)
+        .eq("status", "published")
+        .neq("id", article.id)
+        .not("id", "in", `(${byCat.map(a => a.id).join(',') || '00000000-0000-0000-0000-000000000000'})`)
+        .limit(6 - byCat.length);
+        
+      relatedArticles = [...byCat, ...(moreCat || [])];
+    } else {
+      relatedArticles = byCat || [];
+    }
   }
 
   return (

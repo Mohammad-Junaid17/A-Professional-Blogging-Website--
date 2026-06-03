@@ -44,19 +44,22 @@ export default async function ArticlesPage(props: {
   const fetchedCategories = categoryData?.map((c) => c.name) || [];
   const CATEGORIES = ["All Articles", ...fetchedCategories];
 
-  // Sub-categories for Aqā'id
-  const AQAID_SUBCATS = [
-    "Mawlid",
-    "Knowledge of the Unseen",
-    "Messenger of Allah",
-    "Tawassul",
-    "Deobandism",
-    "Wahaabism",
-    "Kissing of the Thumbs",
-    "Miscellaneous",
-    "Shi'a",
-  ];
-  const isAqaid = currentCategory === "Aqā'id";
+  // Fetch dynamic sub-categories for the current category
+  let dynamicSubCats: string[] = [];
+  if (currentCategory !== "All Articles") {
+    const { data: subCatData } = await supabase
+      .from("articles")
+      .select("sub_category")
+      .eq("category", currentCategory)
+      .not("sub_category", "is", null);
+
+    if (subCatData) {
+      // Extract unique non-null sub_categories
+      const uniqueSubs = new Set(subCatData.map((item) => item.sub_category).filter(Boolean));
+      dynamicSubCats = Array.from(uniqueSubs).sort() as string[];
+    }
+  }
+  const hasSubCats = dynamicSubCats.length > 0;
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
@@ -85,8 +88,8 @@ export default async function ArticlesPage(props: {
           })}
         </ul>
 
-        {/* Sub-topic chips — only for Aqā'id */}
-        {isAqaid && (
+        {/* Sub-topic chips — dynamic for any category with subcategories */}
+        {hasSubCats && (
           <div className="mt-6">
             <h3 className="text-xs font-bold tracking-widest text-muted mb-3 uppercase">
               Sub-Topics
@@ -100,9 +103,9 @@ export default async function ArticlesPage(props: {
                     : "text-muted hover:text-foreground hover:bg-muted/10"
                 }`}
               >
-                All Aqā&apos;id
+                All {currentCategory}
               </Link>
-              {AQAID_SUBCATS.map((sub) => (
+              {dynamicSubCats.map((sub) => (
                 <Link
                   key={sub}
                   href={`/articles?category=${encodeURIComponent(currentCategory)}&sub=${encodeURIComponent(sub)}`}
@@ -127,16 +130,16 @@ export default async function ArticlesPage(props: {
             Home
           </Link>
           <ChevronRight size={14} className="mx-1" />
-          {isAqaid ? (
+          {currentCategory !== "All Articles" ? (
             <>
               <Link
-                href={`/articles?category=${encodeURIComponent(currentCategory)}`}
+                href={`/articles`}
                 className="hover:text-primary transition-colors"
               >
                 Articles
               </Link>
               <ChevronRight size={14} className="mx-1" />
-              <span className="text-foreground font-medium">Aqā&apos;id</span>
+              <span className="text-foreground font-medium">{currentCategory}</span>
               {currentSub && (
                 <>
                   <ChevronRight size={14} className="mx-1" />
@@ -157,17 +160,17 @@ export default async function ArticlesPage(props: {
             <h1 className="text-3xl font-bold font-serif text-foreground">
               {currentSub || (currentCategory === "All Articles" ? "Articles" : currentCategory)}
             </h1>
-            {isAqaid && currentSub && (
+            {currentCategory !== "All Articles" && currentSub && (
               <p className="text-sm text-muted mt-0.5">
-                Aqā&apos;id &rsaquo; {currentSub}
+                {currentCategory} &rsaquo; {currentSub}
               </p>
             )}
           </div>
           <AdminAddButton type="articles" label="Add Article" />
         </div>
 
-        {/* Sub-topic pill row (shown in main area when Aqā'id is active) */}
-        {isAqaid && (
+        {/* Sub-topic pill row (shown in main area when category has subcategories) */}
+        {hasSubCats && (
           <div className="flex flex-wrap gap-2 mb-6">
             <Link
               href={`/articles?category=${encodeURIComponent(currentCategory)}`}
@@ -179,7 +182,7 @@ export default async function ArticlesPage(props: {
             >
               All
             </Link>
-            {AQAID_SUBCATS.map((sub) => (
+            {dynamicSubCats.map((sub) => (
               <Link
                 key={sub}
                 href={`/articles?category=${encodeURIComponent(currentCategory)}&sub=${encodeURIComponent(sub)}`}
