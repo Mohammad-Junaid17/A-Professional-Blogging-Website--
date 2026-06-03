@@ -17,6 +17,9 @@ const cormorantFont = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "Islamic Scholarly Resource",
   description: "A comprehensive knowledge hub for Islamic sciences, jurisprudence, theology, and general Islamic learning.",
+  verification: {
+    google: "MNqfI7SUHfq8Xk4XqtCRySp7DZBnE7EGOxCKf_x_ZpQ",
+  },
 };
 
 export default function RootLayout({
