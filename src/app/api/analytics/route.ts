@@ -9,6 +9,11 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export async function POST(req: Request) {
   try {
     const { path } = await req.json();
+
+    // Server-side guard: never track admin or auth pages
+    if (!path || path.startsWith("/admin") || path.startsWith("/auth") || path.startsWith("/api")) {
+      return NextResponse.json({ success: true }, { status: 200 });
+    }
     
     // Get user agent for simple device tracking if needed later
     const userAgent = req.headers.get("user-agent") || "unknown";

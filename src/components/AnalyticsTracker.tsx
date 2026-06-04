@@ -7,8 +7,15 @@ export function AnalyticsTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Only track actual page views, not API routes or static files
-    if (pathname && !pathname.startsWith("/api/") && !pathname.startsWith("/_next/")) {
+    // Skip tracking for admin, API, and Next.js internal routes
+    const isExcluded =
+      !pathname ||
+      pathname.startsWith("/admin") ||
+      pathname.startsWith("/api/") ||
+      pathname.startsWith("/_next/") ||
+      pathname.startsWith("/auth");
+
+    if (!isExcluded) {
       // Send a silent background request to log the view
       fetch("/api/analytics", {
         method: "POST",
