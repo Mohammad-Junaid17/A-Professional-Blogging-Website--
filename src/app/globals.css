@@ -18,16 +18,17 @@
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --background: #0D140E;
-      --foreground: #E8F0E8;
-      --card: #152217;
-      --card-border: #233626;
-      --muted: #829A88;
-      --primary: #4CAF50; /* Lighter Green for dark mode */
-      --primary-light: #1A301C;
-      --accent: #B0D782; /* Lighter SunniWay Green */
-      --nav-active: #1A301C;
-      --border: #233626;
+      /* Premium dark — deep charcoal slate, warm cream text, gold accents */
+      --background: #111117;      /* Very dark blue-charcoal */
+      --foreground: #F0EDE6;      /* Warm cream — easy on eyes */
+      --card: #1C1C25;            /* Slightly lighter card surface */
+      --card-border: #2A2A38;     /* Subtle border */
+      --muted: #9090A8;           /* Muted lilac-grey — readable but soft */
+      --primary: #C9A84C;         /* Warm gold — prestigious & Islamic */
+      --primary-light: #1E1A0D;   /* Deep dark gold tint for hover/bg */
+      --accent: #E5C97A;          /* Lighter gold for highlights */
+      --nav-active: #1E1A0D;      /* Active nav dark gold tint */
+      --border: #2E2E3E;          /* Subtle dark border */
     }
   }
 }
@@ -53,7 +54,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #A0B2A6; /* Muted aesthetic */
+  background: #A0B2A6;
   border-radius: 8px;
   border: 2px solid var(--background);
 }
@@ -64,10 +65,10 @@
 
 @media (prefers-color-scheme: dark) {
   ::-webkit-scrollbar-thumb {
-    background: #4A5D50;
+    background: #3A3A50;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--primary);
+    background: var(--primary); /* Gold on hover */
   }
 }
