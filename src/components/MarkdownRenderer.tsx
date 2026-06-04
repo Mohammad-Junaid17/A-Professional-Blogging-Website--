@@ -50,7 +50,7 @@ export function MarkdownRenderer({ content }: { content: string }) {
   }
 
   return (
-    <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none prose-p:leading-relaxed prose-headings:font-serif">
+    <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none prose-p:leading-relaxed prose-headings:font-serif text-foreground prose-p:text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-li:text-foreground">
       <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
         {cleaned}
       </ReactMarkdown>
