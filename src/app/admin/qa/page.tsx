@@ -19,7 +19,9 @@ export default function AdminQA() {
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [answeredBy, setAnsweredBy] = useState<Record<string, string>>({});
+  const [questions, setQuestions] = useState<Record<string, string>>({});
   const [acting, setActing] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -63,6 +65,7 @@ export default function AdminQA() {
           action: isEdit ? "edit_answer" : "answer",
           answer: answers[id],
           scholar: answeredBy[id] || "Admin",
+          question: questions[id] !== undefined ? questions[id] : undefined,
         }),
       });
       if (!res.ok) {
@@ -112,6 +115,38 @@ export default function AdminQA() {
     setActing(null);
   };
 
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to permanently delete this question?")) return;
+    setActing(id);
+    try {
+      const res = await fetch(`/api/admin/qa/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete");
+      toast.success("Question deleted permanently");
+      fetchData();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete");
+    }
+    setActing(null);
+  };
+
+  const handleDeleteAllRejected = async () => {
+    if (!confirm("Are you sure you want to permanently delete ALL rejected questions? This cannot be undone.")) return;
+    setActing("delete_all");
+    try {
+      const res = await fetch(`/api/admin/qa?action=delete_all_rejected`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete all rejected questions");
+      toast.success("All rejected questions deleted");
+      fetchData();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete");
+    }
+    setActing(null);
+  };
+
   const tabs: { key: Tab; label: string; icon: any }[] = [
     { key: "pending", label: "Pending", icon: Clock },
     { key: "answered", label: "Answered", icon: CheckCircle },
@@ -140,7 +175,7 @@ export default function AdminQA() {
           {tabs.map(({ key, label, icon: Icon }) => {
             const count = allData.filter(i => i.status === key).length;
             return (
-              <button key={key} onClick={() => { setTab(key); setEditingId(null); }}
+              <button key={key} onClick={() => { setTab(key); setEditingId(null); setExpandedId(null); }}
                 className={`flex whitespace-nowrap items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === key ? "bg-primary text-card" : "bg-card border border-border text-muted hover:text-foreground"}`}>
                 <Icon size={16} /> {label} ({count})
               </button>
@@ -148,15 +183,26 @@ export default function AdminQA() {
           })}
         </div>
         
-        <div className="relative w-full md:w-72 shrink-0">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
-          <input
-            type="text"
-            placeholder="Search questions or answers..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-card border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          {tab === "rejected" && items.length > 0 && (
+            <button 
+              onClick={handleDeleteAllRejected} 
+              disabled={acting === "delete_all"}
+              className="px-3 py-2 text-sm font-semibold bg-red-500/10 text-red-600 rounded-lg hover:bg-red-500/20 transition-colors shrink-0 flex items-center gap-2 disabled:opacity-50"
+            >
+              {acting === "delete_all" ? <Loader2 size={16} className="animate-spin" /> : "Delete All"}
+            </button>
+          )}
+          <div className="relative w-full md:w-72 shrink-0">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
+            <input
+              type="text"
+              placeholder="Search questions or answers..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 bg-card border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
         </div>
       </div>
 
@@ -168,7 +214,12 @@ export default function AdminQA() {
         <div className="space-y-4">
           {items.map((qa) => (
             <div key={qa.id} className="bg-card border border-border rounded-xl p-6">
-              <div className="flex items-start justify-between gap-4 mb-3">
+              <div 
+                className={`flex items-start justify-between gap-4 mb-3 cursor-pointer hover:bg-muted/5 p-2 rounded-lg -m-2`}
+                onClick={() => {
+                  setExpandedId(expandedId === qa.id ? null : qa.id);
+                }}
+              >
                 <div>
                   <p className="text-foreground font-semibold">Q: {qa.question}</p>
                   <div className="flex items-center gap-3 mt-2 text-xs text-muted">
@@ -178,8 +229,16 @@ export default function AdminQA() {
                 </div>
               </div>
 
-              {tab === "pending" && (
+              {tab === "pending" && expandedId === qa.id && (
                 <div className="mt-4 space-y-3 border-t border-border pt-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-foreground mb-1">Edit Question</label>
+                    <textarea 
+                      value={questions[qa.id] !== undefined ? questions[qa.id] : qa.question} 
+                      onChange={(e) => setQuestions(p => ({ ...p, [qa.id]: e.target.value }))}
+                      className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm min-h-[80px]"
+                    />
+                  </div>
                   <div>
                     <label className="block text-sm font-semibold text-foreground mb-1">Answer *</label>
                     <div data-color-mode="light" className="mb-2">
@@ -204,14 +263,22 @@ export default function AdminQA() {
                 </div>
               )}
 
-              {tab === "answered" && qa.admin_answer && (
+              {tab === "answered" && (qa.admin_answer || qa.answer) && expandedId === qa.id && (
                 <div className="mt-4 border-t border-border pt-4">
                   {editingId === qa.id ? (
                     <div className="space-y-3">
                       <div>
+                        <label className="block text-sm font-semibold text-foreground mb-1">Edit Question</label>
+                        <textarea 
+                          value={questions[qa.id] !== undefined ? questions[qa.id] : qa.question} 
+                          onChange={(e) => setQuestions(p => ({ ...p, [qa.id]: e.target.value }))}
+                          className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm min-h-[80px]"
+                        />
+                      </div>
+                      <div>
                         <label className="block text-sm font-semibold text-foreground mb-1">Edit Answer *</label>
                         <div data-color-mode="light" className="mb-2">
-                          <MDEditor value={answers[qa.id] ?? qa.admin_answer} onChange={(val) => setAnswers(p => ({ ...p, [qa.id]: val || "" }))} preview="edit" height={150} />
+                          <MDEditor value={answers[qa.id] ?? (qa.admin_answer || qa.answer)} onChange={(val) => setAnswers(p => ({ ...p, [qa.id]: val || "" }))} preview="edit" height={150} />
                         </div>
                       </div>
                       <div>
@@ -229,12 +296,13 @@ export default function AdminQA() {
                     </div>
                   ) : (
                     <>
-                      <div className="text-sm text-muted"><strong>A:</strong> <MarkdownRenderer content={qa.admin_answer} /></div>
+                      <div className="text-sm text-muted"><strong>A:</strong> <MarkdownRenderer content={qa.admin_answer || qa.answer} /></div>
                       {qa.answered_by && <p className="text-xs text-muted mt-1">— {qa.answered_by}</p>}
                       <div className="flex gap-4 mt-3">
                         <button onClick={() => {
-                          setAnswers(p => ({ ...p, [qa.id]: qa.admin_answer }));
+                          setAnswers(p => ({ ...p, [qa.id]: qa.admin_answer || qa.answer }));
                           setAnsweredBy(p => ({ ...p, [qa.id]: qa.answered_by || "" }));
+                          setQuestions(p => ({ ...p, [qa.id]: qa.question }));
                           setEditingId(qa.id);
                         }} className="text-xs text-primary hover:underline">Edit Answer</button>
                         <button onClick={() => handleRevert(qa.id, "pending")} className="text-xs text-primary hover:underline">Move to Pending</button>
@@ -244,9 +312,10 @@ export default function AdminQA() {
                 </div>
               )}
 
-              {tab === "rejected" && (
-                <div className="mt-4 border-t border-border pt-4">
+              {tab === "rejected" && expandedId === qa.id && (
+                <div className="mt-4 border-t border-border pt-4 flex gap-4">
                   <button onClick={() => handleRevert(qa.id, "pending")} className="text-xs text-primary hover:underline">Move to Pending</button>
+                  <button onClick={() => handleDelete(qa.id)} className="text-xs text-red-500 hover:underline">Delete Permanently</button>
                 </div>
               )}
             </div>

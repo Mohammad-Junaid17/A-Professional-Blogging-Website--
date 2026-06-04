@@ -1,5 +1,5 @@
 import { getSessionUser } from '@/lib/auth-helpers'
-import { createRouteClient } from '@/lib/supabase-route-handler'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function GET(req: Request) {
@@ -10,7 +10,7 @@ export async function GET(req: Request) {
   const type = searchParams.get('type');
   const id = searchParams.get('id');
 
-  const supabase = createRouteClient();
+  const supabase = await createClient();
 
   if (type && id) {
     // Check if specific item is saved
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
   }
 
-  const supabase = createRouteClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from('saved_items')
     .insert({
@@ -81,7 +81,7 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
   }
 
-  const supabase = createRouteClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from('saved_items')
     .delete()

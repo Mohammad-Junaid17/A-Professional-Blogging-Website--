@@ -45,3 +45,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
+
+export async function DELETE(req: Request) {
+  const session = await verifyAdmin(false, 'qa')
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const url = new URL(req.url)
+  const action = url.searchParams.get('action')
+
+  if (action === 'delete_all_rejected') {
+    const { error } = await supabaseAdmin.from('qa_entries').delete().eq('status', 'rejected')
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ success: true })
+  }
+
+  return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
+}
