@@ -6,6 +6,7 @@ import Link from "next/link";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import SaveButton from "@/components/SaveButton";
 
 export const revalidate = 60; // revalidate every 60 seconds
 
@@ -73,7 +74,7 @@ export default async function BookDetailPage({ params }: { params: Promise<{ slu
       </header>
 
       {/* Main Content matching Articles theme */}
-      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-gray-700 dark:text-gray-300 flex flex-col md:flex-row gap-8">
+      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-foreground/90 flex flex-col md:flex-row gap-8">
         {book.cover_url && (
           <div className="md:w-1/3 shrink-0">
             <img src={book.cover_url} alt={book.title} className="w-full h-auto rounded-lg shadow-md border border-border" />
@@ -88,27 +89,30 @@ export default async function BookDetailPage({ params }: { params: Promise<{ slu
       {/* Footer / Downloads */}
       <footer className="border-t border-border pt-8 mt-12 mb-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <h3 className="font-bold text-lg">Downloads</h3>
-          {book.pdf_url && (
-            <div className="flex flex-wrap gap-4">
-              <a 
-                href={book.pdf_url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-primary text-card px-6 py-2 rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-sm text-sm"
-              >
-                <Download size={16} /> Download PDF
-              </a>
-              <a 
-                href={book.pdf_url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-card border border-border text-foreground px-6 py-2 rounded-xl font-bold hover:bg-muted/5 transition-colors shadow-sm text-sm"
-              >
-                <ExternalLink size={16} /> Read Online
-              </a>
-            </div>
-          )}
+          <h3 className="font-bold text-lg">Actions</h3>
+          <div className="flex flex-wrap items-center gap-4">
+            <SaveButton contentType="book" contentId={book.id} />
+            {book.pdf_url && (
+              <>
+                <a 
+                  href={book.pdf_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-primary text-card px-6 py-2 rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-sm text-sm"
+                >
+                  <Download size={16} /> Download PDF
+                </a>
+                <a 
+                  href={book.pdf_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-card border border-border text-foreground px-6 py-2 rounded-xl font-bold hover:bg-muted/5 transition-colors shadow-sm text-sm"
+                >
+                  <ExternalLink size={16} /> Read Online
+                </a>
+              </>
+            )}
+          </div>
         </div>
       </footer>
 

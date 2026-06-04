@@ -6,6 +6,7 @@ import CommentSection from "@/components/CommentSection";
 import { notFound } from "next/navigation";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
 import { ShareButtons } from "@/components/ShareButtons";
+import SaveButton from "@/components/SaveButton";
 
 export const revalidate = 60;
 
@@ -171,7 +172,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
       </header>
 
       {/* Main Content */}
-      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-gray-700 dark:text-gray-300">
+      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-foreground/90">
         <MarkdownRenderer content={article.content || article.excerpt || ""} />
       </div>
 
@@ -179,8 +180,11 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
       <footer className="border-t border-border pt-8 mt-12">
         {/* Share Bar */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
-          <h3 className="font-bold text-lg">Share this article</h3>
-          <ShareButtons title={article.title} />
+          <h3 className="font-bold text-lg">Share or Save this article</h3>
+          <div className="flex flex-wrap items-center gap-3">
+            <SaveButton contentType="article" contentId={article.id} />
+            <ShareButtons title={article.title} />
+          </div>
         </div>
 
         {/* ── Related Articles (Common UI for both Aqaid mapped items and fallback) ── */}

@@ -7,6 +7,7 @@ import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
 import { ShareButtons } from "@/components/ShareButtons";
+import SaveButton from "@/components/SaveButton";
 
 export const revalidate = 60; // revalidate every 60 seconds
 
@@ -71,7 +72,7 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
       </header>
 
       {/* Main Content matching Articles theme */}
-      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-gray-700 dark:text-gray-300">
+      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-foreground/90">
         <h2 className="font-bold text-3xl font-serif text-foreground mb-4">Question</h2>
         <div className="mb-12">
           {qa.question}
@@ -84,8 +85,11 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
       {/* Footer */}
       <footer className="border-t border-border pt-8 mt-12 mb-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <h3 className="font-bold text-lg">Share this Q&A</h3>
-          <ShareButtons title={qa.question} />
+          <h3 className="font-bold text-lg">Share or Save this Q&A</h3>
+          <div className="flex flex-wrap items-center gap-3">
+            <SaveButton contentType="qa" contentId={qa.id} />
+            <ShareButtons title={qa.question} />
+          </div>
         </div>
       </footer>
 

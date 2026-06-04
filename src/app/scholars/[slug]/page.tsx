@@ -6,6 +6,7 @@ import { BookCard } from "@/components/ui/Cards";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import SaveButton from "@/components/SaveButton";
 
 export const revalidate = 60;
 
@@ -90,13 +91,16 @@ export default async function ScholarPage(props: { params: Promise<{ slug: strin
               </span>
             )}
           </div>
+          <div className="mt-4 flex justify-center sm:justify-start">
+            <SaveButton contentType="scholar" contentId={scholar.id} />
+          </div>
         </div>
       </header>
 
       {/* Body */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
         <div className="md:col-span-2">
-          <div className="prose prose-base dark:prose-invert max-w-none font-serif leading-relaxed text-gray-700 dark:text-gray-300">
+          <div className="prose prose-base dark:prose-invert max-w-none font-serif leading-relaxed text-foreground/90">
             <MarkdownRenderer content={scholar.bio || "Biography details not available."} />
           </div>
         </div>

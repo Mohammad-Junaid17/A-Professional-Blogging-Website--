@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   const excerpt = stripWordHtml(body.excerpt);
   const content = stripWordHtml(body.content);
   const { data, error } = await supabaseAdmin.from('articles').insert([{
-    title, slug, author, category, sub_category, reading_time, excerpt, content, status
+    title, slug, author, category, sub_category, reading_time, excerpt, content, status, created_by: session.user.id
   }]).select().single()
   if (error) return NextResponse.json({ error: error.message },{ status: 500 })
   return NextResponse.json({ data },{ status: 201 })

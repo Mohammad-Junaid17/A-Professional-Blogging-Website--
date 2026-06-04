@@ -33,7 +33,7 @@ export default async function Home() {
               </span>
             </div>
           </div>
-          <div className="text-left md:text-center text-lg md:text-xl text-gray-700 dark:text-gray-300 font-serif leading-relaxed max-w-4xl mx-auto mb-10 space-y-6">
+          <div className="text-left md:text-center text-lg md:text-xl text-foreground/90 font-serif leading-relaxed max-w-4xl mx-auto mb-10 space-y-6">
             <p>Asalāmu Álaykum wa raHmatullah</p>
             <p>
               Welcome to Islamic Scholarly Resource! The aim and mission of this website is to propagate the correct Áqaýed (beliefs) and

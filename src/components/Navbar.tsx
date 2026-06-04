@@ -228,12 +228,6 @@ export default function Navbar() {
                         <Link href="/profile" onClick={() => setIsUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-foreground hover:bg-muted/10">
                           <User size={16} className="text-muted" /> My Profile
                         </Link>
-                        <Link href="/profile/comments" onClick={() => setIsUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-foreground hover:bg-muted/10">
-                          <MessageSquare size={16} className="text-muted" /> My Comments
-                        </Link>
-                        <Link href="/profile/questions" onClick={() => setIsUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-foreground hover:bg-muted/10">
-                          <HelpCircle size={16} className="text-muted" /> My Questions
-                        </Link>
                         {user.role === "admin" && (
                           <>
                             <div className="border-t border-border my-1" />

@@ -15,7 +15,8 @@ export async function POST(req: Request) {
   const session = await verifyAdmin(false, 'lectures')
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
   const body = await req.json()
-  const { data, error } = await supabaseAdmin.from('lectures').insert(body).select().single()
+  const insertData = { ...body, created_by: session.user.id };
+  const { data, error } = await supabaseAdmin.from('lectures').insert(insertData).select().single()
   if (error) return NextResponse.json({ error: error.message },{ status: 500 })
   return NextResponse.json({ data },{ status: 201 })
 }

@@ -3,6 +3,7 @@ import { Video, ChevronRight, Clock, Search } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { AdminAddButton } from "@/components/admin/AdminAddButton";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import SaveButton from "@/components/SaveButton";
 
 export const revalidate = 60;
 
@@ -100,9 +101,10 @@ export default async function LecturesPage(props: { searchParams: Promise<{ cate
           </p>
           <div className="flex items-center justify-between text-xs text-muted font-medium pt-3 border-t border-border/50 mt-auto">
             <span className="text-primary truncate max-w-[60%]">{lecture.speaker || "Unknown"}</span>
-            <span className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-3 shrink-0">
               {lecture.duration && <span className="flex items-center gap-1"><Clock size={12} /> {lecture.duration}</span>}
-            </span>
+              <SaveButton contentType="lecture" contentId={lecture.id} iconOnly />
+            </div>
           </div>
         </div>
       </div>
