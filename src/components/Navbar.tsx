@@ -135,8 +135,8 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="h-10 w-10 rounded-full border border-white/50 flex items-center justify-center flex-shrink-0 p-1">
-            <img src="/MuftieAzam2.png" alt="Logo" className="h-full w-full object-contain brightness-0 invert" />
+          <div className="h-11 w-11 rounded-full border border-white/50 flex items-center justify-center flex-shrink-0">
+            <img src="/MuftieAzam2.png" alt="Logo" className="h-[80%] w-[80%] object-contain brightness-0 invert" />
           </div>
           <span className="font-bold text-white text-xl hidden sm:block group-hover:opacity-90 transition-opacity">
             Islamic Scholarly Resource
