@@ -1,8 +1,7 @@
 import { supabaseAdmin } from './supabase-admin'
 import { createClient } from '@/lib/supabase/server'
-import { cache } from 'react'
 
-export const verifyAdmin = cache(async (requireSuperAdmin: boolean = false, requiredSection?: string) => {
+export const verifyAdmin = async (requireSuperAdmin: boolean = false, requiredSection?: string) => {
   try {
     const supabase = await createClient()
 
@@ -47,7 +46,7 @@ export const verifyAdmin = cache(async (requireSuperAdmin: boolean = false, requ
     console.error('verifyAdmin error:', err)
     return null
   }
-})
+}
 
 export async function getSessionUser() {
   try {

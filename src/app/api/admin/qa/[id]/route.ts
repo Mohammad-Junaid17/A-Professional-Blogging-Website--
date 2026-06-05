@@ -10,7 +10,8 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string  }
   const { id } = params;
   const session = await verifyAdmin(false, 'qa')
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  const { action, answer, scholar, status: revertStatus, question } = await req.json()
+  const body = await req.json()
+  const { action, answer, scholar, status: revertStatus, question } = body
 
   if (action === 'answer' || action === 'edit_answer') {
     if (!answer?.trim()) return NextResponse.json({ error: 'Answer is required' }, { status: 400 })
@@ -61,7 +62,7 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string  }
   }
 
   if (action === 'update') {
-    const { question, category, answer, status } = await req.json()
+    const { question, category, answer, status } = body
     const { data, error } = await supabaseAdmin.from('qa_entries').update({
       question,
       category,
