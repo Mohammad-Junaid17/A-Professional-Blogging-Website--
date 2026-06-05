@@ -136,7 +136,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="h-11 w-11 rounded-full border border-white/50 flex items-center justify-center overflow-hidden flex-shrink-0">
-            <img src="/MuftieAzam.png" alt="Logo" className="h-full w-full object-contain brightness-0 invert scale-[1.6] -translate-y-1" />
+            <img src="/MuftieAzam.png" alt="Logo" className="h-full w-full object-contain brightness-0 invert scale-[1.75] -translate-y-[8px]" />
           </div>
           <span className="font-bold text-white text-xl hidden sm:block group-hover:opacity-90 transition-opacity">
             Islamic Scholarly Resource
