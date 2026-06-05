@@ -135,7 +135,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <img src="/logo.png" alt="Logo" className="h-10 w-auto object-contain brightness-0 invert" onError={(e) => { e.currentTarget.style.display = 'none' }} />
+          <img src="/MuftieAzam.png" alt="Logo" className="h-10 w-auto object-contain brightness-0 invert" />
           <span className="font-bold text-white text-xl hidden sm:block group-hover:opacity-90 transition-opacity">
             Islamic Scholarly Resource
           </span>

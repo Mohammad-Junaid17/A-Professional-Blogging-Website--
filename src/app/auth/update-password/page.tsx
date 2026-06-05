@@ -57,7 +57,7 @@ export default function UpdatePasswordPage() {
         <div className="flex justify-center mb-6">
           <Link href="/" className="flex flex-col items-center gap-3">
             <div className="h-16 flex items-center justify-center">
-              <img src="/logo.png" alt="Logo" className="h-full w-auto object-contain dark:brightness-0 dark:invert opacity-90 dark:opacity-100" />
+              <img src="/MuftieAzam.png" alt="Logo" className="h-full w-auto object-contain dark:brightness-0 dark:invert opacity-90 dark:opacity-100" />
             </div>
             <span className="font-amiri italic text-2xl tracking-widest text-slate-700 dark:text-slate-300">Servant of Noori</span>
           </Link>

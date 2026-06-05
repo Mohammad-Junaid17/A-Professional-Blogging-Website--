@@ -48,8 +48,8 @@ export default function Footer() {
           {/* Column 1 */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-10 h-10 rounded flex items-center justify-center overflow-hidden">
-                <img src="/logo.png" alt="Logo" className="w-full h-full object-contain brightness-0 invert" />
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img src="/MuftieAzam.png" alt="Logo" className="w-full h-full object-contain brightness-0 invert" />
               </div>
               <span className="font-bold text-white text-xl">
                 Islamic Scholarly Resource
