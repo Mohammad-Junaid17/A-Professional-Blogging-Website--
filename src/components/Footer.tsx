@@ -49,7 +49,7 @@ export default function Footer() {
           <div className="space-y-4">
             <Link href="/" className="flex items-center group">
               <div className="w-12 h-12 flex items-center justify-center -mr-2">
-                <img src="/MuftieAzam.png" alt="Logo" className="w-full h-full object-contain brightness-0 invert scale-110" />
+                <img src="/MuftieAzam2.png" alt="Logo" className="w-full h-full object-contain brightness-0 invert scale-110" />
               </div>
               <span className="font-bold text-white text-xl">
                 Islamic Scholarly Resource
