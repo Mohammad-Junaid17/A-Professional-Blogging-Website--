@@ -134,9 +134,9 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 w-full bg-[#31373D] border-b border-[#404850]">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="h-10 w-10 rounded-full border border-white/60 flex items-center justify-center overflow-hidden flex-shrink-0">
-            <img src="/MuftieAzam.png" alt="Logo" className="h-full w-full object-contain brightness-0 invert scale-[1.3]" />
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="h-11 w-11 rounded-full border border-white/50 flex items-center justify-center overflow-hidden flex-shrink-0">
+            <img src="/MuftieAzam.png" alt="Logo" className="h-full w-full object-contain brightness-0 invert scale-[1.6] -translate-y-1" />
           </div>
           <span className="font-bold text-white text-xl hidden sm:block group-hover:opacity-90 transition-opacity">
             Islamic Scholarly Resource
