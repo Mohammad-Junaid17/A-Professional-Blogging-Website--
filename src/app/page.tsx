@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, Users, FileText } from "lucide-react";
+import { ArrowRight, BookOpen, Users, FileText, HelpCircle } from "lucide-react";
 import { ArticleCard, BookCard, ScholarCard } from "@/components/ui/Cards";
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,11 +16,14 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* SECTION 1 - Hero */}
-      <section className="relative py-20 md:py-32 overflow-hidden flex items-center justify-center">
+      <section className="relative pt-8 pb-20 md:pt-12 md:pb-32 overflow-hidden flex items-center justify-center">
         {/* Subtle background pattern could go here */}
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-background z-0" />
         <div className="container relative z-10 px-4 text-center max-w-4xl mx-auto">
           <div className="mb-8 inline-flex flex-col items-center justify-center space-y-2 opacity-90 hover:opacity-100 transition-opacity">
+            <div className="h-24 sm:h-32 mb-3 flex items-center justify-center">
+              <img src="/MuftieAzam.png" alt="Logo" className="h-full w-auto object-contain dark:brightness-0 dark:invert opacity-90 dark:opacity-100" />
+            </div>
             <span className="text-sm font-bold tracking-[0.2em] text-primary uppercase border-b border-primary/20 pb-1.5">
               A Mere Servant of <span className="text-accent">Noori</span>
             </span>
@@ -94,10 +97,10 @@ export default async function Home() {
               description="Explore classical and contemporary books and treatises." 
             />
             <CategoryCard 
-              href="/scholars" 
-              icon={<Users size={32} className="text-primary mb-4 group-hover:scale-110 transition-transform" />} 
-              title="Biographies" 
-              description="Learn about the lives and works of traditional scholars." 
+              href="/qa" 
+              icon={<HelpCircle size={32} className="text-primary mb-4 group-hover:scale-110 transition-transform" />} 
+              title="Q&A" 
+              description="Ask questions and find answers on various Islamic topics." 
             />
           </div>
         </div>

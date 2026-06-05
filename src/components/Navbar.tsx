@@ -14,8 +14,8 @@ const mainLinks = [
   { href: "/", label: "Home", icon: Home },
   { href: "/articles", label: "Articles", icon: FileText },
   { href: "/books", label: "Books", icon: BookOpen },
-  { href: "/scholars", label: "Scholars", icon: Users },
   { href: "/qa", label: "Q&A", icon: HelpCircle },
+  { href: "/scholars", label: "Scholars", icon: Users },
 ];
 
 const moreLinks = [

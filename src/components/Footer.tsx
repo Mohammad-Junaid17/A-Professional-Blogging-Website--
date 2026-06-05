@@ -58,6 +58,10 @@ export default function Footer() {
             <p className="text-gray-400 text-sm leading-relaxed">
               A comprehensive knowledge hub for Islamic sciences, jurisprudence, theology, and general Islamic learning.
             </p>
+            <a href="mailto:sugemadinah7@gmail.com" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors mt-4">
+              <Mail size={16} />
+              <span>Contact Admin: sugemadinah7@gmail.com</span>
+            </a>
           </div>
 
           {/* Column 2 */}
@@ -79,6 +83,11 @@ export default function Footer() {
               <li><Link href="/contentions" className="hover:text-primary transition-colors">Contentions</Link></li>
               <li><Link href="/search" className="hover:text-primary transition-colors">Search</Link></li>
             </ul>
+
+            <h3 className="font-bold mt-8 mb-4 text-white">Acknowledgements</h3>
+            <p className="text-sm text-gray-400 leading-relaxed">
+              Special thanks to <a href="https://thesunniway.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-primary transition-colors font-semibold underline decoration-gray-600 underline-offset-2">TheSunniWay</a> and <a href="https://sunnahcentral.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-primary transition-colors font-semibold underline decoration-gray-600 underline-offset-2">SunnahCentral</a> for their invaluable resources and inspiration.
+            </p>
           </div>
 
           {/* Column 4 */}
@@ -107,8 +116,8 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-[#404850] pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-500">
-            © 2026 Islamic Scholarly Resource. All rights reserved.
+          <p className="text-sm text-gray-500 text-center md:text-left">
+            © {new Date().getFullYear()} Islamic Scholarly Resource. All rights reserved.
           </p>
           <div className="flex items-center space-x-4 text-gray-500">
             <a href="https://x.com/sugemadinah" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:text-primary transition-colors"><TwitterIcon size={20} /></a>

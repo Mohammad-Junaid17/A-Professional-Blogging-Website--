@@ -95,10 +95,11 @@ export default function SignUpPage() {
       <div className="bg-card border border-border p-8 sm:p-10 rounded-2xl w-full max-w-md shadow-lg">
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-card">
-              <BookOpen size={22} />
+          <Link href="/" className="flex flex-col items-center gap-3">
+            <div className="h-20 flex items-center justify-center">
+              <img src="/MuftieAzam.png" alt="Logo" className="h-full w-auto object-contain dark:brightness-0 dark:invert opacity-90 dark:opacity-100" />
             </div>
+            <span className="font-amiri italic text-2xl tracking-widest text-slate-700 dark:text-slate-300">Servant of Noori</span>
           </Link>
         </div>
 
