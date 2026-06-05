@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { 
+import {
   Home, FileText, BookOpen, Users, Quote, HelpCircle, Menu, Search, Moon, Sun,
   ArrowRight, Video, ShieldAlert, MessageSquare, BookMarked, LogOut, User, Settings, ChevronDown
 } from "lucide-react";
@@ -109,7 +109,7 @@ export default function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
       subscription.unsubscribe();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSignOut = async () => {
@@ -135,9 +135,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="h-11 w-11 rounded-full border border-white/50 flex items-center justify-center flex-shrink-0">
-            <img src="/MuftieAzam2.png" alt="Logo" className="h-[80%] w-[80%] object-contain brightness-0 invert" />
-          </div>
+          <img src="/logo.png" alt="Logo" className="h-10 w-auto object-contain brightness-0 invert" onError={(e) => { e.currentTarget.style.display = 'none' }} />
           <span className="font-bold text-white text-xl hidden sm:block group-hover:opacity-90 transition-opacity">
             Islamic Scholarly Resource
           </span>

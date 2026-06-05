@@ -66,9 +66,6 @@ export default function AdminSidebar({ role = "admin", accessSections = [] }: { 
         {/* Header */}
         <div className={`flex ${collapsed ? 'flex-col items-center justify-center gap-4 py-4 px-2' : 'items-center justify-between px-4 py-5'} border-b border-white/10`}>
           <Link href="/admin" className="flex items-center gap-2">
-            <div className="w-10 h-10 flex items-center justify-center">
-              <img src="/MuftieAzam.png" alt="Admin Logo" className="w-full h-full object-contain brightness-0 invert" />
-            </div>
             {!collapsed && <span className="font-bold text-lg">Admin</span>}
           </Link>
           <div className={`flex ${collapsed ? 'flex-col' : 'items-center'} gap-2`}>
