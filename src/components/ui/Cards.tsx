@@ -7,21 +7,39 @@ export function ArticleCard({ article }: { article: any }) {
   return (
     <div className="relative h-full group">
       <AdminEditButton id={article.id} type="articles" returnUrl={article.category ? `/articles?category=${encodeURIComponent(article.category)}` : `/articles`} />
-      <Link href={`/articles/${article.slug}`} className="block h-full">
-        <div className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow h-full flex flex-col">
-        <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">Article</span>
-        <h3 className="font-bold text-[1.1rem] text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-          {article.title}
-        </h3>
-        <p className="text-muted text-sm line-clamp-3 mb-4 flex-1">
-          {article.excerpt || article.content?.substring(0, 150) + "..."}
-        </p>
-        <div className="flex items-center justify-between text-xs text-muted font-medium pt-3 border-t border-border/50">
-          <span className="text-primary truncate max-w-[60%]">{article.author}</span>
-          <span>{article.reading_time || 5} min read</span>
-        </div>
-        </div>
-      </Link>
+      {article.redirect_url ? (
+        <a href={article.redirect_url} target="_blank" rel="noopener noreferrer" className="block h-full">
+          <div className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow h-full flex flex-col">
+          <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">Article</span>
+          <h3 className="font-bold text-[1.1rem] text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+            {article.title}
+          </h3>
+          <p className="text-muted text-sm line-clamp-3 mb-4 flex-1">
+            {article.excerpt || article.content?.substring(0, 150) + "..."}
+          </p>
+          <div className="flex items-center justify-between text-xs text-muted font-medium pt-3 border-t border-border/50">
+            <span className="text-primary truncate max-w-[60%]">{article.author}</span>
+            <span>{article.reading_time || 5} min read</span>
+          </div>
+          </div>
+        </a>
+      ) : (
+        <Link href={`/articles/${article.slug}`} className="block h-full">
+          <div className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow h-full flex flex-col">
+          <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">Article</span>
+          <h3 className="font-bold text-[1.1rem] text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+            {article.title}
+          </h3>
+          <p className="text-muted text-sm line-clamp-3 mb-4 flex-1">
+            {article.excerpt || article.content?.substring(0, 150) + "..."}
+          </p>
+          <div className="flex items-center justify-between text-xs text-muted font-medium pt-3 border-t border-border/50">
+            <span className="text-primary truncate max-w-[60%]">{article.author}</span>
+            <span>{article.reading_time || 5} min read</span>
+          </div>
+          </div>
+        </Link>
+      )}
     </div>
   );
 }

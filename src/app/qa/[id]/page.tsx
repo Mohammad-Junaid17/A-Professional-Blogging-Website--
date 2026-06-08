@@ -1,5 +1,5 @@
 import React from "react";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ChevronRight, Calendar, User, Tag } from "lucide-react";
 import Link from "next/link";
@@ -22,6 +22,10 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
 
   if (!qa || qa.status !== "answered") {
     notFound();
+  }
+
+  if (qa.redirect_url) {
+    redirect(qa.redirect_url);
   }
 
   return (

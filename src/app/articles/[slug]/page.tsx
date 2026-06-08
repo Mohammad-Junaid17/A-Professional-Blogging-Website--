@@ -3,7 +3,7 @@ import { ChevronRight, Clock, User, Calendar } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
 import { ShareButtons } from "@/components/ShareButtons";
 import SaveButton from "@/components/SaveButton";
@@ -36,6 +36,10 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
 
   if (!article) {
     notFound();
+  }
+
+  if (article.redirect_url) {
+    redirect(article.redirect_url);
   }
 
   const isAqaid = article.category === "Aqā'id";
