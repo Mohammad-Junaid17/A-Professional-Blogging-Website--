@@ -1,8 +1,15 @@
 {
-  "crons": [
+  "redirects": [
     {
-      "path": "/api/admin/youtube/sync",
-      "schedule": "0 0 * * *"
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "scholarlyresource.vercel.app"
+        }
+      ],
+      "destination": "https://scholarlyresource.dpdns.org/$1",
+      "permanent": true
     }
   ]
 }

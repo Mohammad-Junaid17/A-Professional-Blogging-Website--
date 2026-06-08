@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from 'react-hot-toast';
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
+import { CanonicalMeta } from "@/components/CanonicalMeta";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const cormorantFont = Cormorant_Garamond({
@@ -15,6 +16,7 @@ const cormorantFont = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://scholarlyresource.dpdns.org"),
   title: "Islamic Scholarly Resource",
   description: "A comprehensive knowledge hub for Islamic sciences, jurisprudence, theology, and general Islamic learning.",
   verification: {
@@ -29,6 +31,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <CanonicalMeta />
+      </head>
       <body suppressHydrationWarning className={`${inter.variable} ${cormorantFont.variable} font-sans antialiased bg-background text-foreground min-h-screen flex flex-col`}>
         <AnalyticsTracker />
         <Toaster

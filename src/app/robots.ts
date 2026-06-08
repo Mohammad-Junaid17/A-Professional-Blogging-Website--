@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin/', '/api/'],
     },
-    sitemap: 'https://scholarlyresource.vercel.app/sitemap.xml',
+    sitemap: 'https://scholarlyresource.dpdns.org/sitemap.xml',
   };
 }
