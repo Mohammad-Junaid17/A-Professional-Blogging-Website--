@@ -165,7 +165,7 @@ export default async function ArticlesPage(props: {
           </div>
           <div>
             <h1 className="text-3xl font-bold font-serif text-foreground">
-              {currentSub || (currentCategory === "All Articles" ? "Articles" : currentCategory)}
+              {currentSub || (currentCategory === "All Articles" ? "Islamic Articles & Essays" : currentCategory)}
             </h1>
             {currentCategory !== "All Articles" && currentSub && (
               <p className="text-sm text-muted mt-0.5">

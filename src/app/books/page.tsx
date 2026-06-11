@@ -79,7 +79,7 @@ export default async function BooksPage(props: { searchParams: Promise<{ categor
           <div className="w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center text-primary">
             <BookOpen size={20} />
           </div>
-          <h1 className="text-3xl font-bold font-serif text-foreground">Books & Library</h1>
+          <h1 className="text-3xl font-bold font-serif text-foreground">Islamic Books & Classical Treatises</h1>
           <AdminAddButton type="books" label="Add Book" />
         </div>
 

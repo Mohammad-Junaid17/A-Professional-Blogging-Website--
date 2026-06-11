@@ -96,9 +96,10 @@ export default function Footer() {
             <p className="text-sm text-gray-400 mb-4">
               Subscribe for updates on new articles, books, and scholarly content.
             </p>
-            <form className="flex" action="/#">
+            <form className="flex" action="/api/newsletter" method="POST">
               <input 
                 type="email" 
+                name="email"
                 placeholder="Email address" 
                 className="flex-1 px-3 py-2 bg-[#252A2E] border border-[#404850] rounded-l-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-primary"
                 required

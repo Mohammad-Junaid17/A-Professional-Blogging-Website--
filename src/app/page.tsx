@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Users, FileText, HelpCircle } from "lucide-react";
 import { ArticleCard, BookCard, ScholarCard } from "@/components/ui/Cards";
@@ -24,8 +25,14 @@ export default async function Home() {
         <div className="container relative z-10 px-4 text-center max-w-4xl mx-auto">
           <h1 className="sr-only">Islamic Scholarly Resource — Encyclopaedia of Sunni Islam, Aqeedah, Fiqh & Scholarly Tradition</h1>
           <div className="mb-8 inline-flex flex-col items-center justify-center space-y-2 opacity-90 hover:opacity-100 transition-opacity">
-            <div className="h-24 sm:h-32 mb-3 flex items-center justify-center">
-              <img src="/MuftieAzam.png" alt="Mufti e Azam Hind — Imam Mustafa Rida Khan, patron scholar of Islamic Scholarly Resource" className="h-full w-auto object-contain dark:brightness-0 dark:invert opacity-90 dark:opacity-100" />
+            <div className="h-24 sm:h-32 mb-3 flex items-center justify-center relative w-full max-w-[200px] mx-auto">
+              <Image 
+                src="/MuftieAzam.png" 
+                alt="Mufti e Azam Hind — Imam Mustafa Rida Khan, patron scholar of Islamic Scholarly Resource" 
+                fill
+                priority
+                className="object-contain dark:brightness-0 dark:invert opacity-90 dark:opacity-100" 
+              />
             </div>
             <span className="text-sm font-bold tracking-[0.2em] text-primary uppercase border-b border-primary/20 pb-1.5">
               A Mere Servant of <span className="text-accent">Noori</span>
@@ -34,7 +41,7 @@ export default async function Home() {
               <span className="text-[13px] font-semibold tracking-widest uppercase mt-0.5">
                 Imām Muṣṭafā Riḍā Khān Nūrī
               </span>
-              <span className="font-amiri text-xl text-accent font-medium" dir="rtl">
+              <span className="font-amiri text-xl text-accent font-medium" dir="rtl" lang="ar">
                 رضي الله عنه
               </span>
             </div>
