@@ -4,6 +4,13 @@ import { createClient } from "@/lib/supabase/server";
 import { AdminAddButton } from "@/components/admin/AdminAddButton";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
 import SaveButton from "@/components/SaveButton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Islamic Lectures & Video Series",
+  description:
+    "Watch curated Islamic lectures, bayaans, and educational video series from leading Sunni scholars on topics of Aqeedah, Fiqh, and spirituality.",
+};
 
 export const revalidate = 60;
 

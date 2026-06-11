@@ -5,6 +5,13 @@ import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
 import { AdminAddButton } from "@/components/admin/AdminAddButton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Islamic Contentions & Rebuttals — Misconceptions Addressed",
+  description:
+    "Scholarly responses to common misconceptions, contentions, and attacks against Sunni Islam with evidence-based rebuttals from qualified scholars.",
+};
 
 export const revalidate = 60;
 

@@ -2,6 +2,13 @@
 import Link from "next/link";
 import { Search, ChevronRight, ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Search",
+  description:
+    "Search across articles, books, scholars, Q&A, and lectures on Islamic Scholarly Resource.",
+};
 
 export default async function SearchPage(props: {
   searchParams: Promise<{ q?: string }>;

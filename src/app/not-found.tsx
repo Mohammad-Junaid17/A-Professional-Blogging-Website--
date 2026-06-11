@@ -1,4 +1,11 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Page Not Found",
+  description: "The page or resource you are looking for does not exist on Islamic Scholarly Resource.",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

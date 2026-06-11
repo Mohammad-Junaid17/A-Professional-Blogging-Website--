@@ -3,6 +3,13 @@ import { Users, Search, ChevronRight } from "lucide-react";
 import { ScholarCard } from "@/components/ui/Cards";
 import { createClient } from "@/lib/supabase/server";
 import { AdminAddButton } from "@/components/admin/AdminAddButton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sunni Scholar Biographies — Hanafi, Shafi'i, Maliki Scholars",
+  description:
+    "Read biographies of renowned Sunni scholars, muftis, and jurists from across the Islamic world including Imam Ahmad Raza Khan and the Ahl as-Sunnah tradition.",
+};
 
 export default async function ScholarsPage(props: { searchParams: Promise<{ madhab?: string; q?: string }> }) {
   const searchParams = await props.searchParams;

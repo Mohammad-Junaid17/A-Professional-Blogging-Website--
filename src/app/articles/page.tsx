@@ -3,6 +3,13 @@ import { FileText, Search, ChevronRight } from "lucide-react";
 import { ArticleCard } from "@/components/ui/Cards";
 import { createClient } from "@/lib/supabase/server";
 import { AdminAddButton } from "@/components/admin/AdminAddButton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Islamic Articles & Essays — Aqeedah, Fiqh, Sunnah",
+  description:
+    "Explore in-depth articles on Islamic theology (Aqeedah), jurisprudence (Fiqh), prophetic traditions, and contemporary matters from the Sunni scholarly tradition of Ahl as-Sunnah.",
+};
 
 // Categories are fetched dynamically
 

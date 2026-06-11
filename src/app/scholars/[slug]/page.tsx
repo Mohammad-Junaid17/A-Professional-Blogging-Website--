@@ -7,8 +7,48 @@ import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
 import SaveButton from "@/components/SaveButton";
+import { PersonSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import type { Metadata } from "next";
 
 export const revalidate = 60;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data: scholar } = await supabase
+    .from("scholars")
+    .select("name_english, bio, madhab, origin")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .single();
+
+  if (!scholar) {
+    return { title: "Scholar Not Found" };
+  }
+
+  const description =
+    scholar.bio?.substring(0, 160) ||
+    `Biography of ${scholar.name_english} — a renowned ${scholar.madhab || "Sunni"} scholar${scholar.origin ? ` from ${scholar.origin}` : ""}.`;
+
+  return {
+    title: `${scholar.name_english} — Biography`,
+    description,
+    openGraph: {
+      title: `${scholar.name_english} — Biography`,
+      description,
+      type: "profile",
+    },
+    twitter: {
+      card: "summary",
+      title: `${scholar.name_english} — Biography`,
+      description,
+    },
+  };
+}
 
 export default async function ScholarPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
@@ -31,6 +71,23 @@ export default async function ScholarPage(props: { params: Promise<{ slug: strin
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl relative">
+      <PersonSchema
+        name={scholar.name_english}
+        slug={scholar.slug}
+        description={scholar.bio?.substring(0, 200) || `Biography of ${scholar.name_english}`}
+        birthDate={scholar.birth_year}
+        deathDate={scholar.death_year_ah ? `${scholar.death_year_ah} AH` : undefined}
+        birthPlace={scholar.origin}
+        image={scholar.image_url}
+        notableWorks={scholar.notable_works}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://scholarlyresource.dpdns.org" },
+          { name: "Scholars", url: "https://scholarlyresource.dpdns.org/scholars" },
+          { name: scholar.name_english, url: `https://scholarlyresource.dpdns.org/scholars/${scholar.slug}` },
+        ]}
+      />
       <AdminEditButton id={scholar.id} type="scholars" returnUrl={`/scholars/${scholar.slug}`} />
 
       {/* Breadcrumb */}

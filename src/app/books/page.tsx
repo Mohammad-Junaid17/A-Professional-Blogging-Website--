@@ -3,6 +3,13 @@ import { BookOpen, Search, ChevronRight } from "lucide-react";
 import { BookCard } from "@/components/ui/Cards";
 import { createClient } from "@/lib/supabase/server";
 import { AdminAddButton } from "@/components/admin/AdminAddButton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Islamic Books & Library — Classical Treatises & Translations",
+  description:
+    "Browse our curated library of translated Islamic books, classical treatises, and scholarly works from the Ahl as-Sunnah tradition. Available in English and Urdu.",
+};
 
 // Categories are fetched dynamically
 

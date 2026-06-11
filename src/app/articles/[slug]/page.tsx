@@ -7,8 +7,49 @@ import { notFound, redirect } from "next/navigation";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
 import { ShareButtons } from "@/components/ShareButtons";
 import SaveButton from "@/components/SaveButton";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import type { Metadata } from "next";
 
 export const revalidate = 60;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data: article } = await supabase
+    .from("articles")
+    .select("title, excerpt, author, category")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .single();
+
+  if (!article) {
+    return { title: "Article Not Found" };
+  }
+
+  const description =
+    article.excerpt?.substring(0, 160) ||
+    `Read "${article.title}" — an in-depth article on ${article.category || "Islamic sciences"} from the Sunni scholarly tradition.`;
+
+  return {
+    title: article.title,
+    description,
+    openGraph: {
+      title: article.title,
+      description,
+      type: "article",
+      authors: article.author ? [article.author] : undefined,
+    },
+    twitter: {
+      card: "summary",
+      title: article.title,
+      description,
+    },
+  };
+}
 
 // Ordered sub-topics for Aqā'id section
 const AQAID_SUBTOPICS = [
@@ -104,6 +145,21 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
 
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl relative">
+      <ArticleSchema
+        title={article.title}
+        description={article.excerpt || article.content?.substring(0, 160) || ""}
+        slug={params.slug}
+        author={article.author}
+        datePublished={article.created_at}
+        dateModified={article.updated_at || article.created_at}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://scholarlyresource.dpdns.org" },
+          { name: "Articles", url: "https://scholarlyresource.dpdns.org/articles" },
+          { name: article.title, url: `https://scholarlyresource.dpdns.org/articles/${params.slug}` },
+        ]}
+      />
       <AdminEditButton id={article.id} type="articles" returnUrl={`/articles?category=${encodeURIComponent(article.category)}`} />
 
       {/* Breadcrumb */}

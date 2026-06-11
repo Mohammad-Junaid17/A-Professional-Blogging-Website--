@@ -17,10 +17,69 @@ const cormorantFont = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://scholarlyresource.dpdns.org"),
-  title: "Islamic Scholarly Resource",
-  description: "A comprehensive knowledge hub for Islamic sciences, jurisprudence, theology, and general Islamic learning.",
+  title: {
+    default: "Islamic Scholarly Resource — Encyclopaedia of Sunni Islam",
+    template: "%s | Islamic Scholarly Resource",
+  },
+  description:
+    "A comprehensive encyclopaedia and educational platform for Islamic sciences, jurisprudence (Fiqh), theology (Aqeedah), and Sunni scholarly tradition. Explore articles, books, Q&A, scholar biographies, and lectures.",
+  keywords: [
+    "Islamic articles",
+    "Sunni Islam",
+    "Aqeedah",
+    "Fiqh",
+    "Hanafi",
+    "Imam Ahmad Raza Khan",
+    "Ala Hazrat",
+    "Barelvi",
+    "Islamic books",
+    "Islamic Q&A",
+    "Sunni scholars",
+    "Islamic lectures",
+    "Ahl as-Sunnah",
+    "Islamic knowledge",
+    "Islamic jurisprudence",
+  ],
+  authors: [{ name: "Islamic Scholarly Resource" }],
+  creator: "Islamic Scholarly Resource",
+  publisher: "Islamic Scholarly Resource",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Islamic Scholarly Resource",
+    title: "Islamic Scholarly Resource — Encyclopaedia of Sunni Islam",
+    description:
+      "Explore articles, books, Q&A, scholar biographies, and lectures on Islamic sciences from the Ahl as-Sunnah tradition.",
+    images: [
+      {
+        url: "/icon.png",
+        width: 516,
+        height: 516,
+        alt: "Islamic Scholarly Resource Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Islamic Scholarly Resource — Encyclopaedia of Sunni Islam",
+    description:
+      "Explore articles, books, Q&A, scholar biographies, and lectures on Islamic sciences from the Ahl as-Sunnah tradition.",
+    images: ["/icon.png"],
+    creator: "@sugemadinah",
+  },
   verification: {
     google: "MNqfI7SUHfq8Xk4XqtCRySp7DZBnE7EGOxCKf_x_ZpQ",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 

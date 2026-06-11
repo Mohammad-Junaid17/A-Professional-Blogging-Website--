@@ -4,6 +4,13 @@ import { QACard } from "@/components/ui/QACard";
 import { createClient } from "@/lib/supabase/server";
 import SubmitQuestionButton from "@/components/SubmitQuestionButton";
 import { AdminAddButton } from "@/components/admin/AdminAddButton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Islamic Q&A — Questions & Answers on Fiqh, Aqeedah & Sunnah",
+  description:
+    "Find answers to common questions about Islamic beliefs, rulings, and practices from qualified Sunni scholars of the Hanafi school.",
+};
 
 // Categories are fetched dynamically
 
