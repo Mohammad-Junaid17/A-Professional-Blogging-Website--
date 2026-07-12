@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Islamic Scholarly Resource",
-    short_name: "ISR",
+    name: "Islam360",
+    short_name: "Islam360",
     description:
       "A comprehensive encyclopaedia and educational platform for Islamic sciences, jurisprudence, theology, and Sunni scholarly tradition.",
     start_url: "/",

@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient();
-  const baseUrl = 'https://scholarlyresource.dpdns.org';
+  const baseUrl = 'https://islam360.ridawiway.com';
 
   // Fetch dynamic content to add to sitemap
   const { data: articles } = await supabase.from('articles').select('slug, created_at').eq('status', 'published');

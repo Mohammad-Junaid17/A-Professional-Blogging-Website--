@@ -25,7 +25,7 @@ export async function sendEmail({ to, subject, html }: { to: string, subject: st
     });
 
     await transporter.sendMail({
-      from: SMTP_FROM || '"Islamic Scholarly Resource" <noreply@example.com>',
+      from: SMTP_FROM || '"Islam360" <noreply@example.com>',
       to,
       subject,
       html,

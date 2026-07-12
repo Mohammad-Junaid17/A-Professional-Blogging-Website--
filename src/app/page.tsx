@@ -23,12 +23,12 @@ export default async function Home() {
         {/* Subtle background pattern could go here */}
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-background z-0" />
         <div className="container relative z-10 px-4 text-center max-w-4xl mx-auto">
-          <h1 className="sr-only">Islamic Scholarly Resource — Encyclopaedia of Sunni Islam, Aqeedah, Fiqh & Scholarly Tradition</h1>
+          <h1 className="sr-only">Islam360 — Encyclopaedia of Sunni Islam, Aqeedah, Fiqh & Scholarly Tradition</h1>
           <div className="mb-8 inline-flex flex-col items-center justify-center space-y-2 opacity-90 hover:opacity-100 transition-opacity">
             <div className="h-24 sm:h-32 mb-3 flex items-center justify-center relative w-full max-w-[200px] mx-auto">
               <Image 
                 src="/MuftieAzam.png" 
-                alt="Mufti e Azam Hind — Imam Mustafa Rida Khan, patron scholar of Islamic Scholarly Resource" 
+                alt="Mufti e Azam Hind — Imam Mustafa Rida Khan, patron scholar of Islam360" 
                 fill
                 priority
                 className="object-contain dark:brightness-0 dark:invert opacity-90 dark:opacity-100" 
@@ -49,7 +49,7 @@ export default async function Home() {
           <div className="text-center text-lg md:text-xl text-foreground/90 font-serif leading-relaxed max-w-4xl mx-auto mb-10 space-y-6">
             <p>Asalāmu Álaykum wa raHmatullah</p>
             <p>
-              Welcome to Islamic Scholarly Resource! The aim and mission of this website is to propagate the correct Áqaýed (beliefs) and
+              Welcome to Islam360! The aim and mission of this website is to propagate the correct Áqaýed (beliefs) and
               Manhaj (teachings) of the Ahl as-Sunnah wa al-Jamaáh as written in the works of the great Imām of the Ahl as-Sunnah,
               and revivalist of the 14th century, <strong className="text-foreground">Ala Hazrat</strong> <span className="text-[#9CC76D]">Imam Ahmed Rida al-Qadri</span> rahīmahullāh wa rađiyAllāhu ánh.
             </p>

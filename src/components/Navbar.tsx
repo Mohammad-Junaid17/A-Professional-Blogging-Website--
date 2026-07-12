@@ -137,7 +137,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-3 group">
           <img src="/logo.png" alt="Logo" className="h-10 w-auto object-contain brightness-0 invert" onError={(e) => { e.currentTarget.style.display = 'none' }} />
           <span className="font-bold text-white text-xl hidden sm:block group-hover:opacity-90 transition-opacity">
-            Islamic Scholarly Resource
+            Islam360
           </span>
         </Link>
 

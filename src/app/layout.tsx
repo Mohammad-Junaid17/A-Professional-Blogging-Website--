@@ -16,10 +16,10 @@ const cormorantFont = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://scholarlyresource.dpdns.org"),
+  metadataBase: new URL("https://islam360.ridawiway.com"),
   title: {
-    default: "Islamic Scholarly Resource — Encyclopaedia of Sunni Islam",
-    template: "%s | Islamic Scholarly Resource",
+    default: "Islam360 — Encyclopaedia of Sunni Islam",
+    template: "%s | Islam360",
   },
   description:
     "A comprehensive encyclopaedia and educational platform for Islamic sciences, jurisprudence (Fiqh), theology (Aqeedah), and Sunni scholarly tradition. Explore articles, books, Q&A, scholar biographies, and lectures.",
@@ -40,14 +40,14 @@ export const metadata: Metadata = {
     "Islamic knowledge",
     "Islamic jurisprudence",
   ],
-  authors: [{ name: "Islamic Scholarly Resource" }],
-  creator: "Islamic Scholarly Resource",
-  publisher: "Islamic Scholarly Resource",
+  authors: [{ name: "Islam360" }],
+  creator: "Islam360",
+  publisher: "Islam360",
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "Islamic Scholarly Resource",
-    title: "Islamic Scholarly Resource — Encyclopaedia of Sunni Islam",
+    siteName: "Islam360",
+    title: "Islam360 — Encyclopaedia of Sunni Islam",
     description:
       "Explore articles, books, Q&A, scholar biographies, and lectures on Islamic sciences from the Ahl as-Sunnah tradition.",
     images: [
@@ -55,13 +55,13 @@ export const metadata: Metadata = {
         url: "/icon.png",
         width: 516,
         height: 516,
-        alt: "Islamic Scholarly Resource Logo",
+        alt: "Islam360 Logo",
       },
     ],
   },
   twitter: {
     card: "summary",
-    title: "Islamic Scholarly Resource — Encyclopaedia of Sunni Islam",
+    title: "Islam360 — Encyclopaedia of Sunni Islam",
     description:
       "Explore articles, books, Q&A, scholar biographies, and lectures on Islamic sciences from the Ahl as-Sunnah tradition.",
     images: ["/icon.png"],

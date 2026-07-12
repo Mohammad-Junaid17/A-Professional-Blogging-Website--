@@ -83,9 +83,9 @@ export default async function ScholarPage(props: { params: Promise<{ slug: strin
       />
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://scholarlyresource.dpdns.org" },
-          { name: "Scholars", url: "https://scholarlyresource.dpdns.org/scholars" },
-          { name: scholar.name_english, url: `https://scholarlyresource.dpdns.org/scholars/${scholar.slug}` },
+          { name: "Home", url: "https://islam360.ridawiway.com" },
+          { name: "Scholars", url: "https://islam360.ridawiway.com/scholars" },
+          { name: scholar.name_english, url: `https://islam360.ridawiway.com/scholars/${scholar.slug}` },
         ]}
       />
       <AdminEditButton id={scholar.id} type="scholars" returnUrl={`/scholars/${scholar.slug}`} />

@@ -104,7 +104,7 @@ export default function SignUpPage() {
         </div>
 
         <h1 className="text-2xl font-bold font-serif text-center mb-1 text-foreground">Create Account</h1>
-        <p className="text-muted text-center text-sm mb-8">Join the Islamic Scholarly Resource community</p>
+        <p className="text-muted text-center text-sm mb-8">Join the Islam360 community</p>
 
         {error && (
           <div className="bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 p-3 rounded-lg text-sm mb-6">

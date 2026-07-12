@@ -52,7 +52,7 @@ export default function Footer() {
                 <img src="/MuftieAzam2.png" alt="Logo" className="w-full h-full object-contain brightness-0 invert" />
               </div>
               <span className="font-bold text-white text-xl">
-                Islamic Scholarly Resource
+                Islam360
               </span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -118,7 +118,7 @@ export default function Footer() {
 
         <div className="border-t border-[#404850] pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-gray-500 text-center md:text-left">
-            © {new Date().getFullYear()} Islamic Scholarly Resource. All rights reserved.
+            © {new Date().getFullYear()} Islam360. All rights reserved.
           </p>
           <div className="flex items-center space-x-4 text-gray-500">
             <a href="https://x.com/sugemadinah" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:text-primary transition-colors"><TwitterIcon size={20} /></a>

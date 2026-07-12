@@ -155,9 +155,9 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
       />
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://scholarlyresource.dpdns.org" },
-          { name: "Articles", url: "https://scholarlyresource.dpdns.org/articles" },
-          { name: article.title, url: `https://scholarlyresource.dpdns.org/articles/${params.slug}` },
+          { name: "Home", url: "https://islam360.ridawiway.com" },
+          { name: "Articles", url: "https://islam360.ridawiway.com/articles" },
+          { name: article.title, url: `https://islam360.ridawiway.com/articles/${params.slug}` },
         ]}
       />
       <AdminEditButton id={article.id} type="articles" returnUrl={`/articles?category=${encodeURIComponent(article.category)}`} />

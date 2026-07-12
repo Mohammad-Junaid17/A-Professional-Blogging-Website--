@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 export function CanonicalMeta() {
   const pathname = usePathname() || "";
-  const url = `https://scholarlyresource.dpdns.org${pathname}`;
+  const url = `https://islam360.ridawiway.com${pathname}`;
   
   return (
     <>

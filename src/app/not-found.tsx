@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "Page Not Found",
-  description: "The page or resource you are looking for does not exist on Islamic Scholarly Resource.",
+  description: "The page or resource you are looking for does not exist on Islam360.",
   robots: { index: false, follow: true },
 };
 

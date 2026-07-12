@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Search",
   description:
-    "Search across articles, books, scholars, Q&A, and lectures on Islamic Scholarly Resource.",
+    "Search across articles, books, scholars, Q&A, and lectures on Islam360.",
 };
 
 export default async function SearchPage(props: {

@@ -10,9 +10,9 @@ export function WebSiteSchema() {
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": "https://scholarlyresource.dpdns.org/#website",
-        url: "https://scholarlyresource.dpdns.org",
-        name: "Islamic Scholarly Resource",
+        "@id": "https://islam360.ridawiway.com/#website",
+        url: "https://islam360.ridawiway.com",
+        name: "Islam360",
         description:
           "A comprehensive encyclopaedia and educational platform for Islamic sciences, jurisprudence, theology, and Sunni scholarly tradition.",
         inLanguage: "en",
@@ -21,19 +21,19 @@ export function WebSiteSchema() {
           target: {
             "@type": "EntryPoint",
             urlTemplate:
-              "https://scholarlyresource.dpdns.org/search?q={search_term_string}",
+              "https://islam360.ridawiway.com/search?q={search_term_string}",
           },
           "query-input": "required name=search_term_string",
         },
       },
       {
         "@type": "Organization",
-        "@id": "https://scholarlyresource.dpdns.org/#organization",
-        name: "Islamic Scholarly Resource",
-        url: "https://scholarlyresource.dpdns.org",
+        "@id": "https://islam360.ridawiway.com/#organization",
+        name: "Islam360",
+        url: "https://islam360.ridawiway.com",
         logo: {
           "@type": "ImageObject",
-          url: "https://scholarlyresource.dpdns.org/icon.png",
+          url: "https://islam360.ridawiway.com/icon.png",
         },
         sameAs: [
           "https://x.com/sugemadinah",
@@ -74,25 +74,25 @@ export function ArticleSchema({
     "@type": "Article",
     headline: title,
     description: description,
-    url: `https://scholarlyresource.dpdns.org/articles/${slug}`,
-    image: image || "https://scholarlyresource.dpdns.org/icon.png",
+    url: `https://islam360.ridawiway.com/articles/${slug}`,
+    image: image || "https://islam360.ridawiway.com/icon.png",
     datePublished: datePublished || undefined,
     dateModified: dateModified || datePublished || undefined,
     author: {
       "@type": "Person",
-      name: author || "Islamic Scholarly Resource",
+      name: author || "Islam360",
     },
     publisher: {
       "@type": "Organization",
-      name: "Islamic Scholarly Resource",
+      name: "Islam360",
       logo: {
         "@type": "ImageObject",
-        url: "https://scholarlyresource.dpdns.org/icon.png",
+        url: "https://islam360.ridawiway.com/icon.png",
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://scholarlyresource.dpdns.org/articles/${slug}`,
+      "@id": `https://islam360.ridawiway.com/articles/${slug}`,
     },
   };
 
@@ -153,7 +153,7 @@ export function PersonSchema({
     "@context": "https://schema.org",
     "@type": "Person",
     name: name,
-    url: `https://scholarlyresource.dpdns.org/scholars/${slug}`,
+    url: `https://islam360.ridawiway.com/scholars/${slug}`,
     description: description,
     image: image || undefined,
     birthDate: birthDate || undefined,
@@ -163,7 +163,7 @@ export function PersonSchema({
       : undefined,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://scholarlyresource.dpdns.org/scholars/${slug}`,
+      "@id": `https://islam360.ridawiway.com/scholars/${slug}`,
     },
   };
 
