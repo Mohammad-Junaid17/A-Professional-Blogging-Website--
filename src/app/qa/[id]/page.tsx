@@ -92,7 +92,10 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
           <h3 className="font-bold text-lg">Share or Save this Q&A</h3>
           <div className="flex flex-wrap items-center gap-3">
             <SaveButton contentType="qa" contentId={qa.id} />
-            <ShareButtons title={qa.question} />
+            <ShareButtons 
+              title={qa.question} 
+              text={`Regarding: ${qa.question}\n\nA scholarly query answered by ${qa.answered_by || "Islam360"}\n\nRead now at:`}
+            />
           </div>
         </div>
       </footer>

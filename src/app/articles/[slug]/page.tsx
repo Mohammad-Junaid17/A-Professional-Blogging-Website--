@@ -243,7 +243,10 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
           <h3 className="font-bold text-lg">Share or Save this article</h3>
           <div className="flex flex-wrap items-center gap-3">
             <SaveButton contentType="article" contentId={article.id} />
-            <ShareButtons title={article.title} />
+            <ShareButtons 
+              title={article.title} 
+              text={`Regarding ${article.title}\n\nA scholarly query answered by ${article.author || "Islam360"}\n\nRead now at:`}
+            />
           </div>
         </div>
 

@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { Share2, Copy, Check } from "lucide-react";
 
-export function ShareButtons({ title }: { title: string }) {
+export function ShareButtons({ title, text }: { title: string; text?: string }) {
   const [copied, setCopied] = useState(false);
 
   async function handleShare() {
     const url = window.location.href;
     if (navigator.share) {
       try {
-        await navigator.share({ title, url });
+        await navigator.share({ title, text, url });
       } catch {
         // user cancelled — no-op
       }
