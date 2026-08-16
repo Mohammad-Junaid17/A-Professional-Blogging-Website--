@@ -245,7 +245,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
             <SaveButton contentType="article" contentId={article.id} />
             <ShareButtons 
               title={article.title} 
-              text={`Regarding ${article.title}\n\nA scholarly query answered by ${article.author || "Islam360"}\n\nRead now at:`}
+              text={`${article.title}\n\nA scholarly query answered by ${article.author || "Islam360"}\n\nRead now at:`}
             />
           </div>
         </div>
