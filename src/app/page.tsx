@@ -31,7 +31,7 @@ export default async function Home() {
                 alt="Mufti e Azam Hind — Imam Mustafa Rida Khan, patron scholar of Islam360" 
                 fill
                 priority
-                className="object-contain dark:brightness-0 dark:invert opacity-90 dark:opacity-100" 
+                className="object-contain brightness-0 dark:brightness-0 dark:invert opacity-90 dark:opacity-100" 
               />
             </div>
             <span className="text-sm font-bold tracking-[0.2em] text-primary uppercase border-b border-primary/20 pb-1.5">
@@ -62,8 +62,8 @@ export default async function Home() {
             <Link href="/articles" className="w-full sm:w-auto px-8 py-3 bg-primary text-card font-semibold rounded-lg hover:bg-primary/90 transition-colors">
               Explore Articles
             </Link>
-            <Link href="/books" className="w-full sm:w-auto px-8 py-3 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary/10 transition-colors">
-              Browse Library
+            <Link href="/qa" className="w-full sm:w-auto px-8 py-3 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary/10 transition-colors">
+              Ask Q&A
             </Link>
           </div>
 
