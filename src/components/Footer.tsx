@@ -27,21 +27,7 @@ export default function Footer() {
     <footer className="bg-[#31373D] text-gray-300 pt-16 pb-6">
       <div className="container mx-auto px-4">
         
-        {/* Social Banner */}
-        <div className="flex flex-col items-center justify-center space-y-5 mb-16 pb-12 border-b border-border">
-          <span className="text-sm text-white font-bold uppercase tracking-[0.2em]">Follow Our Updates</span>
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-6">
-              <a href="https://x.com/sugemadinah" target="_blank" rel="noopener noreferrer" className="p-4 bg-[#252A2E] border border-[#404850] rounded-full hover:bg-primary/20 hover:border-primary/50 hover:-translate-y-1 hover:shadow-lg transition-all group" aria-label="Twitter">
-                <TwitterIcon size={24} className="text-gray-400 group-hover:text-primary transition-colors" />
-              </a>
-              <a href="https://www.instagram.com/q.sunnahh_/" target="_blank" rel="noopener noreferrer" className="p-4 bg-[#252A2E] border border-[#404850] rounded-full hover:bg-primary/20 hover:border-primary/50 hover:-translate-y-1 hover:shadow-lg transition-all group" aria-label="Instagram">
-                <InstagramIcon size={24} className="text-gray-400 group-hover:text-primary transition-colors" />
-              </a>
-            </div>
-            <span className="text-sm text-gray-500 italic mt-2">Curated by @q.sunnahh_</span>
-          </div>
-        </div>
+
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           

@@ -66,27 +66,7 @@ export default async function Home() {
               Browse Library
             </Link>
           </div>
-          <div className="mt-12 flex flex-col items-center justify-center space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both">
-            <span className="text-xs text-muted font-bold uppercase tracking-[0.2em]">Follow Our Updates</span>
-            <div className="flex flex-col items-center gap-3">
-              <div className="flex items-center gap-4">
-                <a href="https://x.com/sugemadinah" target="_blank" rel="noopener noreferrer" className="p-3 bg-background/50 backdrop-blur-sm border border-border rounded-full hover:bg-primary/10 hover:border-primary/30 hover:scale-110 transition-all group" aria-label="Twitter">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted group-hover:text-primary transition-colors">
-                    <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
-                    <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
-                  </svg>
-                </a>
-                <a href="https://www.instagram.com/q.sunnahh_/" target="_blank" rel="noopener noreferrer" className="p-3 bg-background/50 backdrop-blur-sm border border-border rounded-full hover:bg-primary/10 hover:border-primary/30 hover:scale-110 transition-all group" aria-label="Instagram">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted group-hover:text-primary transition-colors">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                  </svg>
-                </a>
-              </div>
-              <span className="text-[11px] text-muted/80 italic">Curated by @q.sunnahh_</span>
-            </div>
-          </div>
+
         </div>
       </section>
 
@@ -178,29 +158,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* SECTION 6 - Newsletter */}
-      <section className="py-20 bg-background border-b border-border">
-        <div className="container px-4 mx-auto max-w-xl text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-4">Stay Updated</h2>
-          <p className="text-muted mb-8">
-            Subscribe for updates on new articles, books, and scholarly content.
-          </p>
-          <form className="flex flex-col sm:flex-row gap-3">
-            <input 
-              type="email" 
-              placeholder="Enter your email address" 
-              className="flex-1 px-4 py-3 bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-              required
-            />
-            <button 
-              type="submit"
-              className="bg-primary text-card px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </section>
+
 
     </div>
   );
