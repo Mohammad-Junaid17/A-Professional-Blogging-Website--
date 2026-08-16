@@ -16,20 +16,18 @@
     --border: #C8E6C9;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      /* Premium dark — deep charcoal slate, warm cream text, gold accents */
-      --background: #111117;      /* Very dark blue-charcoal */
-      --foreground: #F0EDE6;      /* Warm cream — easy on eyes */
-      --card: #1C1C25;            /* Slightly lighter card surface */
-      --card-border: #2A2A38;     /* Subtle border */
-      --muted: #9090A8;           /* Muted lilac-grey — readable but soft */
-      --primary: #C9A84C;         /* Warm gold — prestigious & Islamic */
-      --primary-light: #1E1A0D;   /* Deep dark gold tint for hover/bg */
-      --accent: #E5C97A;          /* Lighter gold for highlights */
-      --nav-active: #1E1A0D;      /* Active nav dark gold tint */
-      --border: #2E2E3E;          /* Subtle dark border */
-    }
+  .dark {
+    /* Premium dark — deep charcoal slate, warm cream text, gold accents */
+    --background: #31373D;      /* Changed to match website header color */
+    --foreground: #F0EDE6;      /* Warm cream — easy on eyes */
+    --card: #1C1C25;            /* Slightly lighter card surface */
+    --card-border: #2A2A38;     /* Subtle border */
+    --muted: #9090A8;           /* Muted lilac-grey — readable but soft */
+    --primary: #C9A84C;         /* Warm gold — prestigious & Islamic */
+    --primary-light: #1E1A0D;   /* Deep dark gold tint for hover/bg */
+    --accent: #E5C97A;          /* Lighter gold for highlights */
+    --nav-active: #1E1A0D;      /* Active nav dark gold tint */
+    --border: #2E2E3E;          /* Subtle dark border */
   }
 }
 
@@ -63,12 +61,10 @@
   background: var(--primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar-thumb {
-    background: #3A3A50;
-  }
+.dark ::-webkit-scrollbar-thumb {
+  background: #3A3A50;
+}
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--primary); /* Gold on hover */
-  }
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary); /* Gold on hover */
 }

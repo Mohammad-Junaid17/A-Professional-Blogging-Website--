@@ -16,19 +16,20 @@ export async function POST(req: Request) {
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   try {
-    const { question, category, answer, answered_by } = await req.json()
+    const { title, question, category, answer, answered_by, translationUrdu } = await req.json()
 
-    if (!question || !category || !answer) {
+    if (!title || !question || !category || !answer) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    const slug = question
+    const slug = title
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, "")
       .replace(/\s+/g, "-")
       .slice(0, 60) + "-" + Date.now().toString(36);
 
     const { data, error } = await supabaseAdmin.from('qa_entries').insert({
+      title,
       question,
       category,
       answer: answer,
@@ -40,6 +41,24 @@ export async function POST(req: Request) {
     }).select().single()
 
     if (error) throw error
+
+    const qaId = data.id;
+    const translationsToInsert = [];
+    
+    if (translationUrdu?.trim()) {
+      translationsToInsert.push({
+        content_type: 'qa',
+        content_id: qaId,
+        language: 'urdu',
+        content: translationUrdu.trim(),
+      });
+    }
+    
+    if (translationsToInsert.length > 0) {
+      const { error: transErr } = await supabaseAdmin.from('translations').insert(translationsToInsert);
+      if (transErr) console.error("Error inserting translations:", transErr);
+    }
+
     return NextResponse.json({ data })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, FileText, BookOpen, Users, Quote, HelpCircle,
   BookMarked, ShieldAlert, Video, MessageSquare, Mail, Settings,
-  LogOut, ChevronLeft, Menu, BookOpenCheck, Tags, Moon, Sun
+  LogOut, ChevronLeft, Menu, BookOpenCheck, Tags, Moon, Sun, Languages
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
@@ -22,6 +22,7 @@ const sidebarLinks = [
   { href: "/admin/comments", label: "Comments", icon: MessageSquare },
   { href: "/admin/newsletter", label: "Newsletter", icon: Mail },
   { href: "/admin/users", label: "Users", icon: Users },
+  { href: "/admin/translations", label: "Translations", icon: Languages },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

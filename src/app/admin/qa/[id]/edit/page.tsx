@@ -18,7 +18,7 @@ export default function EditQA({ params, searchParams }: { params: Promise<{ id:
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
-  
+  const [title, setTitle] = useState("");
   const [question, setQuestion] = useState("");
   const [category, setCategory] = useState("Fiqh");
   const [answer, setAnswer] = useState("");
@@ -28,6 +28,7 @@ export default function EditQA({ params, searchParams }: { params: Promise<{ id:
   useEffect(() => {
     supabase.from("qa_entries").select("*").eq("id", id).single().then(({ data }) => {
       if (data) {
+        setTitle(data.title || "");
         setQuestion(data.question || "");
         setCategory(data.category || "Fiqh");
         setAnswer(data.admin_answer || data.answer || "");
@@ -49,6 +50,7 @@ export default function EditQA({ params, searchParams }: { params: Promise<{ id:
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           action: "update", 
+          title,
           question, 
           category, 
           answer, 
@@ -89,7 +91,19 @@ export default function EditQA({ params, searchParams }: { params: Promise<{ id:
       <div className="bg-card border border-border rounded-xl p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-semibold text-foreground mb-1.5">Question *</label>
+            <label className="block text-sm font-semibold text-foreground mb-1.5">Short Title *</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g., Why Maslak e AalaHazrat?"
+              className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-foreground mb-1.5">Full Question *</label>
             <div data-color-mode="light">
               <MDEditor
                 value={question}

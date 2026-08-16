@@ -62,8 +62,9 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string  }
   }
 
   if (action === 'update') {
-    const { question, category, answer, status } = body
+    const { title, question, category, answer, status } = body
     const { data, error } = await supabaseAdmin.from('qa_entries').update({
+      title,
       question,
       category,
       admin_answer: answer,

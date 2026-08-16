@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronRight, Clock, User, Calendar } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
+import { TranslationWrapper } from "@/components/TranslationWrapper";
 import CommentSection from "@/components/CommentSection";
 import { notFound, redirect } from "next/navigation";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
@@ -231,10 +232,12 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-foreground/90">
-        <MarkdownRenderer content={article.content || article.excerpt || ""} />
-      </div>
+      {/* Main Content with Translation Support */}
+      <TranslationWrapper 
+        originalContent={article.content || article.excerpt || ""}
+        contentType="article"
+        contentId={article.id}
+      />
 
       {/* Footer */}
       <footer className="border-t border-border pt-8 mt-12">

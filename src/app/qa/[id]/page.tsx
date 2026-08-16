@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ChevronRight, Calendar, User, Tag } from "lucide-react";
 import Link from "next/link";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
+import { TranslationWrapper } from "@/components/TranslationWrapper";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
 import { ShareButtons } from "@/components/ShareButtons";
@@ -56,7 +57,10 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
           )}
         </div>
         
-        {/* We move the question text down into the body to match the image format */}
+        {/* Main Title */}
+        <h1 className="text-4xl sm:text-5xl font-bold font-serif text-foreground mt-8 mb-6 leading-tight">
+          {qa.title || qa.question}
+        </h1>
         
         <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted border-b border-border pb-6">
           {qa.answered_by && (
@@ -75,15 +79,12 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
         </div>
       </header>
 
-      {/* Main Content matching Articles theme */}
-      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-foreground/90">
-        <h2 className="font-bold text-3xl font-serif text-foreground mb-4">Question</h2>
-        <div className="mb-12">
-          {qa.question}
-        </div>
-
-        <h2 className="font-bold text-3xl font-serif text-foreground mb-4 mt-8">Answer</h2>
-        <MarkdownRenderer content={qa.admin_answer || qa.answer || "No answer provided yet."} />
+      <div className="mb-16">
+        <TranslationWrapper 
+          originalContent={`## Question\n\n${qa.question}\n\n## Answer\n\n${qa.admin_answer || qa.answer || "No answer provided yet."}`}
+          contentType="qa"
+          contentId={qa.id}
+        />
       </div>
 
       {/* Footer */}
@@ -93,8 +94,8 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
           <div className="flex flex-wrap items-center gap-3">
             <SaveButton contentType="qa" contentId={qa.id} />
             <ShareButtons 
-              title={qa.question} 
-              text={`${qa.question}\n\nA scholarly query answered by ${qa.answered_by || "Islam360"}\n\nRead now at:`}
+              title={qa.title || qa.question} 
+              text={`${qa.title || qa.question}\n\nA scholarly query answered by ${qa.answered_by || "Islam360"}\n\nRead now at:`}
             />
           </div>
         </div>

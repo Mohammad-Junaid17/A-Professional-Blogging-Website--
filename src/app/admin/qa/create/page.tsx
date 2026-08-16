@@ -13,10 +13,12 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 export default function CreateQA() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState("");
   const [question, setQuestion] = useState("");
   const [category, setCategory] = useState("Fiqh");
   const [answer, setAnswer] = useState("");
   const [answeredBy, setAnsweredBy] = useState("");
+  const [translationUrdu, setTranslationUrdu] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +31,14 @@ export default function CreateQA() {
       const res = await fetch("/api/admin/qa", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, category, answer, answered_by: answeredBy }),
+        body: JSON.stringify({ 
+          title,
+          question, 
+          category, 
+          answer, 
+          answered_by: answeredBy,
+          translationUrdu,
+        }),
       });
 
       if (!res.ok) {
@@ -62,7 +71,19 @@ export default function CreateQA() {
         <form onSubmit={handleSubmit} className="space-y-6">
           
           <div>
-            <label className="block text-sm font-semibold text-foreground mb-1.5">Question *</label>
+            <label className="block text-sm font-semibold text-foreground mb-1.5">Short Title *</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g., Why Maslak e AalaHazrat?"
+              className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-foreground mb-1.5">Full Question *</label>
             <div data-color-mode="light">
               <MDEditor
                 value={question}
@@ -100,6 +121,23 @@ export default function CreateQA() {
               placeholder="e.g., Shaykh Admin"
               className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
+          </div>
+
+          <div className="border-t border-border pt-6 mt-6">
+            <h3 className="text-lg font-bold font-serif text-foreground mb-4">Simultaneous Translations (Optional)</h3>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-1.5">Urdu Translation (Markdown)</label>
+                <div data-color-mode="light">
+                  <MDEditor
+                    value={translationUrdu}
+                    onChange={(val) => setTranslationUrdu(val || "")}
+                    preview="edit"
+                    height={150}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="pt-4 flex justify-end">

@@ -195,6 +195,17 @@ export default function Navbar() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-2">
+          {/* Theme Toggle */}
+          {mounted && (
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+          )}
+
           <Link
             href="/search"
             className="p-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 transition-colors"

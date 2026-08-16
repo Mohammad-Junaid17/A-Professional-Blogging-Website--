@@ -17,7 +17,7 @@ export function QACard({ qa }: { qa: any }) {
               Q&A {qa.category && `• ${qa.category}`} {qa.sub_category && `• ${qa.sub_category}`}
             </span>
             <h3 className="font-bold text-[1.1rem] text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-              {qa.question}
+              {qa.title || qa.question}
             </h3>
             <p className="text-muted text-sm line-clamp-3 mb-4 flex-1">
               {previewText}
@@ -37,7 +37,7 @@ export function QACard({ qa }: { qa: any }) {
               Q&A {qa.category && `• ${qa.category}`} {qa.sub_category && `• ${qa.sub_category}`}
             </span>
             <h3 className="font-bold text-[1.1rem] text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-              {qa.question}
+              {qa.title || qa.question}
             </h3>
             <p className="text-muted text-sm line-clamp-3 mb-4 flex-1">
               {previewText}
