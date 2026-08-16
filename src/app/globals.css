@@ -19,15 +19,15 @@
   .dark {
     /* Premium dark — deep charcoal slate, warm cream text, soft gold accents */
     --background: #31373D;      /* Match website header color */
-    --foreground: #E8E4DD;      /* Warm off-white */
-    --card: #3A4048;            /* Slightly lighter card surface */
-    --card-border: #4A5058;     /* Subtle border */
-    --muted: #9CA3AF;           /* Neutral gray — readable but soft */
+    --foreground: #F0EDE6;      /* Warm cream — easy on eyes */
+    --card: #1C1C25;            /* Slightly lighter card surface */
+    --card-border: #2A2A38;     /* Subtle border */
+    --muted: #9090A8;           /* Muted lilac-grey — readable but soft */
     --primary: #D4C9A8;         /* Soft muted gold — calm & elegant */
-    --primary-light: #3A3830;   /* Very subtle warm tint for hover/bg */
+    --primary-light: #1E1A0D;   /* Deep dark gold tint for hover/bg */
     --accent: #E0D8C0;          /* Light cream gold for highlights */
-    --nav-active: #3A3830;      /* Active nav warm tint */
-    --border: #4A5058;          /* Subtle dark border */
+    --nav-active: #1E1A0D;      /* Active nav dark gold tint */
+    --border: #2E2E3E;          /* Subtle dark border */
   }
 }
 
