@@ -114,7 +114,7 @@ export function TranslationWrapper({
         </div>
       </div>
 
-      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-foreground/90">
+      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-foreground">
         {activeLang === "en" ? (
           <MarkdownRenderer content={originalContent} />
         ) : translations.find((t) => t.language === activeLang)?.content ? (
@@ -122,14 +122,14 @@ export function TranslationWrapper({
         ) : (
           <div className="py-16 px-6 text-center border border-dashed border-border rounded-xl bg-muted/10 my-8">
             <Languages size={48} className="mx-auto text-muted mb-4 opacity-50" />
-            <h3 className="text-xl font-bold font-serif mb-2">Translation Not Available</h3>
-            <p className="text-muted-foreground mb-6">
+            <h3 className="text-xl font-bold font-serif mb-2 text-foreground">Translation Not Available</h3>
+            <p className="text-muted mb-6">
               The {LANGUAGES.find(l => l.code === activeLang)?.label} translation for this content has not been added yet.
             </p>
             <button
               onClick={() => handleRequest(activeLang)}
               disabled={requestedLanguages.has(activeLang)}
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 bg-primary text-card px-6 py-2.5 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {requestedLanguages.has(activeLang) ? (
                 <>

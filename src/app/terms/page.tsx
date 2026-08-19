@@ -19,7 +19,7 @@ export default function TermsAndConditions() {
       <div className="bg-card border border-border rounded-xl p-8">
         <h1 className="text-3xl font-bold font-serif text-foreground mb-6">Content Usage Policy</h1>
         
-        <div className="prose prose-zinc dark:prose-invert max-w-none">
+        <div className="prose dark:prose-invert max-w-none prose-p:text-foreground prose-li:text-foreground prose-headings:text-foreground prose-strong:text-foreground">
           <p className="text-muted-foreground mb-4">Last updated: {new Date().toLocaleDateString()}</p>
           
           <h2 className="text-xl font-semibold mt-8 mb-4">Copyright</h2>
