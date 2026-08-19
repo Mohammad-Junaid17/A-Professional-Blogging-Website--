@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { Toaster } from 'react-hot-toast';
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 import { CanonicalMeta } from "@/components/CanonicalMeta";
+import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const cormorantFont = Cormorant_Garamond({
@@ -134,6 +135,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <StickyMobileCTA />
         </ThemeProvider>
       </body>
     </html>
