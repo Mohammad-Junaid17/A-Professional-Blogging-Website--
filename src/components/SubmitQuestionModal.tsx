@@ -73,9 +73,12 @@ export default function SubmitQuestionModal({ onClose }: { onClose: () => void }
               <Send size={28} className="text-primary" />
             </div>
             <h3 className="text-xl font-bold text-foreground mb-2">Question Submitted!</h3>
-            <p className="text-muted text-sm mb-6">
-              Your question has been submitted and is under review. JazakAllah khayran.
+            <p className="text-muted text-sm mb-4">
+              Your question has been submitted and is under review. 
             </p>
+            <div className="bg-primary/5 border-l-4 border-primary p-3 mb-6 text-left text-sm text-muted-foreground italic rounded-r">
+              <span className="font-semibold text-primary">Note:</span> Obtaining answers from scholars takes time. Please allow at least 72 hours before expecting a response. JazakAllah khayran.
+            </div>
             <button
               onClick={onClose}
               className="px-6 py-2.5 bg-primary text-card rounded-lg font-semibold hover:bg-primary/90 transition-colors"

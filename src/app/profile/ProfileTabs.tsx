@@ -40,6 +40,25 @@ export default function ProfileTabs({
     }
   }
 
+  const handleRemind = async (qaId: string) => {
+    try {
+      const res = await fetch('/api/profile/remind-qa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: qaId }),
+      })
+      if (res.ok) {
+        toast.success("Reminder sent to admins")
+        router.refresh()
+      } else {
+        const data = await res.json()
+        toast.error(data.error || "Failed to send reminder")
+      }
+    } catch (e) {
+      toast.error("An error occurred")
+    }
+  }
+
   return (
     <div>
       {/* Tab Navigation */}
@@ -161,27 +180,64 @@ export default function ProfileTabs({
               </div>
             ) : (
               <div className="space-y-4">
-                {userQA.map((qa) => (
-                  <div key={qa.id} className="bg-card border border-border rounded-xl p-5 hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] font-bold tracking-widest text-green-600 bg-green-500/10 px-2 py-1 rounded-md uppercase">
-                        Answered
-                      </span>
-                      <span className="text-xs text-muted flex items-center gap-1">
-                        <Calendar size={12} /> {new Date(qa.created_at).toLocaleDateString()}
-                      </span>
+                {userQA.map((qa) => {
+                  let hasReminded = false;
+                  if (qa.reminded_at) {
+                    const daysSinceReminder = Math.floor((new Date().getTime() - new Date(qa.reminded_at).getTime()) / (1000 * 60 * 60 * 24));
+                    hasReminded = daysSinceReminder < 3;
+                  }
+
+                  return (
+                    <div key={qa.id} className="bg-card border border-border rounded-xl p-5 hover:shadow-md transition-shadow">
+                      <div className="flex items-center justify-between mb-3">
+                        {qa.status === 'pending' ? (
+                          <span className="text-[10px] font-bold tracking-widest text-yellow-600 bg-yellow-500/10 px-2 py-1 rounded-md uppercase">
+                            Pending
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-bold tracking-widest text-green-600 bg-green-500/10 px-2 py-1 rounded-md uppercase">
+                            Answered
+                          </span>
+                        )}
+                        <span className="text-xs text-muted flex items-center gap-1">
+                          <Calendar size={12} /> {new Date(qa.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-foreground mb-4 line-clamp-2">
+                        {qa.question}
+                      </h3>
+                      
+                      {qa.status === 'pending' ? (
+                        <div className="pt-2 border-t border-border/50">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs font-semibold text-muted">Awaiting scholar review</span>
+                            <button
+                              onClick={() => handleRemind(qa.id)}
+                              disabled={hasReminded}
+                              className={`text-xs px-3 py-1.5 rounded-md font-medium transition-colors ${
+                                hasReminded 
+                                  ? 'bg-muted/10 text-muted cursor-not-allowed' 
+                                  : 'bg-primary/10 text-primary hover:bg-primary/20'
+                              }`}
+                            >
+                              {hasReminded ? 'Reminded Admin' : 'Remind Admin'}
+                            </button>
+                          </div>
+                          <p className="text-[10px] text-muted italic">
+                            * Please allow up to 72 hours for an answer before reminding. Avoid clicking repeatedly.
+                          </p>
+                        </div>
+                      ) : (
+                        <Link 
+                          href={`/qa/${qa.id}`}
+                          className="text-sm font-medium text-primary hover:underline flex items-center gap-1 pt-2 border-t border-border/50"
+                        >
+                          Read Answer <ExternalLink size={14} />
+                        </Link>
+                      )}
                     </div>
-                    <h3 className="font-bold text-foreground mb-4 line-clamp-2">
-                      {qa.question}
-                    </h3>
-                    <Link 
-                      href={`/qa/${qa.id}`}
-                      className="text-sm font-medium text-primary hover:underline flex items-center gap-1"
-                    >
-                      Read Answer <ExternalLink size={14} />
-                    </Link>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

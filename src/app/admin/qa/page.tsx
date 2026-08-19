@@ -224,6 +224,11 @@ export default function AdminQA() {
                   <p className="text-foreground font-semibold">Q: {qa.question}</p>
                   <div className="flex items-center gap-3 mt-2 text-xs text-muted">
                     {qa.category && <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full">{qa.category}</span>}
+                    {tab === "pending" && qa.reminded_at && (
+                      <span className="bg-red-500/10 text-red-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-widest text-[10px]">
+                        Reminded
+                      </span>
+                    )}
                     <span>{qa.created_at ? new Date(qa.created_at).toLocaleDateString() : '—'}</span>
                   </div>
                 </div>

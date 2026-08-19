@@ -61,7 +61,7 @@ export default async function ProfilePage() {
     .from('qa_entries')
     .select('*')
     .eq('submitted_by', user.id)
-    .in('status', ['answered', 'approved'])
+    .in('status', ['pending', 'answered', 'approved'])
     .order('created_at', { ascending: false })
 
   // Admin/Moderator content
@@ -136,6 +136,7 @@ export default async function ProfilePage() {
         <div className="text-sm text-foreground/80 space-y-2">
           <p>Here you can view all the content you have saved across the site, including Articles, Books, Q&A, and Lectures.</p>
           <p>You can also track the status of questions you have submitted. When your questions are approved and answered by our team, they will appear here.</p>
+          <p className="text-primary/80 italic text-xs mt-2 border-l-2 border-primary pl-2">Note: Obtaining answers from scholars takes time. Please wait at least 72 hours before expecting an answer.</p>
           {isAdminOrMod && (
             <p className="font-medium text-primary mt-2">As a {profile?.role}, you have access to the "Added Content" tab to track items you have published.</p>
           )}

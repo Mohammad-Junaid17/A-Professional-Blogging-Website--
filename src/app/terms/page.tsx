@@ -3,8 +3,8 @@ import { ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms and Conditions",
-  description: "Terms and Conditions for using Islam360.",
+  title: "Content Usage Policy",
+  description: "Content Usage Policy for Islam360.",
 };
 
 export default function TermsAndConditions() {
@@ -13,29 +13,41 @@ export default function TermsAndConditions() {
       <div className="flex items-center text-sm text-muted mb-6">
         <Link href="/" className="hover:text-primary transition-colors">Home</Link>
         <ChevronRight size={14} className="mx-1" />
-        <span className="text-foreground font-medium">Terms & Conditions</span>
+        <span className="text-foreground font-medium">Content Usage Policy</span>
       </div>
 
       <div className="bg-card border border-border rounded-xl p-8">
-        <h1 className="text-3xl font-bold font-serif text-foreground mb-6">Terms & Conditions</h1>
+        <h1 className="text-3xl font-bold font-serif text-foreground mb-6">Content Usage Policy</h1>
         
         <div className="prose prose-zinc dark:prose-invert max-w-none">
           <p className="text-muted-foreground mb-4">Last updated: {new Date().toLocaleDateString()}</p>
           
-          <h2 className="text-xl font-semibold mt-8 mb-4">1. Acceptance of Terms</h2>
-          <p>By accessing and using Islam360, you accept and agree to be bound by the terms and provision of this agreement. In addition, when using this websites particular services, you shall be subject to any posted guidelines or rules applicable to such services.</p>
+          <h2 className="text-xl font-semibold mt-8 mb-4">Copyright</h2>
+          <p>Articles, fatawa, translations, references, page content, and related materials published on Islam360 may be shared, copied, distributed, or republished without modification, provided that reference to the original source is included.</p>
 
-          <h2 className="text-xl font-semibold mt-8 mb-4">2. Use of Content</h2>
-          <p>The content and materials provided on Islam360 are for educational and informational purposes only. You may view, download, and print content for your personal, non-commercial use, provided you keep intact all copyright and other proprietary notices.</p>
+          <h2 className="text-xl font-semibold mt-8 mb-4">Use of Content</h2>
+          <p>Content from Islam360 may be shared, copied, reproduced, republished, uploaded, transmitted, distributed, stored, printed, or circulated in electronic, digital, physical, or other form, as long as the content is not edited or modified and proper reference to the original source is included.</p>
+          <p>The reference should clearly include the article title where available, the direct article link where available, and the website link: <a href="https://islam360.ridawiway.com" className="text-primary hover:underline">https://islam360.ridawiway.com</a>.</p>
 
-          <h2 className="text-xl font-semibold mt-8 mb-4">3. User Accounts</h2>
-          <p>If you create an account on the website, you are responsible for maintaining the security of your account and you are fully responsible for all activities that occur under the account and any other actions taken in connection with it.</p>
+          <h2 className="text-xl font-semibold mt-8 mb-4">Required Attribution</h2>
+          <p>When referencing Islam360, attribution should be clear enough for readers to find the original source. A proper reference includes:</p>
+          <ul className="list-disc pl-6 space-y-2 my-4">
+            <li>The name of the article or fatawa being referenced.</li>
+            <li>The direct URL of the article page.</li>
+            <li>The website name, Islam360, with a link to <a href="https://islam360.ridawiway.com" className="text-primary hover:underline">https://islam360.ridawiway.com</a>.</li>
+            <li>A note identifying that the content is shared from the original source.</li>
+          </ul>
 
-          <h2 className="text-xl font-semibold mt-8 mb-4">4. Q&A and Submissions</h2>
-          <p>By submitting questions to our Q&A platform, you grant us the right to publish, edit, or remove the question and answer on our platform for the benefit of other users.</p>
+          <h2 className="text-xl font-semibold mt-8 mb-4">No Modification</h2>
+          <p>Editing, modifying, adapting, rewriting, translating, summarizing, excerpting in a misleading way, removing references, changing wording, or altering the meaning or scholarly context of content from Islam360 is strictly not allowed. Shared content must remain faithful to the original published source.</p>
 
-          <h2 className="text-xl font-semibold mt-8 mb-4">5. Modifications to Terms</h2>
-          <p>We reserve the right to modify these terms at any time. You should check this page regularly. Your continued use of the website following the posting of changes to these terms will mean you accept those changes.</p>
+          <h2 className="text-xl font-semibold mt-8 mb-4">Authors and Sources</h2>
+          <p>Some materials may include references to scholars, authors, publications, or source works. Those rights remain with their respective owners where applicable. Referencing Islam360 does not replace the need to preserve the original scholarly references shown within an article.</p>
+
+          <h2 className="text-xl font-semibold mt-8 mb-4">Questions</h2>
+          <p>Permission is not required to share, reproduce, publish, or distribute unmodified material from Islam360, provided that reference to the original source is included. For questions about attribution, contact us at <a href="mailto:sugemadinah7@gmail.com" className="text-primary hover:underline">sugemadinah7@gmail.com</a>.</p>
+
+          <p className="mt-8 text-sm text-muted-foreground">This policy does not limit any rights that may be available under applicable law.</p>
         </div>
       </div>
     </div>
