@@ -24,9 +24,11 @@ export default function EditQA({ params, searchParams }: { params: Promise<{ id:
   const [answer, setAnswer] = useState("");
   const [answeredBy, setAnsweredBy] = useState("");
   const [status, setStatus] = useState("answered");
+  const [translationUrdu, setTranslationUrdu] = useState("");
 
   useEffect(() => {
-    supabase.from("qa_entries").select("*").eq("id", id).single().then(({ data }) => {
+    async function loadData() {
+      const { data } = await supabase.from("qa_entries").select("*").eq("id", id).single();
       if (data) {
         setTitle(data.title || "");
         setQuestion(data.question || "");
@@ -35,8 +37,18 @@ export default function EditQA({ params, searchParams }: { params: Promise<{ id:
         setAnsweredBy(data.answered_by || "");
         setStatus(data.status || "answered");
       }
+      // Load existing Urdu translation
+      const { data: transData } = await supabase
+        .from("translations")
+        .select("content")
+        .eq("content_type", "qa")
+        .eq("content_id", id)
+        .eq("language", "urdu")
+        .single();
+      if (transData?.content) setTranslationUrdu(transData.content);
       setFetching(false);
-    });
+    }
+    loadData();
   }, [id, supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,7 +67,8 @@ export default function EditQA({ params, searchParams }: { params: Promise<{ id:
           category, 
           answer, 
           scholar: answeredBy,
-          status 
+          status,
+          translationUrdu
         }),
       });
 
@@ -156,6 +169,18 @@ export default function EditQA({ params, searchParams }: { params: Promise<{ id:
               onChange={(e) => setAnsweredBy(e.target.value)}
               className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
+          </div>
+
+          <div className="border-t border-border pt-6 mt-6">
+            <h3 className="text-lg font-bold font-serif text-foreground mb-4">Urdu Translation (Optional)</h3>
+            <div data-color-mode="light">
+              <MDEditor
+                value={translationUrdu}
+                onChange={(val) => setTranslationUrdu(val || "")}
+                preview="edit"
+                height={150}
+              />
+            </div>
           </div>
 
           <div className="flex items-center justify-between pt-4 border-t border-border mt-6">

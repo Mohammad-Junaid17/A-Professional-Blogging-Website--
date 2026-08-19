@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
 import { CategorySelector } from "@/components/admin/CategorySelector";
 import { DeleteButton } from "@/components/admin/DeleteButton";
+import { createClient } from "@/lib/supabase/client";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -28,15 +29,30 @@ export default function EditArticle({ params, searchParams }: { params: Promise<
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
   const [status, setStatus] = useState("published");
+  const [translationUrdu, setTranslationUrdu] = useState("");
+  const supabase = createClient();
+
   useEffect(() => {
-    fetch(`/api/admin/articles/${id}`).then(res => res.json()).then(({ data }) => {
+    async function loadData() {
+      const res = await fetch(`/api/admin/articles/${id}`);
+      const { data } = await res.json();
       if (data) {
         setTitle(data.title || ""); setSlug(data.slug || ""); setAuthor(data.author || "");
         setCategory(data.category || ""); setSubCategory(data.sub_category || ""); setReadingTime(data.reading_time?.toString() || "");
         setExcerpt(data.excerpt || ""); setContent(data.content || ""); setStatus(data.status || "published");
       }
+      // Load existing Urdu translation
+      const { data: transData } = await supabase
+        .from("translations")
+        .select("content")
+        .eq("content_type", "article")
+        .eq("content_id", id)
+        .eq("language", "urdu")
+        .single();
+      if (transData?.content) setTranslationUrdu(transData.content);
       setFetching(false);
-    }).catch(() => setFetching(false));
+    }
+    loadData();
   }, [id]);
 
 
@@ -52,7 +68,7 @@ export default function EditArticle({ params, searchParams }: { params: Promise<
         body: JSON.stringify({
           title, slug, author, category, sub_category: subCategory,
           reading_time: readingTime ? parseInt(readingTime) : null,
-          excerpt, content, status
+          excerpt, content, status, translationUrdu
         }),
       });
       if (!res.ok) {
@@ -103,6 +119,19 @@ export default function EditArticle({ params, searchParams }: { params: Promise<
         </div>
         <div><label className="block text-sm font-semibold text-foreground mb-1.5">Excerpt</label><textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={2} className="w-full p-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
         <div data-color-mode="light"><label className="block text-sm font-semibold text-foreground mb-1.5">Content *</label><MDEditor value={content} onChange={(val) => setContent(val || "")} height={400} /></div>
+
+        <div className="border-t border-border pt-6 mt-2">
+          <h3 className="text-lg font-bold font-serif text-foreground mb-4">Urdu Translation (Optional)</h3>
+          <div data-color-mode="light">
+            <MDEditor
+              value={translationUrdu}
+              onChange={(val) => setTranslationUrdu(val || "")}
+              preview="edit"
+              height={150}
+            />
+          </div>
+        </div>
+
         <div className="flex items-center justify-between pt-4 border-t border-border">
           <DeleteButton id={id} table="articles" redirectTo="/admin/articles" />
           <button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">
