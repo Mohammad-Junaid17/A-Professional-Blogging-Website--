@@ -4,51 +4,49 @@ import { AdminEditButton } from "@/components/admin/AdminEditButton";
 
 export function QACard({ qa }: { qa: any }) {
   const answerPreview = qa.admin_answer || qa.answer || "";
-  // Strip simple markdown or just truncate
   const previewText = answerPreview.replace(/[#_*\[\]]/g, "").substring(0, 150) + (answerPreview.length > 150 ? "..." : "");
 
+  const CardContent = () => (
+    <div className="group block bg-card border border-border p-6 rounded-xl hover:shadow-sm transition-all h-full flex flex-col justify-center relative">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
+        <div className="flex items-center gap-3">
+          <span className="bg-background px-3 py-1 rounded-full text-xs font-bold tracking-wider text-muted uppercase">
+            Q&A {qa.category && `• ${qa.category}`}
+          </span>
+          <span className="text-sm text-muted">
+            {new Date(qa.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </span>
+        </div>
+        <div className="flex items-center gap-1 text-sm text-muted group-hover:text-primary transition-colors">
+          <span>Read Full Answer</span>
+          <ArrowRight size={16} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+        </div>
+      </div>
+      
+      <h3 className="text-2xl font-serif font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+        {qa.title || qa.question}
+      </h3>
+      
+      <p className="text-muted text-sm line-clamp-2 mb-4 leading-relaxed max-w-4xl">
+        {previewText}
+      </p>
+      
+      <div className="text-sm text-muted font-medium">
+        {qa.answered_by || "Admin"}
+      </div>
+    </div>
+  );
+
   return (
-    <div className="relative h-full group">
+    <div className="relative w-full">
       <AdminEditButton id={qa.id} type="qa" returnUrl="/qa" />
       {qa.redirect_url ? (
-        <a href={qa.redirect_url} target="_blank" rel="noopener noreferrer" className="block h-full">
-          <div className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow h-full flex flex-col">
-            <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">
-              Q&A {qa.category && `• ${qa.category}`} {qa.sub_category && `• ${qa.sub_category}`}
-            </span>
-            <h3 className="font-bold text-[1.1rem] text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-              {qa.title || qa.question}
-            </h3>
-            <p className="text-muted text-sm line-clamp-3 mb-4 flex-1">
-              {previewText}
-            </p>
-            <div className="flex items-center justify-between text-xs text-muted font-medium pt-3 border-t border-border/50">
-              <span className="text-primary truncate max-w-[60%]">{qa.answered_by || "Admin"}</span>
-              <span className="flex items-center gap-1 group-hover:text-primary transition-colors">
-                Read Full Answer <ArrowRight size={14} />
-              </span>
-            </div>
-          </div>
+        <a href={qa.redirect_url} target="_blank" rel="noopener noreferrer" className="block w-full">
+          <CardContent />
         </a>
       ) : (
-        <Link href={`/qa/${qa.id}`} className="block h-full">
-          <div className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow h-full flex flex-col">
-            <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">
-              Q&A {qa.category && `• ${qa.category}`} {qa.sub_category && `• ${qa.sub_category}`}
-            </span>
-            <h3 className="font-bold text-[1.1rem] text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-              {qa.title || qa.question}
-            </h3>
-            <p className="text-muted text-sm line-clamp-3 mb-4 flex-1">
-              {previewText}
-            </p>
-            <div className="flex items-center justify-between text-xs text-muted font-medium pt-3 border-t border-border/50">
-              <span className="text-primary truncate max-w-[60%]">{qa.answered_by || "Admin"}</span>
-              <span className="flex items-center gap-1 group-hover:text-primary transition-colors">
-                Read Full Answer <ArrowRight size={14} />
-              </span>
-            </div>
-          </div>
+        <Link href={`/qa/${qa.id}`} className="block w-full">
+          <CardContent />
         </Link>
       )}
     </div>

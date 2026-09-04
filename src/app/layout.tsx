@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
@@ -10,7 +10,7 @@ import { CanonicalMeta } from "@/components/CanonicalMeta";
 import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const cormorantFont = Cormorant_Garamond({
+const serifFont = Playfair_Display({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-amiri", // Keeping variable name same to map to tailwind's font-serif easily
@@ -94,7 +94,7 @@ export default function RootLayout({
       <head>
         <CanonicalMeta />
       </head>
-      <body suppressHydrationWarning className={`${inter.variable} ${cormorantFont.variable} font-sans antialiased bg-background text-foreground min-h-screen flex flex-col`}>
+      <body suppressHydrationWarning className={`${inter.variable} ${serifFont.variable} font-sans antialiased bg-background text-foreground min-h-screen flex flex-col`}>
         <AnalyticsTracker />
         <Toaster
           position="top-right"

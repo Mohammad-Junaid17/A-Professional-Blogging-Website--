@@ -4,16 +4,16 @@
 
 @layer base {
   :root {
-    --background: #F8FAF8;
-    --foreground: #1E2923;
+    --background: #F8F9FA;
+    --foreground: #212529;
     --card: #FFFFFF;
-    --card-border: #E8F0E8;
-    --muted: #6B7C73;
-    --primary: #1B5E20; /* Deep Green */
-    --primary-light: #E8F5E9; /* Light Green background */
-    --accent: #9CC76D; /* SunniWay Light Green */
-    --nav-active: #E8F5E9; /* Light Green */
-    --border: #C8E6C9;
+    --card-border: #E9ECEF;
+    --muted: #6C757D;
+    --primary: #4A5D4E; /* Refined muted green for highlights */
+    --primary-light: #F0F4F1;
+    --accent: #5C6B51;
+    --nav-active: #E9ECEF;
+    --border: #DEE2E6;
   }
 
   .dark {

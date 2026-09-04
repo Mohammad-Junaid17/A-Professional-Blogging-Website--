@@ -22,7 +22,8 @@ const config: Config = {
         border: "var(--border)",
       },
       fontFamily: {
-        amiri: ["var(--font-amiri)", "serif"],
+        serif: ["var(--font-amiri)", "serif"],
+        amiri: ["var(--font-amiri)", "serif"], // keeping for backwards compatibility
       },
     },
   },

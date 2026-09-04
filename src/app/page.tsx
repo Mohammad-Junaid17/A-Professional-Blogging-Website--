@@ -105,11 +105,11 @@ export default async function Home() {
               View All <ArrowRight size={16} />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex flex-col space-y-6">
             {articles && articles.length > 0 ? (
               articles.map((article) => <ArticleCard key={article.id} article={article} />)
             ) : (
-              <p className="text-muted col-span-3 text-center py-10">No articles available yet.</p>
+              <p className="text-muted text-center py-10">No articles available yet.</p>
             )}
           </div>
         </div>
@@ -145,11 +145,11 @@ export default async function Home() {
                   View All <ArrowRight size={16} />
                 </Link>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex flex-col space-y-4">
                 {scholars && scholars.length > 0 ? (
                   scholars.map((scholar) => <ScholarCard key={scholar.id} scholar={scholar} />)
                 ) : (
-                  <p className="text-muted col-span-2 text-center py-4">No scholars available yet.</p>
+                  <p className="text-muted text-center py-4">No scholars available yet.</p>
                 )}
               </div>
             </div>
