@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -8,15 +7,27 @@ import dynamic from "next/dynamic";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 export default function CreateContention() {
-  const supabase = createClient(); const router = useRouter();
+  const router = useRouter();
   const [loading, setLoading] = useState(false); const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ claim: "", rebuttal: "", scholarly_response: "", scholar: "", source: "", status: "published" });
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setLoading(true); setError(null);
-    const { error } = await supabase.from("contentions").insert(form);
-    if (error) { setError(error.message); setLoading(false); } else { router.push("/admin/contentions"); router.refresh(); }
+    try {
+      const res = await fetch("/api/admin/contentions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to save contention");
+      }
+      router.push("/admin/contentions"); router.refresh();
+    } catch (err: any) {
+      setError(err.message); setLoading(false);
+    }
   };
 
   return (
