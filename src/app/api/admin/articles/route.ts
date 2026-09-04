@@ -16,12 +16,22 @@ export async function POST(req: Request) {
   const session = await verifyAdmin(false, 'articles')
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
   const body = await req.json();
-  const { title, slug, author, category, sub_category, reading_time, status } = body;
+  const { title, slug, author, category, sub_category, reading_time, status, translationUrdu } = body;
   const excerpt = stripWordHtml(body.excerpt);
   const content = stripWordHtml(body.content);
   const { data, error } = await supabaseAdmin.from('articles').insert([{
     title, slug, author, category, sub_category, reading_time, excerpt, content, status, created_by: session.user.id
   }]).select().single()
   if (error) return NextResponse.json({ error: error.message },{ status: 500 })
+
+  if (translationUrdu?.trim() && data) {
+    await supabaseAdmin.from('translations').insert({
+      content_type: 'article',
+      content_id: data.id,
+      language: 'urdu',
+      content: translationUrdu.trim(),
+    });
+  }
+
   return NextResponse.json({ data },{ status: 201 })
 }

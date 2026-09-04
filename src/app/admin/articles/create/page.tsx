@@ -23,6 +23,7 @@ export default function CreateArticle() {
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
   const [status, setStatus] = useState("published");
+  const [translationUrdu, setTranslationUrdu] = useState("");
   const generateSlug = (t: string) => t.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").slice(0, 80);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -37,7 +38,7 @@ export default function CreateArticle() {
         body: JSON.stringify({
           title, slug: slug || generateSlug(title), author, category, sub_category: subCategory,
           reading_time: readingTime ? parseInt(readingTime) : null,
-          excerpt, content, status
+          excerpt, content, status, translationUrdu
         }),
       });
 
@@ -118,7 +119,19 @@ export default function CreateArticle() {
           <MDEditor value={content} onChange={(val) => setContent(val || "")} height={400} />
         </div>
 
-        <div className="flex justify-end pt-4 border-t border-border">
+        <div className="border-t border-border pt-6 mt-2">
+          <h3 className="text-lg font-bold font-serif text-foreground mb-4">Urdu Translation (Optional)</h3>
+          <div data-color-mode="light">
+            <MDEditor
+              value={translationUrdu}
+              onChange={(val) => setTranslationUrdu(val || "")}
+              preview="edit"
+              height={150}
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-end pt-4 border-t border-border mt-6">
           <button type="submit" disabled={loading}
             className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">
             {loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}

@@ -9,8 +9,24 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string  }
   const session = await verifyAdmin(false, 'contentions')
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
   const body = await req.json()
-  const { data, error } = await supabaseAdmin.from('contentions').update(body).eq('id', params.id).select().single()
+  const { translationUrdu, ...rest } = body;
+  const { data, error } = await supabaseAdmin.from('contentions').update(rest).eq('id', params.id).select().single()
   if (error) return NextResponse.json({ error: error.message },{ status: 500 })
+
+  if (translationUrdu?.trim()) {
+    const { data: existing } = await supabaseAdmin.from('translations').select('id').eq('content_type', 'contention').eq('content_id', id).eq('language', 'urdu').single();
+    if (existing) {
+      await supabaseAdmin.from('translations').update({ content: translationUrdu.trim() }).eq('id', existing.id);
+    } else {
+      await supabaseAdmin.from('translations').insert({
+        content_type: 'contention',
+        content_id: id,
+        language: 'urdu',
+        content: translationUrdu.trim(),
+      });
+    }
+  }
+
   return NextResponse.json({ data })
 }
 

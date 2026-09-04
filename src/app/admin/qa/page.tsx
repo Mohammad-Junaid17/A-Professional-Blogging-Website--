@@ -264,6 +264,9 @@ export default function AdminQA() {
                       className="flex items-center gap-2 px-4 py-2 bg-green-500/10 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-500/20 transition-colors disabled:opacity-50">
                       {acting === qa.id ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />} Publish Answer
                     </button>
+                    <Link href={`/admin/qa/${qa.id}/edit`} className="flex items-center gap-2 px-4 py-2 bg-blue-500/10 text-blue-600 rounded-lg text-sm font-semibold hover:bg-blue-500/20 transition-colors">
+                      Full Edit
+                    </Link>
                   </div>
                 </div>
               )}
@@ -309,7 +312,8 @@ export default function AdminQA() {
                           setAnsweredBy(p => ({ ...p, [qa.id]: qa.answered_by || "" }));
                           setQuestions(p => ({ ...p, [qa.id]: qa.question }));
                           setEditingId(qa.id);
-                        }} className="text-xs text-primary hover:underline">Edit Answer</button>
+                        }} className="text-xs text-primary hover:underline">Quick Edit</button>
+                        <Link href={`/admin/qa/${qa.id}/edit`} className="text-xs text-blue-500 hover:underline font-semibold">Full Edit</Link>
                         <button onClick={() => handleRevert(qa.id, "pending")} className="text-xs text-primary hover:underline">Move to Pending</button>
                       </div>
                     </>

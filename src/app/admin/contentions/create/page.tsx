@@ -9,7 +9,7 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 export default function CreateContention() {
   const router = useRouter();
   const [loading, setLoading] = useState(false); const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ claim: "", rebuttal: "", scholarly_response: "", scholar: "", source: "", status: "published" });
+  const [form, setForm] = useState({ claim: "", rebuttal: "", scholarly_response: "", scholar: "", source: "", status: "published", translationUrdu: "" });
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -49,7 +49,18 @@ export default function CreateContention() {
             </select>
           </div>
         </div>
-        <div className="flex justify-end pt-4 border-t border-border"><button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Save Contention"}</button></div>
+        <div className="border-t border-border pt-6 mt-2">
+          <h3 className="text-lg font-bold font-serif text-foreground mb-4">Urdu Translation (Optional)</h3>
+          <div data-color-mode="light">
+            <MDEditor
+              value={form.translationUrdu}
+              onChange={(val) => set("translationUrdu", val || "")}
+              preview="edit"
+              height={150}
+            />
+          </div>
+        </div>
+        <div className="flex justify-end pt-4 border-t border-border mt-6"><button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Save Contention"}</button></div>
       </form>
     </div>
   );

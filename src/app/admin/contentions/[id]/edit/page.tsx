@@ -14,20 +14,39 @@ export default function EditContention({ params, searchParams }: { params: Promi
   const { returnUrl } = React.use(searchParams);
   const supabase = createClient(); const router = useRouter();
   const [loading, setLoading] = useState(false); const [fetching, setFetching] = useState(true); const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ claim: "", rebuttal: "", scholarly_response: "", scholar: "", source: "", status: "published" });
+  const [form, setForm] = useState({ claim: "", rebuttal: "", scholarly_response: "", scholar: "", source: "", status: "published", translationUrdu: "" });
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
   useEffect(() => {
-    supabase.from("contentions").select("*").eq("id", id).single().then(({ data }) => {
-      if (data) setForm({ claim: data.claim || "", rebuttal: data.rebuttal || "", scholarly_response: data.scholarly_response || "", scholar: data.scholar || "", source: data.source || "", status: data.status || "published" });
+    async function loadData() {
+      const { data } = await supabase.from("contentions").select("*").eq("id", id).single();
+      if (data) {
+        let trans = "";
+        const { data: transData } = await supabase.from("translations").select("content").eq("content_type", "contention").eq("content_id", id).eq("language", "urdu").single();
+        if (transData?.content) trans = transData.content;
+        setForm({ claim: data.claim || "", rebuttal: data.rebuttal || "", scholarly_response: data.scholarly_response || "", scholar: data.scholar || "", source: data.source || "", status: data.status || "published", translationUrdu: trans });
+      }
       setFetching(false);
-    });
-  }, [id]);
+    }
+    loadData();
+  }, [id, supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setLoading(true); setError(null);
-    const { error } = await supabase.from("contentions").update(form).eq("id", id);
-    if (error) { setError(error.message); setLoading(false); } else { router.push(returnUrl || "/admin/contentions"); router.refresh(); }
+    try {
+      const res = await fetch(`/api/admin/contentions/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Failed to update contention");
+      }
+      router.push(returnUrl || "/admin/contentions"); router.refresh();
+    } catch (err: any) {
+      setError(err.message); setLoading(false);
+    }
   };
 
   if (fetching) return <div className="flex justify-center py-20"><Loader2 size={32} className="animate-spin text-primary" /></div>;
@@ -51,7 +70,18 @@ export default function EditContention({ params, searchParams }: { params: Promi
             </select>
           </div>
         </div>
-        <div className="flex items-center justify-between pt-4 border-t border-border">
+        <div className="border-t border-border pt-6 mt-2">
+          <h3 className="text-lg font-bold font-serif text-foreground mb-4">Urdu Translation (Optional)</h3>
+          <div data-color-mode="light">
+            <MDEditor
+              value={form.translationUrdu}
+              onChange={(val) => set("translationUrdu", val || "")}
+              preview="edit"
+              height={150}
+            />
+          </div>
+        </div>
+        <div className="flex items-center justify-between pt-4 border-t border-border mt-6">
           <DeleteButton id={id} table="contentions" redirectTo={returnUrl || "/admin/contentions"} />
           <button type="submit" disabled={loading} className="flex items-center gap-2 bg-primary text-card px-8 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">{loading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />} {loading ? "Saving..." : "Update"}</button>
         </div>

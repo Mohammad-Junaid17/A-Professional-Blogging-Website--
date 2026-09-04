@@ -14,9 +14,20 @@ export async function GET() {
 export async function POST(req: Request) {
   const session = await verifyAdmin(false, 'contentions')
   if (!session) return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
-  const body = await req.json()
-  const insertData = { ...body, created_by: session.user.id };
+  const body = await req.json();
+  const { translationUrdu, ...rest } = body;
+  const insertData = { ...rest, created_by: session.user.id };
   const { data, error } = await supabaseAdmin.from('contentions').insert(insertData).select().single()
   if (error) return NextResponse.json({ error: error.message },{ status: 500 })
+
+  if (translationUrdu?.trim() && data) {
+    await supabaseAdmin.from('translations').insert({
+      content_type: 'contention',
+      content_id: data.id,
+      language: 'urdu',
+      content: translationUrdu.trim(),
+    });
+  }
+
   return NextResponse.json({ data },{ status: 201 })
 }
