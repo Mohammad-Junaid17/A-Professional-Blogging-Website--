@@ -84,7 +84,7 @@ export function TranslationWrapper({
 
   return (
     <div>
-      <div className="absolute top-3 right-3 md:top-6 md:right-6 z-10">
+      <div className="flex justify-end mb-6">
         <div className="inline-flex items-center bg-gray-200/70 dark:bg-[#2A2A38] p-[3px] rounded-lg">
           <button
             onClick={() => setActiveLang("en")}

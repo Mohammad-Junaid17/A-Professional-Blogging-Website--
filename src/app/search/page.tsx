@@ -1,80 +1,89 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
-import { Search, ChevronRight, ArrowRight } from "lucide-react";
+import { Search, ChevronRight, Video, Clock } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { ArticleCard, BookCard, ScholarCard } from "@/components/ui/Cards";
+import { QACard } from "@/components/ui/QACard";
+import SaveButton from "@/components/SaveButton";
+import { AdminEditButton } from "@/components/admin/AdminEditButton";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Search",
-  description:
-    "Search across articles, books, scholars, Q&A, and lectures on Islam360.",
+  description: "Search across articles, books, scholars, Q&A, and lectures on Islam360.",
 };
 
-export default async function SearchPage(props: {
-  searchParams: Promise<{ q?: string }>;
-}) {
+function getYouTubeId(url: string) {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/);
+  return match ? match[1] : null;
+}
+
+const renderLectureCard = (lecture: any) => {
+  const ytId = getYouTubeId(lecture.embed_url);
+  return (
+    <div key={lecture.id} className="bg-card border border-border rounded-xl hover:shadow-md transition-shadow flex flex-col overflow-hidden relative group h-full">
+      <AdminEditButton id={lecture.id} type="lectures" />
+      <div className="aspect-video bg-muted/20 relative flex items-center justify-center shrink-0">
+        {ytId ? (
+          <a href={`https://www.youtube.com/watch?v=${ytId}`} target="_blank" rel="noopener noreferrer" className="w-full h-full relative block">
+            <img src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} alt={lecture.title} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white">
+                <svg className="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+              </div>
+            </div>
+          </a>
+        ) : lecture.embed_url ? (
+          <iframe src={lecture.embed_url} className="w-full h-full border-0 pointer-events-none" allowFullScreen />
+        ) : (
+          <Video size={48} className="text-muted/50" />
+        )}
+      </div>
+      <div className="p-5 flex-1 flex flex-col">
+        <span className="text-[10px] font-bold tracking-widest text-primary/80 mb-2 uppercase">
+          {lecture.category === "YouTube Sync" ? "YOUTUBE SYNC" : `LECTURE ${lecture.category ? `• ${lecture.category}` : ""}`}
+        </span>
+        <h3 className="font-bold text-[1.05rem] leading-snug text-foreground mb-2 line-clamp-2 hover:text-primary transition-colors">{lecture.title}</h3>
+        <p className="text-muted text-sm line-clamp-2 mb-4 flex-1">{lecture.description || "No description provided."}</p>
+        <div className="flex items-center justify-between text-xs text-muted font-medium pt-3 border-t border-border/50 mt-auto">
+          <span className="text-primary truncate max-w-[60%]">{lecture.speaker || "Unknown"}</span>
+          <div className="flex items-center gap-3 shrink-0">
+            {lecture.duration && <span className="flex items-center gap-1"><Clock size={12} /> {lecture.duration}</span>}
+            <SaveButton contentType="lecture" contentId={lecture.id} iconOnly />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default async function SearchPage(props: { searchParams: Promise<{ q?: string }> }) {
   const searchParams = await props.searchParams;
   const supabase = await createClient();
   const query = searchParams.q || "";
 
-  const results: any[] = [];
-
+  // Perform parallel searches if query exists
+  let articles: any[] = [], books: any[] = [], scholars: any[] = [], qa: any[] = [], lectures: any[] = [];
+  
   if (query) {
-    // Search Articles
-    const { data: articles } = await supabase
-      .from("articles")
-      .select("id, title, slug, excerpt, content, author")
-      .ilike("title", `%${query}%`)
-      .limit(10);
-      
-    // Search Books
-    const { data: books } = await supabase
-      .from("books")
-      .select("id, title, slug, description, author")
-      .ilike("title", `%${query}%`)
-      .limit(10);
-
-    // Search Scholars
-    const { data: scholars } = await supabase
-      .from("scholars")
-      .select("id, name_english, slug, bio, madhab")
-      .ilike("name_english", `%${query}%`)
-      .limit(10);
-
-    if (articles) {
-      results.push(...articles.map(a => ({
-        ...a,
-        type: "ARTICLE",
-        desc: a.excerpt || a.content?.substring(0, 150),
-        subtitle: a.author,
-        url: `/articles/${a.slug}`
-      })));
-    }
-    
-    if (books) {
-      results.push(...books.map(b => ({
-        ...b,
-        type: "BOOK",
-        desc: b.description,
-        subtitle: b.author,
-        url: `/books/${b.slug}`
-      })));
-    }
-    
-    if (scholars) {
-      results.push(...scholars.map(s => ({
-        ...s,
-        title: s.name_english,
-        type: "SCHOLAR",
-        desc: s.bio?.substring(0, 150),
-        subtitle: s.madhab,
-        url: `/scholars/${s.slug}`
-      })));
-    }
+    const [articlesRes, booksRes, scholarsRes, qaRes, lecturesRes] = await Promise.all([
+      supabase.from("articles").select("*").ilike("title", `%${query}%`).limit(10),
+      supabase.from("books").select("*").ilike("title", `%${query}%`).limit(10),
+      supabase.from("scholars").select("*").ilike("name_english", `%${query}%`).limit(10),
+      supabase.from("qa_entries").select("*").or(`question.ilike.%${query}%,answer.ilike.%${query}%`).eq("status", "answered").limit(10),
+      supabase.from("lectures").select("*").ilike("title", `%${query}%`).limit(10)
+    ]);
+    articles = articlesRes.data || [];
+    books = booksRes.data || [];
+    scholars = scholarsRes.data || [];
+    qa = qaRes.data || [];
+    lectures = lecturesRes.data || [];
   }
 
+  const totalResults = articles.length + books.length + scholars.length + qa.length + lectures.length;
+
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl min-h-[60vh]">
+    <div className="container mx-auto px-4 py-8 max-w-6xl min-h-[60vh]">
       <div className="flex items-center text-sm text-muted mb-6">
         <Link href="/" className="hover:text-primary transition-colors">Home</Link>
         <ChevronRight size={14} className="mx-1" />
@@ -94,7 +103,7 @@ export default async function SearchPage(props: {
           type="text"
           name="q"
           defaultValue={query}
-          placeholder="Search across articles, books, and scholars..."
+          placeholder="Search across articles, books, Q&A, scholars, and lectures..."
           className="w-full pl-14 pr-4 py-4 bg-card border-2 border-border rounded-xl text-lg text-foreground focus:outline-none focus:border-primary transition-colors"
           autoFocus
         />
@@ -102,54 +111,79 @@ export default async function SearchPage(props: {
       </form>
 
       {query && (
-        <div className="mb-6 border-b border-border pb-4">
+        <div className="mb-8 border-b border-border pb-4">
           <p className="font-medium text-foreground">
-            {results.length} result(s) found for &quot;{query}&quot;
+            {totalResults} result(s) found for "{query}"
           </p>
         </div>
       )}
 
-      <div className="space-y-4">
-        {results.map((item, idx) => {
-          let badgeClass = "bg-primary text-card";
-          if (item.type === "BOOK") badgeClass = "bg-[#C9A84C] text-white";
-          if (item.type === "SCHOLAR") badgeClass = "bg-teal-600 text-white";
+      {query && totalResults === 0 && (
+        <div className="text-center py-16 text-muted bg-card border border-border rounded-xl">
+          <Search size={48} className="mx-auto text-muted/30 mb-4" />
+          <p className="text-lg">No results found matching your search.</p>
+          <p className="text-sm mt-2">Try different keywords or check your spelling.</p>
+        </div>
+      )}
 
-          return (
-            <Link key={`${item.type}-${idx}`} href={item.url} className="block group">
-              <div className="bg-card border border-border p-6 rounded-xl hover:shadow-md hover:border-primary/30 transition-all flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className={`text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded-sm ${badgeClass}`}>
-                      {item.type}
-                    </span>
-                    {item.subtitle && (
-                      <>
-                        <span className="text-muted">|</span>
-                        <span className="text-xs font-medium text-muted">{item.subtitle}</span>
-                      </>
-                    )}
-                  </div>
-                  <h3 className="font-bold text-lg text-primary group-hover:underline mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-muted line-clamp-2">
-                    {item.desc}
-                  </p>
-                </div>
-                <div className="pt-2">
-                  <ArrowRight size={20} className="text-muted group-hover:text-primary transition-colors" />
-                </div>
-              </div>
-            </Link>
-          );
-        })}
+      <div className="space-y-12 max-w-6xl">
+        {qa.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-serif font-bold text-foreground mb-6 flex items-center gap-2">
+              <span className="bg-indigo-600/10 text-indigo-600 px-3 py-1 rounded-full text-sm">Q&A</span>
+              Questions & Answers
+            </h2>
+            <div className="space-y-4">
+              {qa.map(q => <QACard key={`qa-${q.id}`} qa={q} />)}
+            </div>
+          </div>
+        )}
 
-        {query && results.length === 0 && (
-          <div className="text-center py-12 text-muted bg-card border border-border rounded-xl">
-            <Search size={48} className="mx-auto text-muted/30 mb-4" />
-            <p>No results found matching your search.</p>
-            <p className="text-sm mt-2">Try different keywords or check your spelling.</p>
+        {articles.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-serif font-bold text-foreground mb-6 flex items-center gap-2">
+              <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Articles</span>
+              Articles & Essays
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {articles.map(a => <ArticleCard key={`article-${a.id}`} article={a} />)}
+            </div>
+          </div>
+        )}
+
+        {books.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-serif font-bold text-foreground mb-6 flex items-center gap-2">
+              <span className="bg-[#C9A84C]/10 text-[#C9A84C] px-3 py-1 rounded-full text-sm">Books</span>
+              Books & Publications
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {books.map(b => <BookCard key={`book-${b.id}`} book={b} />)}
+            </div>
+          </div>
+        )}
+
+        {scholars.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-serif font-bold text-foreground mb-6 flex items-center gap-2">
+              <span className="bg-teal-600/10 text-teal-600 px-3 py-1 rounded-full text-sm">Scholars</span>
+              Scholar Biographies
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {scholars.map(s => <ScholarCard key={`scholar-${s.id}`} scholar={s} />)}
+            </div>
+          </div>
+        )}
+
+        {lectures.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-serif font-bold text-foreground mb-6 flex items-center gap-2">
+              <span className="bg-red-600/10 text-red-600 px-3 py-1 rounded-full text-sm">Lectures</span>
+              Audio & Video Lectures
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {lectures.map(renderLectureCard)}
+            </div>
           </div>
         )}
       </div>

@@ -62,29 +62,48 @@ export default async function ContentionsPage(props: { searchParams: Promise<{ q
 
       <div className="space-y-10">
         {contentions && contentions.length > 0 ? (
-          contentions.map((contention) => (
-            <div key={contention.id} className="bg-card border border-border p-5 rounded-xl hover:shadow-md transition-shadow flex flex-col relative group">
-              <AdminEditButton id={contention.id} type="contentions" />
-              <span className="text-xs font-bold tracking-widest text-primary/80 mb-2 uppercase">Contention</span>
-              <h3 className="font-bold text-[1.1rem] text-foreground mb-4 line-clamp-2">&quot;{contention.claim}&quot;</h3>
-              <div className="prose prose-sm dark:prose-invert max-w-none text-muted mb-4 flex-1">
-                <p className="font-semibold text-foreground mb-1">Rebuttal:</p>
-                <MarkdownRenderer content={contention.rebuttal} />
-                {contention.scholarly_response && (
-                  <div className="mt-4">
-                    <p className="font-semibold text-foreground mb-1">Scholarly Response:</p>
-                    <MarkdownRenderer content={contention.scholarly_response} />
+          contentions.map((contention) => {
+            const previewText = contention.rebuttal.replace(/[#_*\[\]`]/g, "").substring(0, 200) + (contention.rebuttal.length > 200 ? "..." : "");
+            
+            return (
+            <div key={contention.id} className="relative w-full">
+              <AdminEditButton id={contention.id} type="contentions" returnUrl="/contentions" />
+              <Link href={`/contentions/${contention.id}`} className="block w-full h-full">
+                <div className="bg-card border border-border p-6 rounded-xl hover:shadow-md hover:border-primary/30 transition-all flex flex-col relative group h-full">
+                  <div className="flex items-center justify-between mb-3 pr-10">
+                    <span className="bg-background px-3 py-1 rounded-full text-[10px] font-bold tracking-wider text-muted uppercase">
+                      Contention & Rebuttal
+                    </span>
+                    <div className="flex items-center gap-1 text-xs text-muted group-hover:text-primary transition-colors">
+                      <span>Read Full Response</span>
+                      <ChevronRight size={14} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    </div>
                   </div>
-                )}
-              </div>
-              <div className="flex items-center justify-between text-xs text-muted font-medium pt-3 border-t border-border/50">
-                <span className="text-primary truncate max-w-[60%]">{contention.scholar || "Admin"}</span>
-                <span className="truncate max-w-[40%] text-right">
-                  {contention.source && <span className="flex items-center gap-1"><BookOpen size={14} /> {contention.source}</span>}
-                </span>
-              </div>
+                  
+                  <h3 className="font-bold font-serif text-[1.25rem] leading-snug text-foreground mb-3 group-hover:text-primary transition-colors">
+                    &quot;{contention.claim}&quot;
+                  </h3>
+                  
+                  <p className="text-muted text-sm line-clamp-3 mb-5 leading-relaxed flex-1">
+                    {previewText}
+                  </p>
+                  
+                  <div className="flex items-center justify-between text-xs text-muted font-medium pt-4 border-t border-border/50 mt-auto">
+                    <span className="text-primary truncate max-w-[60%]">
+                      {contention.scholar || "Admin"}
+                    </span>
+                    <span className="truncate max-w-[40%] text-right">
+                      {contention.source && (
+                        <span className="flex items-center justify-end gap-1">
+                          <BookOpen size={14} /> {contention.source}
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </Link>
             </div>
-          ))
+          )})
         ) : (
           <div className="py-16 text-center">
             <p className="text-muted text-lg mb-2">No contentions found</p>

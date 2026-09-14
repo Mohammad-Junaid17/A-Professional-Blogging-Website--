@@ -6,7 +6,7 @@ import { AdminEditButton } from "@/components/admin/AdminEditButton";
 export function ArticleCard({ article }: { article: any }) {
   const CardContent = () => (
     <div className="group block bg-card border border-border p-6 rounded-xl hover:shadow-sm transition-all h-full flex flex-col justify-center relative">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3 pr-12">
         <div className="flex items-center gap-3">
           {article.category && (
             <span className="bg-background px-3 py-1 rounded-full text-xs font-bold tracking-wider text-muted uppercase">
@@ -56,7 +56,7 @@ export function ArticleCard({ article }: { article: any }) {
 export function BookCard({ book }: { book: any }) {
   const CardContent = () => (
     <div className="group block bg-card border border-border p-5 rounded-xl hover:shadow-sm transition-all h-full flex flex-col justify-center relative">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 pr-12">
         <div className="flex items-center gap-3">
           <span className="bg-background px-3 py-1 rounded-full text-[10px] font-bold tracking-wider text-muted uppercase">
             Book {book.category && `• ${book.category}`}
@@ -100,7 +100,7 @@ export function BookCard({ book }: { book: any }) {
 export function ScholarCard({ scholar }: { scholar: any }) {
   const CardContent = () => (
     <div className="group block bg-card border border-border p-5 rounded-xl hover:shadow-sm transition-all h-full flex flex-col justify-center relative">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 pr-12">
         <div className="flex items-center gap-3">
           {scholar.madhab && (
             <span className="bg-background px-3 py-1 rounded-full text-[10px] font-bold tracking-wider text-muted uppercase">

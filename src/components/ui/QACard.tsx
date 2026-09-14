@@ -8,7 +8,7 @@ export function QACard({ qa }: { qa: any }) {
 
   const CardContent = () => (
     <div className="group block bg-card border border-border p-6 rounded-xl hover:shadow-sm transition-all h-full flex flex-col justify-center relative">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3 pr-12">
         <div className="flex items-center gap-3">
           <span className="bg-background px-3 py-1 rounded-full text-xs font-bold tracking-wider text-muted uppercase">
             Q&A {qa.category && `• ${qa.category}`}
