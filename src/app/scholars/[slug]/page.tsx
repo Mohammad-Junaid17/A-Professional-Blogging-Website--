@@ -7,6 +7,7 @@ import { TranslationWrapper } from "@/components/TranslationWrapper";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import { verifyAdmin } from "@/lib/auth-helpers";
 import SaveButton from "@/components/SaveButton";
 import { PersonSchema, BreadcrumbSchema } from "@/components/JsonLd";
 import type { Metadata } from "next";
@@ -54,6 +55,7 @@ export async function generateMetadata({
 export default async function ScholarPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const supabase = await createClient();
+  const adminSession = await verifyAdmin();
 
   const { data: scholar } = await supabase
     .from("scholars")
@@ -162,6 +164,7 @@ export default async function ScholarPage(props: { params: Promise<{ slug: strin
             originalContent={scholar.bio || "Biography details not available."}
             contentType="scholars"
             contentId={scholar.id}
+            editHref={adminSession ? `/admin/scholars/${scholar.id}/edit?returnUrl=/scholars/${scholar.slug}` : undefined}
           />
         </div>
 

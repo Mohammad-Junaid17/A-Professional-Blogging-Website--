@@ -6,6 +6,7 @@ import { TranslationWrapper } from "@/components/TranslationWrapper";
 import CommentSection from "@/components/CommentSection";
 import { notFound, redirect } from "next/navigation";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import { verifyAdmin } from "@/lib/auth-helpers";
 import { ShareButtons } from "@/components/ShareButtons";
 import SaveButton from "@/components/SaveButton";
 import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
@@ -68,6 +69,7 @@ const AQAID_SUBTOPICS = [
 export default async function ArticlePage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const supabase = await createClient();
+  const adminSession = await verifyAdmin();
 
   const { data: article } = await supabase
     .from("articles")
@@ -237,6 +239,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
         originalContent={article.content || article.excerpt || ""}
         contentType="article"
         contentId={article.id}
+        editHref={adminSession ? `/admin/articles/${article.id}/edit?returnUrl=/articles/${article.slug}` : undefined}
       />
 
       {/* Footer */}

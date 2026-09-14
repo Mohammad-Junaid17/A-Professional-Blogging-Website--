@@ -7,6 +7,7 @@ import { TranslationWrapper } from "@/components/TranslationWrapper";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import { verifyAdmin } from "@/lib/auth-helpers";
 import { ShareButtons } from "@/components/ShareButtons";
 import type { Metadata } from "next";
 
@@ -36,6 +37,7 @@ export async function generateMetadata(
 export default async function ContentionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
+  const adminSession = await verifyAdmin();
   const { data: contention } = await supabase
     .from("contentions")
     .select("*")
@@ -92,6 +94,7 @@ export default async function ContentionDetailPage({ params }: { params: Promise
         originalContent={`## Rebuttal\n\n${contention.rebuttal}${contention.scholarly_response ? `\n\n---\n\n## Scholarly Response\n\n${contention.scholarly_response}` : ""}`}
         contentType="contentions"
         contentId={contention.id}
+        editHref={adminSession ? `/admin/contentions/${contention.id}/edit?returnUrl=/contentions/${contention.id}` : undefined}
       />
 
       {/* Footer */}

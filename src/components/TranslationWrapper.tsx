@@ -3,18 +3,21 @@
 import React, { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { MarkdownRenderer } from "./MarkdownRenderer";
-import { Languages, CheckCircle, Minus, Plus } from "lucide-react";
+import { Languages, CheckCircle, Minus, Plus, Pencil } from "lucide-react";
+import Link from "next/link";
 
 interface TranslationWrapperProps {
   originalContent: string;
   contentType: "article" | "qa" | "contentions" | "scholars" | "books";
   contentId: string;
+  editHref?: string; // optional — only passed when user is admin
 }
 
 export function TranslationWrapper({
   originalContent,
   contentType,
   contentId,
+  editHref,
 }: TranslationWrapperProps) {
   const [activeLang, setActiveLang] = useState<string>("en");
   const [fontSize, setFontSize] = useState<number>(16);
@@ -77,6 +80,18 @@ export function TranslationWrapper({
       */}
       <div className="sticky top-16 z-40 -mx-4 px-4 bg-background border-b border-gray-200 dark:border-gray-800 shadow-sm">
         <div className="flex justify-end items-center py-2.5 gap-6 max-w-4xl mx-auto">
+
+          {/* Admin Edit Button — only rendered when editHref is provided */}
+          {editHref && (
+            <Link
+              href={editHref}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1e2a] text-gray-600 dark:text-gray-400 hover:border-primary hover:text-primary transition-all shadow-sm text-[12px] font-semibold"
+              title="Edit this content"
+            >
+              <Pencil size={12} />
+              Edit
+            </Link>
+          )}
 
           {/* Font Size Controls */}
           <div className="flex items-center gap-2">

@@ -7,6 +7,7 @@ import { TranslationWrapper } from "@/components/TranslationWrapper";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import { verifyAdmin } from "@/lib/auth-helpers";
 import SaveButton from "@/components/SaveButton";
 
 export const revalidate = 60; // revalidate every 60 seconds
@@ -14,6 +15,7 @@ export const revalidate = 60; // revalidate every 60 seconds
 export default async function BookDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = await createClient();
+  const adminSession = await verifyAdmin();
   const { data: book } = await supabase
     .from("books")
     .select("*")
@@ -87,6 +89,7 @@ export default async function BookDetailPage({ params }: { params: Promise<{ slu
             originalContent={book.description || "No description provided."}
             contentType="books"
             contentId={book.id}
+            editHref={adminSession ? `/admin/books/${book.id}/edit?returnUrl=/books/${book.slug}` : undefined}
           />
         </div>
       </div>

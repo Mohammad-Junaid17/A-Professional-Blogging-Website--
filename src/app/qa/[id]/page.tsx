@@ -7,6 +7,7 @@ import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import { TranslationWrapper } from "@/components/TranslationWrapper";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
+import { verifyAdmin } from "@/lib/auth-helpers";
 import { ShareButtons } from "@/components/ShareButtons";
 import SaveButton from "@/components/SaveButton";
 
@@ -15,6 +16,7 @@ export const revalidate = 60; // revalidate every 60 seconds
 export default async function QADetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
+  const adminSession = await verifyAdmin();
   const { data: qa } = await supabase
     .from("qa_entries")
     .select("*")
@@ -27,6 +29,40 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
 
   if (qa.redirect_url) {
     redirect(qa.redirect_url);
+  }
+
+  // Fetch related Q&As based on category/sub_category
+  let relatedQAs: any[] = [];
+  let query = supabase
+    .from("qa_entries")
+    .select("id, question, category, sub_category")
+    .eq("status", "answered")
+    .neq("id", qa.id)
+    .limit(6);
+
+  if (qa.sub_category) {
+    query = query.eq("sub_category", qa.sub_category);
+  } else if (qa.category) {
+    query = query.eq("category", qa.category);
+  }
+
+  const { data: byCat } = await query;
+  if (byCat) relatedQAs = byCat;
+
+  // If not enough related by sub_category, fetch more from parent category
+  if (relatedQAs.length < 6 && qa.sub_category && qa.category) {
+    const { data: moreCat } = await supabase
+      .from("qa_entries")
+      .select("id, question, category, sub_category")
+      .eq("category", qa.category)
+      .eq("status", "answered")
+      .neq("id", qa.id)
+      .not("id", "in", `(${relatedQAs.map(q => q.id).join(',') || '00000000-0000-0000-0000-000000000000'})`)
+      .limit(6 - relatedQAs.length);
+      
+    if (moreCat) {
+      relatedQAs = [...relatedQAs, ...moreCat];
+    }
   }
 
   return (
@@ -84,6 +120,7 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
           originalContent={`## Question\n\n${qa.question}\n\n## Answer\n\n${qa.admin_answer || qa.answer || "No answer provided yet."}`}
           contentType="qa"
           contentId={qa.id}
+          editHref={adminSession ? `/admin/qa/${qa.id}/edit?returnUrl=/qa/${qa.id}` : undefined}
         />
       </div>
 
@@ -99,6 +136,41 @@ export default async function QADetailPage({ params }: { params: Promise<{ id: s
             />
           </div>
         </div>
+
+        {/* ── Related Q&As ── */}
+        {relatedQAs.length > 0 && (
+          <div className="mt-12">
+            <div className="flex items-baseline gap-3 mb-6 border-b border-border pb-3">
+              <h3 className="font-bold text-2xl font-serif">Related Q&As</h3>
+              {qa.sub_category && (
+                <span className="text-xs font-bold tracking-widest uppercase text-primary bg-primary-light px-2 py-0.5 rounded-full">
+                  {qa.sub_category}
+                </span>
+              )}
+            </div>
+            <ul className="space-y-3">
+              {relatedQAs.map((related) => (
+                <li key={related.id} className="flex items-start gap-3 group">
+                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0 group-hover:scale-150 transition-transform" />
+                  <Link
+                    href={`/qa/${related.id}`}
+                    className="text-foreground hover:text-primary transition-colors text-base font-medium leading-snug"
+                  >
+                    {related.question}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6">
+              <Link
+                href={`/qa?category=${encodeURIComponent(qa.category || "")}`}
+                className="inline-flex items-center gap-1 text-sm text-primary hover:underline font-medium"
+              >
+                View all {qa.category} Q&As →
+              </Link>
+            </div>
+          </div>
+        )}
       </footer>
 
       {/* Comments */}

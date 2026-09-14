@@ -20,7 +20,7 @@ export const verifyAdmin = async (requireSuperAdmin: boolean = false, requiredSe
       .eq('id', user.id)
       .single()
 
-    if (error || !profile || profile.disabled) {
+    if (error || !profile) {
       return null
     }
 
