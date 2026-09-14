@@ -24,6 +24,7 @@ const config: Config = {
       fontFamily: {
         serif: ["var(--font-amiri)", "serif"],
         amiri: ["var(--font-amiri)", "serif"], // keeping for backwards compatibility
+        lora: ["var(--font-lora)", "serif"],
       },
     },
   },

@@ -3,6 +3,7 @@ import { MapPin, BookOpen } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { BookCard } from "@/components/ui/Cards";
+import { TranslationWrapper } from "@/components/TranslationWrapper";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
@@ -157,9 +158,11 @@ export default async function ScholarPage(props: { params: Promise<{ slug: strin
       {/* Body */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
         <div className="md:col-span-2">
-          <div className="prose prose-base dark:prose-invert max-w-none font-serif leading-relaxed text-foreground/90">
-            <MarkdownRenderer content={scholar.bio || "Biography details not available."} />
-          </div>
+          <TranslationWrapper 
+            originalContent={scholar.bio || "Biography details not available."}
+            contentType="scholars"
+            contentId={scholar.id}
+          />
         </div>
 
         <div className="space-y-6">

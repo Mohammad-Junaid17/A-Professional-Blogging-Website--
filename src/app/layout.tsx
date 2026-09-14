@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Lora } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
@@ -14,6 +14,12 @@ const serifFont = Playfair_Display({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-amiri", // Keeping variable name same to map to tailwind's font-serif easily
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-lora",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -94,7 +100,10 @@ export default function RootLayout({
       <head>
         <CanonicalMeta />
       </head>
-      <body suppressHydrationWarning className={`${inter.variable} ${serifFont.variable} font-sans antialiased bg-background text-foreground min-h-screen flex flex-col`}>
+      <body
+        suppressHydrationWarning
+        className={`${inter.variable} ${serifFont.variable} ${lora.variable} font-sans antialiased flex flex-col min-h-screen bg-background text-foreground transition-colors duration-200`}
+      >
         <AnalyticsTracker />
         <Toaster
           position="top-right"

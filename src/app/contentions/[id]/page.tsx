@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ChevronRight, BookOpen, ShieldAlert } from "lucide-react";
 import Link from "next/link";
+import { TranslationWrapper } from "@/components/TranslationWrapper";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
@@ -87,18 +88,11 @@ export default async function ContentionDetailPage({ params }: { params: Promise
         </div>
       </header>
 
-      <div className="mb-16 prose prose-lg dark:prose-invert max-w-none font-serif leading-relaxed text-foreground">
-        <h2>Rebuttal</h2>
-        <MarkdownRenderer content={contention.rebuttal} />
-        
-        {contention.scholarly_response && (
-          <>
-            <hr className="my-8 border-border" />
-            <h2>Scholarly Response</h2>
-            <MarkdownRenderer content={contention.scholarly_response} />
-          </>
-        )}
-      </div>
+      <TranslationWrapper 
+        originalContent={`## Rebuttal\n\n${contention.rebuttal}${contention.scholarly_response ? `\n\n---\n\n## Scholarly Response\n\n${contention.scholarly_response}` : ""}`}
+        contentType="contentions"
+        contentId={contention.id}
+      />
 
       {/* Footer */}
       <footer className="border-t border-border pt-8 mt-12 mb-8">

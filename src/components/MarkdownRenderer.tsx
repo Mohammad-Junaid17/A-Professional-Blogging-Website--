@@ -22,7 +22,15 @@ function stripWordHtml(content: string): string {
     .trim();
 }
 
-export function MarkdownRenderer({ content }: { content: string }) {
+export function MarkdownRenderer({ 
+  content, 
+  className = "", 
+  style = {} 
+}: { 
+  content: string;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   // Detect Word content via MSO markers
   const hasWordHtml = /mso-|MsoNormal|<o:|<w:|<!--\[if/i.test(content);
 
@@ -50,7 +58,10 @@ export function MarkdownRenderer({ content }: { content: string }) {
   }
 
   return (
-    <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none prose-p:leading-relaxed prose-headings:font-serif text-foreground prose-p:text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-li:text-foreground">
+    <div 
+      className={`prose prose-sm md:prose-base dark:prose-invert max-w-none prose-p:leading-relaxed prose-headings:font-serif text-foreground prose-p:text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-li:text-foreground ${className}`}
+      style={style}
+    >
       <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
         {cleaned}
       </ReactMarkdown>

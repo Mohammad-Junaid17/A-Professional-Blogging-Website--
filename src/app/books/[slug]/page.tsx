@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Book, Download, ExternalLink, Calendar, User, Globe, Tag } from "lucide-react";
 import Link from "next/link";
+import { TranslationWrapper } from "@/components/TranslationWrapper";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
@@ -82,7 +83,11 @@ export default async function BookDetailPage({ params }: { params: Promise<{ slu
         )}
         <div className="md:w-2/3">
           <h2 className="font-bold text-3xl font-serif text-foreground mb-4">Description</h2>
-          <MarkdownRenderer content={book.description || "No description provided."} />
+          <TranslationWrapper 
+            originalContent={book.description || "No description provided."}
+            contentType="books"
+            contentId={book.id}
+          />
         </div>
       </div>
 

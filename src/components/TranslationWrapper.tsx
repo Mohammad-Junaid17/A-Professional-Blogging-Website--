@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { MarkdownRenderer } from "./MarkdownRenderer";
-import { Languages, ExternalLink, CheckCircle } from "lucide-react";
+import { Languages, CheckCircle, Minus, Plus } from "lucide-react";
 
 interface TranslationWrapperProps {
   originalContent: string;
-  contentType: "article" | "qa";
+  contentType: "article" | "qa" | "contentions" | "scholars" | "books";
   contentId: string;
 }
 
@@ -16,8 +16,8 @@ export function TranslationWrapper({
   contentType,
   contentId,
 }: TranslationWrapperProps) {
-  const [currentContent, setCurrentContent] = useState(originalContent);
   const [activeLang, setActiveLang] = useState<string>("en");
+  const [fontSize, setFontSize] = useState<number>(16);
   const [translations, setTranslations] = useState<any[]>([]);
   const [requestedLanguages, setRequestedLanguages] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
@@ -40,22 +40,6 @@ export function TranslationWrapper({
     }
     loadTranslations();
   }, [contentType, contentId]);
-
-  const handleTranslate = (langCode: string) => {
-    const translation = translations.find((t) => t.language === langCode);
-    if (translation) {
-      if (translation.external_link) {
-        window.open(translation.external_link, "_blank");
-      } else if (translation.content) {
-        setCurrentContent(translation.content);
-        setActiveLang(langCode);
-      }
-    }
-  };
-
-  const handleRevert = () => {
-    setActiveLang("en");
-  };
 
   const handleRequest = async (langCode: string) => {
     setRequestedLanguages((prev) => new Set(prev).add(langCode));
@@ -84,41 +68,85 @@ export function TranslationWrapper({
 
   return (
     <div>
-      <div className="flex justify-end mb-6">
-        <div className="inline-flex items-center bg-gray-200/70 dark:bg-[#2A2A38] p-[3px] rounded-lg">
-          <button
-            onClick={() => setActiveLang("en")}
-            className={`px-3 py-1 rounded-md text-[13px] font-semibold transition-all duration-200 ${
-              activeLang === "en"
-                ? "bg-white dark:bg-[#31373D] text-black dark:text-white shadow-sm"
-                : "text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white"
-            }`}
-          >
-            En
-          </button>
-          {LANGUAGES.map((lang) => (
+      {/*
+        Sticky reading-controls bar.
+        sticky top-16  → docks directly below the h-16 navbar (z-50)
+        z-40           → above article text, below navbar & modals
+        -mx-4 px-4     → negative margin bleeds to container edges so bg covers full width
+        backdrop-blur  → frosted glass effect while scrolling
+      */}
+      <div className="sticky top-16 z-40 -mx-4 px-4 bg-background border-b border-gray-200 dark:border-gray-800 shadow-sm">
+        <div className="flex justify-end items-center py-2.5 gap-6 max-w-4xl mx-auto">
+
+          {/* Font Size Controls */}
+          <div className="flex items-center gap-2">
             <button
-              key={lang.code}
-              onClick={() => setActiveLang(lang.code)}
-              className={`px-3 py-1 rounded-md text-[13px] font-semibold transition-all duration-200 ${
-                activeLang === lang.code
+              onClick={() => setFontSize(prev => Math.max(13, prev - 1))}
+              disabled={fontSize <= 13}
+              className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1e2a] text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2a2a38] hover:text-black dark:hover:text-white disabled:opacity-40 transition-all shadow-sm"
+              aria-label="Decrease font size"
+            >
+              <Minus size={13} />
+            </button>
+            <span className="text-[13px] font-semibold text-gray-700 dark:text-gray-300 min-w-[20px] text-center tabular-nums select-none">
+              {fontSize}
+            </span>
+            <button
+              onClick={() => setFontSize(prev => Math.min(24, prev + 1))}
+              disabled={fontSize >= 24}
+              className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1e2a] text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2a2a38] hover:text-black dark:hover:text-white disabled:opacity-40 transition-all shadow-sm"
+              aria-label="Increase font size"
+            >
+              <Plus size={13} />
+            </button>
+          </div>
+
+          {/* Language Toggle */}
+          <div className="inline-flex items-center bg-gray-100 dark:bg-[#2A2A38] border border-gray-200 dark:border-gray-700 p-[3px] rounded-full shadow-sm">
+            <button
+              onClick={() => setActiveLang("en")}
+              className={`px-4 py-1 rounded-full text-[13px] font-semibold transition-all duration-200 ${
+                activeLang === "en"
                   ? "bg-white dark:bg-[#31373D] text-black dark:text-white shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white"
+                  : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
               }`}
             >
-              <span className={lang.code === "urdu" ? "font-urdu text-[14px]" : ""}>
-                {lang.displayLabel}
-              </span>
+              En
             </button>
-          ))}
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => setActiveLang(lang.code)}
+                className={`px-4 py-1 rounded-full text-[13px] font-semibold transition-all duration-200 ${
+                  activeLang === lang.code
+                    ? "bg-white dark:bg-[#31373D] text-black dark:text-white shadow-sm"
+                    : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+                }`}
+              >
+                <span className={lang.code === "urdu" ? "font-urdu text-[14px]" : ""}>
+                  {lang.displayLabel}
+                </span>
+              </button>
+            ))}
+          </div>
+
         </div>
       </div>
 
-      <div className="prose prose-lg dark:prose-invert max-w-none mb-16 font-serif leading-relaxed text-foreground">
+      {/* Content — pt-6 provides spacing below the sticky bar */}
+      <div className="mb-16 pt-6" dir={activeLang === "urdu" ? "rtl" : "ltr"}>
         {activeLang === "en" ? (
-          <MarkdownRenderer content={originalContent} />
+          <MarkdownRenderer
+            content={originalContent}
+            className="font-lora"
+            style={{ fontSize: `${fontSize}px` }}
+          />
         ) : translations.find((t) => t.language === activeLang)?.content ? (
-          <MarkdownRenderer content={translations.find((t) => t.language === activeLang)!.content} />
+          <MarkdownRenderer
+            content={translations.find((t) => t.language === activeLang)!.content}
+            className="font-lora"
+            style={{ fontSize: `${fontSize}px` }}
+          />
         ) : (
           <div className="py-16 px-6 text-center border border-dashed border-border rounded-xl bg-muted/10 my-8">
             <Languages size={48} className="mx-auto text-muted mb-4 opacity-50" />
