@@ -18,6 +18,28 @@ function getYouTubeId(url: string) {
   return match ? match[1] : null;
 }
 
+function buildDiacriticRegex(query: string) {
+  // Escape regex special characters
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  
+  // Mapping of common English letters to their transliterated diacritic forms
+  const map: Record<string, string> = {
+    'a': '[aāAĀ]',
+    'i': '[iīIĪ]',
+    'u': '[uūUŪ]',
+    's': '[sṣśšSṢŚŠ]',
+    'd': '[dḍDḌ]',
+    't': '[tṭTṬ]',
+    'z': '[zẓZẒ]',
+    'h': '[hḥHḤ]'
+  };
+  
+  // Replace plain letters with their diacritic equivalents
+  const withDiacritics = escaped.replace(/[aiusdtzh]/ig, (match) => map[match.toLowerCase()] || match);
+  
+  return `.*${withDiacritics}.*`;
+}
+
 const renderLectureCard = (lecture: any) => {
   const ytId = getYouTubeId(lecture.embed_url);
   return (
@@ -66,12 +88,36 @@ export default async function SearchPage(props: { searchParams: Promise<{ q?: st
   let articles: any[] = [], books: any[] = [], scholars: any[] = [], qa: any[] = [], lectures: any[] = [];
   
   if (query) {
+    const regexQuery = buildDiacriticRegex(query);
+    const safeOrRegex = `"${regexQuery.replace(/"/g, '""')}"`;
+
+    // 1. Search translations first for Urdu (or any translated) matches
+    const { data: tm } = await supabase
+      .from("translations")
+      .select("content_id, content_type")
+      .ilike("content", `%${query}%`)
+      .limit(50);
+      
+    const tIds: Record<string, string[]> = { article: [], books: [], scholars: [], qa: [], contentions: [] };
+    if (tm) {
+      tm.forEach((t) => {
+        if (tIds[t.content_type]) {
+          tIds[t.content_type].push(t.content_id);
+        }
+      });
+    }
+
+    const orStr = (baseOr: string, type: string) => {
+      const ids = tIds[type];
+      return ids && ids.length > 0 ? `${baseOr},id.in.(${ids.join(',')})` : baseOr;
+    };
+    
     const [articlesRes, booksRes, scholarsRes, qaRes, lecturesRes] = await Promise.all([
-      supabase.from("articles").select("*").ilike("title", `%${query}%`).limit(10),
-      supabase.from("books").select("*").ilike("title", `%${query}%`).limit(10),
-      supabase.from("scholars").select("*").ilike("name_english", `%${query}%`).limit(10),
-      supabase.from("qa_entries").select("*").or(`question.ilike.%${query}%,answer.ilike.%${query}%`).eq("status", "answered").limit(10),
-      supabase.from("lectures").select("*").ilike("title", `%${query}%`).limit(10)
+      supabase.from("articles").select("*").or(orStr(`title.imatch.${safeOrRegex}`, 'article')).limit(10),
+      supabase.from("books").select("*").or(orStr(`title.imatch.${safeOrRegex}`, 'books')).limit(10),
+      supabase.from("scholars").select("*").or(orStr(`name_english.imatch.${safeOrRegex}`, 'scholars')).limit(10),
+      supabase.from("qa_entries").select("*").or(orStr(`question.imatch.${safeOrRegex},answer.imatch.${safeOrRegex}`, 'qa')).eq("status", "answered").limit(10),
+      supabase.from("lectures").select("*").filter("title", "imatch", regexQuery).limit(10)
     ]);
     articles = articlesRes.data || [];
     books = booksRes.data || [];

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { MarkdownRenderer } from "./MarkdownRenderer";
-import { Languages, CheckCircle, Minus, Plus, Pencil } from "lucide-react";
+import { Languages, CheckCircle, Minus, Plus, Pencil, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
 interface TranslationWrapperProps {
@@ -79,9 +79,25 @@ export function TranslationWrapper({
         backdrop-blur  → frosted glass effect while scrolling
       */}
       <div className="sticky top-16 z-40 -mx-4 px-4 bg-background border-b border-gray-200 dark:border-gray-800 shadow-sm">
-        <div className="flex justify-end items-center py-2.5 gap-6 max-w-4xl mx-auto">
+        <div className="flex justify-between items-center py-2.5 gap-6 max-w-4xl mx-auto">
+          
+          {/* Back Button */}
+          <Link
+            href={contentType === 'article' ? '/articles' : `/${contentType}`}
+            className="flex items-center gap-1.5 text-sm font-medium text-muted hover:text-primary transition-colors"
+          >
+            <ChevronLeft size={16} />
+            <span className="hidden sm:inline">
+              {contentType === 'article' ? 'Articles' : 
+               contentType === 'qa' ? 'Q&A' : 
+               contentType === 'scholars' ? 'Scholars' : 
+               contentType === 'books' ? 'Books' : 'Contentions'}
+            </span>
+          </Link>
 
-          {/* Admin Edit Button — only rendered when editHref is provided */}
+          {/* Right side controls */}
+          <div className="flex items-center gap-6">
+            {/* Admin Edit Button — only rendered when editHref is provided */}
           {editHref && (
             <Link
               href={editHref}
@@ -147,8 +163,9 @@ export function TranslationWrapper({
 
         </div>
       </div>
+    </div>
 
-      {/* Content — pt-6 provides spacing below the sticky bar */}
+    {/* Content — pt-6 provides spacing below the sticky bar */}
       <div className="mb-16 pt-6" dir={activeLang === "urdu" ? "rtl" : "ltr"}>
         {activeLang === "en" ? (
           <MarkdownRenderer
