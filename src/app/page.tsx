@@ -99,8 +99,8 @@ export default async function Home() {
       {/* SECTION 3 - Recent Articles */}
       <section className="py-20">
         <div className="container px-4 mx-auto">
-          <div className="flex justify-between items-end mb-10 border-b border-border pb-4">
-            <h2 className="text-3xl font-bold font-serif text-foreground">Recent Articles</h2>
+          <div className="flex justify-between items-end mb-10 border-b border-border-subtle pb-4">
+            <h2 className="text-xl font-condensed font-bold tracking-widest text-text-heading uppercase">Recent Articles</h2>
             <Link href="/articles" className="text-primary font-medium hover:underline flex items-center gap-1">
               View All <ArrowRight size={16} />
             </Link>
@@ -122,8 +122,8 @@ export default async function Home() {
             
             {/* Library Column */}
             <div>
-              <div className="flex justify-between items-end mb-8 border-b border-border pb-4">
-                <h2 className="text-2xl font-bold font-serif text-foreground">From the Library</h2>
+              <div className="flex justify-between items-end mb-8 border-b border-border-subtle pb-4">
+                <h2 className="text-lg font-condensed font-bold tracking-widest text-text-heading uppercase">From the Library</h2>
                 <Link href="/books" className="text-primary font-medium hover:underline flex items-center gap-1 text-sm">
                   View All <ArrowRight size={16} />
                 </Link>
@@ -139,8 +139,8 @@ export default async function Home() {
 
             {/* Scholars Column */}
             <div>
-              <div className="flex justify-between items-end mb-8 border-b border-border pb-4">
-                <h2 className="text-2xl font-bold font-serif text-foreground">Renowned Scholars</h2>
+              <div className="flex justify-between items-end mb-8 border-b border-border-subtle pb-4">
+                <h2 className="text-lg font-condensed font-bold tracking-widest text-text-heading uppercase">Renowned Scholars</h2>
                 <Link href="/scholars" className="text-primary font-medium hover:underline flex items-center gap-1 text-sm">
                   View All <ArrowRight size={16} />
                 </Link>
@@ -167,10 +167,10 @@ export default async function Home() {
 function CategoryCard({ href, icon, title, description }: { href: string, icon: React.ReactNode, title: string, description: string }) {
   return (
     <Link href={href} className="group block h-full">
-      <div className="bg-background border border-border p-6 rounded-xl hover:shadow-md transition-all group-hover:border-primary/30 h-full flex flex-col items-center text-center">
+      <div className="bg-bg-secondary border border-border-subtle p-6 rounded-xl hover:shadow-md transition-all group-hover:border-accent h-full flex flex-col items-center text-center">
         {icon}
-        <h3 className="text-lg font-bold text-foreground mb-2">{title}</h3>
-        <p className="text-sm text-muted">{description}</p>
+        <h3 className="text-lg font-serif font-bold text-text-heading mb-2 group-hover:text-accent transition-colors">{title}</h3>
+        <p className="text-sm text-text-body">{description}</p>
       </div>
     </Link>
   );

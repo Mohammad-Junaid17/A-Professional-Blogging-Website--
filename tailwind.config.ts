@@ -10,21 +10,39 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        card: "var(--card)",
-        "card-border": "var(--card-border)",
-        muted: "var(--muted)",
-        primary: "var(--primary)",
-        "primary-light": "var(--primary-light)",
+        // Base references
+        background: "var(--bg-primary)",
+        foreground: "var(--text-body)",
+        
+        // Semantic Tokens
+        "bg-primary": "var(--bg-primary)",
+        "bg-secondary": "var(--bg-secondary)",
+        "bg-card": "var(--bg-card)",
+        
+        "border-subtle": "var(--border-subtle)",
+        "border-pill": "var(--border-pill)",
+        
+        "text-heading": "var(--text-heading)",
+        "text-body": "var(--text-body)",
+        "text-muted": "var(--text-muted)",
+        
         accent: "var(--accent)",
-        "nav-active": "var(--nav-active)",
-        border: "var(--border)",
+        "accent-bg": "var(--accent-bg)",
+
+        // Legacy tokens mapped to semantic tokens for backward compatibility
+        card: "var(--bg-card)",
+        "card-border": "var(--border-subtle)",
+        muted: "var(--text-muted)",
+        primary: "var(--accent)",
+        "primary-light": "var(--accent-bg)",
+        "nav-active": "var(--bg-secondary)",
+        border: "var(--border-subtle)",
       },
       fontFamily: {
         serif: ["var(--font-amiri)", "serif"],
-        amiri: ["var(--font-amiri)", "serif"], // keeping for backwards compatibility
+        amiri: ["var(--font-amiri)", "serif"],
         lora: ["var(--font-lora)", "serif"],
+        condensed: ["var(--font-oswald)", "sans-serif"],
       },
     },
   },

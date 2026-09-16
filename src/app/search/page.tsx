@@ -43,7 +43,7 @@ function buildDiacriticRegex(query: string) {
 const renderLectureCard = (lecture: any) => {
   const ytId = getYouTubeId(lecture.embed_url);
   return (
-    <div key={lecture.id} className="bg-card border border-border rounded-xl hover:shadow-md transition-shadow flex flex-col overflow-hidden relative group h-full">
+    <div key={lecture.id} className="bg-bg-secondary border border-border-subtle rounded-xl hover:shadow-md transition-shadow flex flex-col overflow-hidden relative group h-full">
       <AdminEditButton id={lecture.id} type="lectures" />
       <div className="aspect-video bg-muted/20 relative flex items-center justify-center shrink-0">
         {ytId ? (
@@ -143,17 +143,18 @@ export default async function SearchPage(props: { searchParams: Promise<{ q?: st
         <h1 className="text-3xl font-bold font-serif text-foreground">Search</h1>
       </div>
 
-      <form method="GET" action="/search" className="relative mb-8">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={24} />
+      <form action="/search" method="GET" className="relative max-w-3xl mb-12">
         <input
           type="text"
           name="q"
           defaultValue={query}
           placeholder="Search across articles, books, Q&A, scholars, and lectures..."
-          className="w-full pl-14 pr-4 py-4 bg-card border-2 border-border rounded-xl text-lg text-foreground focus:outline-none focus:border-primary transition-colors"
+          className="w-full pl-6 pr-16 py-4 bg-bg-secondary border border-border-subtle rounded-full text-lg text-text-body placeholder:text-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all shadow-sm"
           autoFocus
         />
-        <button type="submit" className="hidden">Search</button>
+        <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-accent flex items-center justify-center hover:brightness-110 transition-all shadow-sm">
+          <Search size={20} className="text-bg-primary" />
+        </button>
       </form>
 
       {query && (
@@ -165,8 +166,8 @@ export default async function SearchPage(props: { searchParams: Promise<{ q?: st
       )}
 
       {query && totalResults === 0 && (
-        <div className="text-center py-16 text-muted bg-card border border-border rounded-xl">
-          <Search size={48} className="mx-auto text-muted/30 mb-4" />
+        <div className="text-center py-16 text-text-muted bg-bg-secondary border border-border-subtle rounded-xl">
+          <Search size={48} className="mx-auto text-text-muted/30 mb-4" />
           <p className="text-lg">No results found matching your search.</p>
           <p className="text-sm mt-2">Try different keywords or check your spelling.</p>
         </div>

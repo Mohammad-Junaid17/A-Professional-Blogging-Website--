@@ -101,7 +101,7 @@ export function TranslationWrapper({
           {editHref && (
             <Link
               href={editHref}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1e2a] text-gray-600 dark:text-gray-400 hover:border-primary hover:text-primary transition-all shadow-sm text-[12px] font-semibold"
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-border-subtle bg-bg-secondary text-text-muted hover:border-accent hover:text-accent hover:bg-accent-bg transition-all shadow-sm text-[12px] font-bold uppercase tracking-wider"
               title="Edit this content"
             >
               <Pencil size={12} />
@@ -114,7 +114,7 @@ export function TranslationWrapper({
             <button
               onClick={() => setFontSize(prev => Math.max(13, prev - 1))}
               disabled={fontSize <= 13}
-              className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1e2a] text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2a2a38] hover:text-black dark:hover:text-white disabled:opacity-40 transition-all shadow-sm"
+              className="w-8 h-8 flex items-center justify-center rounded-full border border-border-subtle bg-bg-secondary text-text-muted hover:bg-accent-bg hover:text-accent hover:border-accent disabled:opacity-40 transition-all shadow-sm"
               aria-label="Decrease font size"
             >
               <Minus size={13} />
@@ -125,7 +125,7 @@ export function TranslationWrapper({
             <button
               onClick={() => setFontSize(prev => Math.min(24, prev + 1))}
               disabled={fontSize >= 24}
-              className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1e2a] text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2a2a38] hover:text-black dark:hover:text-white disabled:opacity-40 transition-all shadow-sm"
+              className="w-8 h-8 flex items-center justify-center rounded-full border border-border-subtle bg-bg-secondary text-text-muted hover:bg-accent-bg hover:text-accent hover:border-accent disabled:opacity-40 transition-all shadow-sm"
               aria-label="Increase font size"
             >
               <Plus size={13} />
@@ -133,13 +133,13 @@ export function TranslationWrapper({
           </div>
 
           {/* Language Toggle */}
-          <div className="inline-flex items-center bg-gray-100 dark:bg-[#2A2A38] border border-gray-200 dark:border-gray-700 p-[3px] rounded-full shadow-sm">
+          <div className="inline-flex items-center bg-bg-secondary border border-border-subtle p-[3px] rounded-full shadow-sm">
             <button
               onClick={() => setActiveLang("en")}
-              className={`px-4 py-1 rounded-full text-[13px] font-semibold transition-all duration-200 ${
+              className={`px-4 py-1 rounded-full text-[13px] font-bold transition-all duration-200 ${
                 activeLang === "en"
-                  ? "bg-white dark:bg-[#31373D] text-black dark:text-white shadow-sm"
-                  : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+                  ? "bg-accent-bg text-accent border border-accent shadow-sm"
+                  : "text-text-muted hover:text-accent border border-transparent"
               }`}
             >
               En
@@ -148,10 +148,10 @@ export function TranslationWrapper({
               <button
                 key={lang.code}
                 onClick={() => setActiveLang(lang.code)}
-                className={`px-4 py-1 rounded-full text-[13px] font-semibold transition-all duration-200 ${
+                className={`px-4 py-1 rounded-full text-[13px] font-bold transition-all duration-200 ${
                   activeLang === lang.code
-                    ? "bg-white dark:bg-[#31373D] text-black dark:text-white shadow-sm"
-                    : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+                    ? "bg-accent-bg text-accent border border-accent shadow-sm"
+                    : "text-text-muted hover:text-accent border border-transparent"
                 }`}
               >
                 <span className={lang.code === "urdu" ? "font-urdu text-[14px]" : ""}>

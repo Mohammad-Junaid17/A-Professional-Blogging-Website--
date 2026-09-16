@@ -5,29 +5,29 @@ import { AdminEditButton } from "@/components/admin/AdminEditButton";
 
 export function ArticleCard({ article }: { article: any }) {
   const CardContent = () => (
-    <div className="group block bg-card border border-border p-6 rounded-xl hover:shadow-sm transition-all h-full flex flex-col justify-center relative">
+    <div className="group block py-6 border-b border-border-subtle transition-all h-full flex flex-col justify-center relative hover:bg-background/40">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3 pr-12">
         <div className="flex items-center gap-3">
           {article.category && (
-            <span className="bg-background px-3 py-1 rounded-full text-xs font-bold tracking-wider text-muted uppercase">
+            <span className="bg-card border border-border-pill px-3 py-1 rounded-full text-[10px] md:text-xs font-bold tracking-wider text-muted uppercase group-hover:border-accent group-hover:text-accent transition-colors">
               {article.category}
             </span>
           )}
-          <span className="text-sm text-muted">
+          <span className="text-sm text-muted font-medium">
             {new Date(article.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           </span>
         </div>
-        <div className="flex items-center gap-1 text-sm text-muted group-hover:text-primary transition-colors">
+        <div className="flex items-center gap-1 text-sm text-muted group-hover:text-accent transition-colors">
           <span>{article.reading_time || 5} min read</span>
           <ArrowRight size={16} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
         </div>
       </div>
       
-      <h3 className="text-2xl font-serif font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+      <h3 className="text-2xl font-serif font-semibold leading-snug text-text-heading mb-3 group-hover:text-accent transition-colors">
         {article.title}
       </h3>
       
-      <p className="text-muted text-sm line-clamp-2 mb-4 leading-relaxed max-w-4xl">
+      <p className="text-text-body text-sm line-clamp-2 mb-4 leading-relaxed max-w-4xl">
         {article.excerpt || article.content?.substring(0, 200) + "..."}
       </p>
       
@@ -55,10 +55,10 @@ export function ArticleCard({ article }: { article: any }) {
 
 export function BookCard({ book }: { book: any }) {
   const CardContent = () => (
-    <div className="group block bg-card border border-border p-5 rounded-xl hover:shadow-sm transition-all h-full flex flex-col justify-center relative">
+    <div className="group block py-5 border-b border-border-subtle transition-all h-full flex flex-col justify-center relative hover:bg-background/40">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 pr-12">
         <div className="flex items-center gap-3">
-          <span className="bg-background px-3 py-1 rounded-full text-[10px] font-bold tracking-wider text-muted uppercase">
+          <span className="bg-card border border-border-pill px-3 py-1 rounded-full text-[10px] font-bold tracking-wider text-muted uppercase group-hover:border-accent group-hover:text-accent transition-colors">
             Book {book.category && `• ${book.category}`}
           </span>
           {book.language && (
@@ -67,17 +67,17 @@ export function BookCard({ book }: { book: any }) {
             </span>
           )}
         </div>
-        <div className="flex items-center gap-1 text-xs text-muted group-hover:text-primary transition-colors">
+        <div className="flex items-center gap-1 text-xs text-muted group-hover:text-accent transition-colors">
           <span>View Details</span>
           <ArrowRight size={14} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
         </div>
       </div>
       
-      <h3 className="text-xl font-serif font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+      <h3 className="text-xl font-serif font-semibold leading-snug text-text-heading mb-2 group-hover:text-accent transition-colors">
         {book.title}
       </h3>
       
-      <p className="text-muted text-sm line-clamp-2 mb-3 leading-relaxed max-w-4xl">
+      <p className="text-text-body text-sm line-clamp-2 mb-3 leading-relaxed max-w-4xl">
         {book.description || "No description provided."}
       </p>
       
@@ -99,11 +99,11 @@ export function BookCard({ book }: { book: any }) {
 
 export function ScholarCard({ scholar }: { scholar: any }) {
   const CardContent = () => (
-    <div className="group block bg-card border border-border p-5 rounded-xl hover:shadow-sm transition-all h-full flex flex-col justify-center relative">
+    <div className="group block py-5 border-b border-border-subtle transition-all h-full flex flex-col justify-center relative hover:bg-background/40">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 pr-12">
         <div className="flex items-center gap-3">
           {scholar.madhab && (
-            <span className="bg-background px-3 py-1 rounded-full text-[10px] font-bold tracking-wider text-muted uppercase">
+            <span className="bg-card border border-border-pill px-3 py-1 rounded-full text-[10px] font-bold tracking-wider text-muted uppercase group-hover:border-accent group-hover:text-accent transition-colors">
               {scholar.madhab}
             </span>
           )}
@@ -113,17 +113,17 @@ export function ScholarCard({ scholar }: { scholar: any }) {
             </span>
           )}
         </div>
-        <div className="flex items-center gap-1 text-xs text-muted group-hover:text-primary transition-colors">
+        <div className="flex items-center gap-1 text-xs text-muted group-hover:text-accent transition-colors">
           <span>View Profile</span>
           <ArrowRight size={14} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
         </div>
       </div>
       
-      <h3 className="text-xl font-serif font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+      <h3 className="text-xl font-serif font-semibold leading-snug text-text-heading mb-2 group-hover:text-accent transition-colors">
         {scholar.name_english}
       </h3>
       
-      <p className="text-muted text-sm line-clamp-2 leading-relaxed max-w-4xl">
+      <p className="text-text-body text-sm line-clamp-2 leading-relaxed max-w-4xl">
         {scholar.bio || "No biography provided."}
       </p>
     </div>
