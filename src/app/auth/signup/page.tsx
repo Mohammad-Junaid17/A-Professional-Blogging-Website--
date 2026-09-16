@@ -70,7 +70,7 @@ export default function SignUpPage() {
   if (success) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
-        <div className="bg-bg-secondary border border-border-subtle p-8 sm:p-10 rounded-2xl w-full max-w-md shadow-lg text-center">
+        <div className="bg-card border border-border p-8 sm:p-10 rounded-2xl w-full max-w-md shadow-lg text-center">
           <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <Mail size={32} className="text-primary" />
           </div>
@@ -92,7 +92,7 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
-      <div className="bg-bg-secondary border border-border-subtle p-8 sm:p-10 rounded-2xl w-full max-w-md shadow-lg">
+      <div className="bg-card border border-border p-8 sm:p-10 rounded-2xl w-full max-w-md shadow-lg">
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <Link href="/" className="flex flex-col items-center gap-3">

@@ -73,7 +73,7 @@ function SignInForm() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
-      <div className="bg-bg-secondary border border-border-subtle p-8 sm:p-10 rounded-2xl w-full max-w-md shadow-lg">
+      <div className="bg-card border border-border p-8 sm:p-10 rounded-2xl w-full max-w-md shadow-lg">
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <Link href="/" className="flex flex-col items-center gap-3">

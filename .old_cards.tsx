@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
 import { User, ArrowRight, Book } from "lucide-react";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
@@ -59,7 +59,7 @@ export function BookCard({ book }: { book: any }) {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 pr-12">
         <div className="flex items-center gap-3">
           <span className="bg-background px-3 py-1 rounded-full text-[10px] font-bold tracking-wider text-muted uppercase">
-            Book {book.category && `• ${book.category}`}
+            Book {book.category && `ΓÇó ${book.category}`}
           </span>
           {book.language && (
             <span className="text-xs text-muted font-medium uppercase tracking-wider">

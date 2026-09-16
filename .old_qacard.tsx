@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
 
@@ -11,7 +11,7 @@ export function QACard({ qa }: { qa: any }) {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3 pr-12">
         <div className="flex items-center gap-3">
           <span className="bg-background px-3 py-1 rounded-full text-xs font-bold tracking-wider text-muted uppercase">
-            Q&A {qa.category && `• ${qa.category}`}
+            Q&A {qa.category && `ΓÇó ${qa.category}`}
           </span>
           <span className="text-sm text-muted">
             {new Date(qa.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}

@@ -4,61 +4,30 @@
 
 @layer base {
   :root {
-    /* Base Next.js references mapped to new semantic tokens */
-    --background: var(--bg-primary);
-    --foreground: var(--text-body);
-    
-    /* Light Mode Semantic Tokens */
-    --bg-primary: #F8F9FA;
-    --bg-secondary: #E9ECEF;
-    --bg-card: #FFFFFF;
-    --border-subtle: rgba(0, 0, 0, 0.08);
-    --border-pill: rgba(0, 0, 0, 0.12);
-    
-    --text-heading: #212529;
-    --text-body: #495057;
-    --text-muted: #6C757D;
-    
-    --accent: #4A5D4E;
-    --accent-bg: rgba(74, 93, 78, 0.12);
-
-    /* Legacy tokens for backward compatibility */
-    --card: var(--bg-card);
-    --card-border: var(--border-subtle);
-    --muted: var(--text-muted);
-    --primary: var(--accent);
-    --primary-light: var(--accent-bg);
-    --nav-active: var(--bg-secondary);
-    --border: var(--border-subtle);
+    --background: #F8F9FA;
+    --foreground: #212529;
+    --card: #FFFFFF;
+    --card-border: #E9ECEF;
+    --muted: #6C757D;
+    --primary: #4A5D4E; /* Refined muted green for highlights */
+    --primary-light: #F0F4F1;
+    --accent: #5C6B51;
+    --nav-active: #E9ECEF;
+    --border: #DEE2E6;
   }
 
   .dark {
-    /* Base Next.js references mapped to new semantic tokens */
-    --background: var(--bg-primary);
-    --foreground: var(--text-body);
-
-    /* Premium Dark Mode Semantic Tokens */
-    --bg-primary: #12141c;
-    --bg-secondary: #171a23;
-    --bg-card: #1a1d27;
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-pill: rgba(255, 255, 255, 0.12);
-    
-    --text-heading: #f5f3ec;
-    --text-body: #c7cbd6;
-    --text-muted: #8b8f9c;
-    
-    --accent: #9ccc3c;
-    --accent-bg: rgba(156, 204, 60, 0.12);
-
-    /* Legacy tokens for backward compatibility */
-    --card: var(--bg-card);
-    --card-border: var(--border-subtle);
-    --muted: var(--text-muted);
-    --primary: var(--accent);
-    --primary-light: var(--accent-bg);
-    --nav-active: var(--bg-secondary);
-    --border: var(--border-subtle);
+    /* Premium dark — deep charcoal slate, warm cream text, soft gold accents */
+    --background: #31373D;      /* Match website header color */
+    --foreground: #F0EDE6;      /* Warm cream — easy on eyes */
+    --card: #1C1C25;            /* Slightly lighter card surface */
+    --card-border: #2A2A38;     /* Subtle border */
+    --muted: #9090A8;           /* Muted lilac-grey — readable but soft */
+    --primary: #D4C9A8;         /* Soft muted gold — calm & elegant */
+    --primary-light: #1E1A0D;   /* Deep dark gold tint for hover/bg */
+    --accent: #E0D8C0;          /* Light cream gold for highlights */
+    --nav-active: #1E1A0D;      /* Active nav dark gold tint */
+    --border: #2E2E3E;          /* Subtle dark border */
   }
 }
 

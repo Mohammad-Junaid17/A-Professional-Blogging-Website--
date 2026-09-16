@@ -371,10 +371,10 @@ export function CategoryFilterBar({
                 onClick={() => handleCategoryClick("")}
                 role="option"
                 aria-selected={!activeCategory && !activeExtra}
-                className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all whitespace-nowrap border focus:outline-none focus:ring-2 focus:ring-accent/50 ${
+                className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap border focus:outline-none focus:ring-2 focus:ring-primary/50 ${
                   !activeCategory && !activeExtra
-                    ? "bg-accent-bg text-accent border-accent shadow-sm"
-                    : "bg-card text-muted border-border-pill hover:border-accent hover:text-accent"
+                    ? "bg-primary text-card border-primary shadow-sm"
+                    : "bg-card text-muted border-border hover:border-primary/50 hover:text-foreground"
                 }`}
               >
                 {allCategoryLabel}
@@ -388,10 +388,10 @@ export function CategoryFilterBar({
                     onClick={() => handleCategoryClick(cat)}
                     role="option"
                     aria-selected={activeCategory === cat && !activeExtra}
-                    className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all whitespace-nowrap border focus:outline-none focus:ring-2 focus:ring-accent/50 ${
+                    className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap border focus:outline-none focus:ring-2 focus:ring-primary/50 ${
                       activeCategory === cat && !activeExtra
-                        ? "bg-accent-bg text-accent border-accent shadow-sm"
-                        : "bg-card text-muted border-border-pill hover:border-accent hover:text-accent"
+                        ? "bg-primary text-card border-primary shadow-sm"
+                        : "bg-card text-muted border-border hover:border-primary/50 hover:text-foreground"
                     }`}
                   >
                     {cat}
@@ -413,7 +413,7 @@ export function CategoryFilterBar({
                 onClick={() => setModalOpen(true)}
                 aria-haspopup="dialog"
                 aria-expanded={modalOpen}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase border border-border-pill bg-card text-muted hover:border-accent hover:text-accent transition-all focus:outline-none focus:ring-2 focus:ring-accent/50"
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold border border-border bg-card text-muted hover:border-primary/50 hover:text-foreground transition-all focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
                 <SlidersHorizontal size={14} />
                 Filters
