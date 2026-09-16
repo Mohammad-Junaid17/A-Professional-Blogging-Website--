@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { AdminEditButton } from "@/components/admin/AdminEditButton";
 
@@ -7,27 +7,27 @@ export function QACard({ qa }: { qa: any }) {
   const previewText = answerPreview.replace(/[#_*\[\]]/g, "").substring(0, 150) + (answerPreview.length > 150 ? "..." : "");
 
   const CardContent = () => (
-    <div className="group block py-6 border-b border-border-subtle transition-all h-full flex flex-col justify-center relative hover:bg-background/40">
+    <div className="group block bg-bg-secondary border border-border-subtle p-6 rounded-xl hover:shadow-sm transition-all h-full flex flex-col justify-center relative">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3 pr-12">
         <div className="flex items-center gap-3">
-          <span className="bg-card border border-border-pill px-3 py-1 rounded-full text-[10px] md:text-xs font-bold tracking-wider text-muted uppercase group-hover:border-accent group-hover:text-accent transition-colors">
-            Q&A {qa.category && `• ${qa.category}`}
+          <span className="bg-background px-3 py-1 rounded-full text-xs font-bold tracking-wider text-muted uppercase">
+            Q&A {qa.category && `â€¢ ${qa.category}`}
           </span>
-          <span className="text-sm text-muted font-medium">
+          <span className="text-sm text-muted">
             {new Date(qa.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           </span>
         </div>
-        <div className="flex items-center gap-1 text-sm text-muted group-hover:text-accent transition-colors">
+        <div className="flex items-center gap-1 text-sm text-muted group-hover:text-primary transition-colors">
           <span>Read Full Answer</span>
           <ArrowRight size={16} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
         </div>
       </div>
       
-      <h3 className="text-2xl font-serif font-semibold leading-snug text-text-heading mb-3 group-hover:text-accent transition-colors">
+      <h3 className="text-2xl font-serif font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
         {qa.title || qa.question}
       </h3>
       
-      <p className="text-text-body text-sm line-clamp-2 mb-4 leading-relaxed max-w-4xl">
+      <p className="text-muted text-sm line-clamp-2 mb-4 leading-relaxed max-w-4xl">
         {previewText}
       </p>
       
